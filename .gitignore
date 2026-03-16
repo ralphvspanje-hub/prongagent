@@ -1,0 +1,8 @@
+# Test data with real personal info
+test/
+
+# Local tooling
+.claude/
+
+# OpenClaw generated files
+.clawhub/
