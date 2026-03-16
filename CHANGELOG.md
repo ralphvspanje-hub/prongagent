@@ -4,6 +4,17 @@ Tracks skill file iterations and product learnings. Every time a skill file chan
 
 ---
 
+## 2026-03-16 — Channel-agnostic messaging
+
+**What happened:** ProngAgent hardcoded "Discord" throughout skill files, workspace files, README, and product docs, but OpenClaw supports 24+ messaging channels (WhatsApp, Telegram, Slack, Signal, etc.) natively via its Gateway layer. The agent never sends to a channel directly — it composes messages and the Gateway routes them. Made the entire repo channel-agnostic so the product accurately reflects the architecture.
+**Changed:**
+1. **Skill files** — Removed all prescriptive Discord references: `daily-plan/SKILL.md` (description, daily_message mode Steps 5-6), `weekly-review/SKILL.md` (Step 4, examples, tone table, edge cases), `spaced-repetition/SKILL.md` (queue management references), `onboarding/SKILL.md` (post-onboarding step). All now say "message" or "send the message" instead of "Discord message" or "send via Discord". No skill logic, triggers, or evaluation criteria changed.
+2. **Workspace files** — `AGENTS.md`: "Discord message formatting" → "Message formatting". `TOOLS.md`: "Discord (built-in)" section rewritten as "Messaging (built-in)" listing all supported channels. `BOOTSTRAP.md`: "if Discord is configured" → "if a messaging channel is configured".
+3. **README.md** — Restructured: "Set up Discord" → "Set up a messaging channel" with subsections for Discord, WhatsApp, and Telegram setup commands. "Without Discord" → "Without a messaging channel". Intro updated to list multiple channels. Cron job examples made generic (removed `--channel discord`).
+4. **Product docs** — `AGENT_LEARNING_COMPANION.md`: ~30 prescriptive references changed to "messaging". Left comparative table (Section 2 ProngGSD vs Agent) as-is. Architecture diagram says "Messaging (any channel)". `IMPLEMENTATION_GUIDE.md`: ~14 prescriptive references changed. Left historical notes and community references.
+5. **CLAUDE.md** — "Daily task generation + Discord delivery" → "+ delivery". "OpenClaw agent + Discord" → "+ messaging" in related projects.
+**File:** All skill files, workspace files, README.md, product docs, CLAUDE.md
+
 ## 2026-03-16 — Converted to OpenClaw-native workspace template
 
 **What happened:** ProngAgent was a generic markdown-based agent product. Researched OpenClaw's skill format, memory system, workspace conventions, Discord integration, scheduling (cron + heartbeat), and ClawHub publishing. Cross-referenced against 5+ real OpenClaw workspace templates on GitHub. Converted the entire repo to an OpenClaw-native workspace template.

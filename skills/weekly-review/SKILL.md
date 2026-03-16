@@ -45,9 +45,9 @@ Read ALL of the following before generating the digest:
 ## What to write
 
 - `memory/weekly-digests/week-{N}.md` — the stored digest (structured format for agent records and future comparison)
-- Discord message — the user-facing narrative (warmer, shorter, story-driven)
+- Message — the user-facing narrative (warmer, shorter, story-driven)
 
-These are TWO separate outputs. The stored digest is structured data. The Discord message is a narrative woven from that data.
+These are TWO separate outputs. The stored digest is structured data. The message is a narrative woven from that data.
 
 ---
 
@@ -125,7 +125,7 @@ Write to `memory/weekly-digests/week-{N}.md`:
 (or: First week — no comparison baseline)
 ```
 
-### Step 4: Compose the Discord message
+### Step 4: Compose the message
 
 This is the user-facing output. It weaves all 7 elements into a NARRATIVE — a story, not a report.
 
@@ -217,7 +217,7 @@ If nothing needs adjusting, skip this element entirely.
 - **NEVER guilt trip** about missed tasks or low completion. Frame everything as data for adjustment: "Quiet week — that's useful info. Want me to lighten the load?"
 - **Adjust length by verbosity setting** (from `config/settings.md`):
 
-| Verbosity | Discord message length | Elements |
+| Verbosity | Message length | Elements |
 |-----------|----------------------|----------|
 | concise | 5-8 lines | A + C + F only (narrative summary, key stats, look-ahead) |
 | normal | 10-15 lines | All 7 elements, woven together |
@@ -225,7 +225,7 @@ If nothing needs adjusting, skip this element entirely.
 
 ---
 
-## Example Discord message (normal verbosity)
+## Example message (normal verbosity)
 
 ```
 Agent: "📊 Week 4 Recap
@@ -255,7 +255,7 @@ Agent: "📊 Week 4 Recap
         Keep going. You're 4 weeks into a path most people never start. 💪"
 ```
 
-## Example Discord message (concise verbosity)
+## Example message (concise verbosity)
 
 ```
 Agent: "📊 Week 4 Recap
@@ -406,7 +406,7 @@ Shift tone to urgency-aware:
 Summarize in one sentence, don't list each one:
 
 - "I adjusted your plan a couple of times this week based on your progress — shifted more time to System Design and swapped some articles for videos."
-- The stored digest has the full list. The Discord message summarizes.
+- The stored digest has the full list. The message summarizes.
 
 ### Very long history (week 10+)
 
@@ -415,7 +415,7 @@ Keep the digest the SAME length. Don't let it grow with more data — summarize 
 - Focus on this week's story, not cumulative history
 - Week-over-week comparisons only against last week, not Week 1
 - Pillar progress: mention current state and recent changes, not full history
-- The stored digest can be slightly longer for records, but the Discord message stays at the verbosity-appropriate length
+- The stored digest can be slightly longer for records, but the message stays at the verbosity-appropriate length
 
 ### Mid-week manual request
 

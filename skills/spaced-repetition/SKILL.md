@@ -17,7 +17,7 @@ Two activation paths:
 **1. QUEUE MANAGEMENT** — runs daily before `daily_message` mode in the daily-plan skill.
 - Checks what concepts are due for review today
 - Prepares one review question and writes it to the Review Queue in `memory/spaced-repetition.md`
-- The daily-plan skill reads the Review Queue and embeds the question in the daily Discord message
+- The daily-plan skill reads the Review Queue and embeds the question in the daily message
 - This is the primary trigger — it's how review questions reach the user
 
 **2. RESPONSE PROCESSING** — after the user answers a review question.
@@ -125,7 +125,7 @@ If nothing is due, clear the queue:
 (nothing due)
 ```
 
-The daily-plan skill's `daily_message` mode reads this section and embeds the question in the Discord message as:
+The daily-plan skill's `daily_message` mode reads this section and embeds the question in the message as:
 
 ```
 🔄 Quick review: [question text]

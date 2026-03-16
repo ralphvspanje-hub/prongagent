@@ -220,7 +220,7 @@ Wait for confirmation. If they correct anything, update before proceeding.
 1. Write all extracted data to `memory/user-profile.md` using the exact field format in that template
 2. Ensure `memory/resume-context.md` is populated (if resume was provided)
 3. Trigger plan generation — call the daily-plan skill with mode: `full_plan`
-4. Send first day's tasks via Discord
+4. Send first day's tasks
 
 ## Edge cases
 

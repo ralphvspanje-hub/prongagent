@@ -27,7 +27,7 @@ prongagent/                        # OpenClaw workspace template
 ├── FUTURE_IDEAS.md                # Parked ideas
 ├── skills/                        # THE PRODUCT — 12 skill directories
 │   ├── onboarding/SKILL.md        # First-time user setup: dream career, goals, prefs
-│   ├── daily-plan/SKILL.md        # Daily task generation + Discord delivery
+│   ├── daily-plan/SKILL.md        # Daily task generation + delivery
 │   ├── check-in/SKILL.md          # Evening progress check-in conversation
 │   ├── adaptation/SKILL.md        # Autonomous plan adjustment
 │   ├── weekly-review/SKILL.md     # Weekly narrative digest
@@ -115,7 +115,7 @@ ProngAgent is the third generation of the Prong learning platform:
 
 - **DailyProng** (v1) — Claude Cowork plugin (pure .md files, no deployable code)
 - **ProngGSD** (v2) — React + Supabase web app (traditional SPA)
-- **ProngAgent** (v3) — OpenClaw agent + Discord (agent-native, file-based)
+- **ProngAgent** (v3) — OpenClaw agent + messaging (agent-native, file-based)
 
 Some prompts and resources are ported from ProngGSD. See Section 5 of the product report for what ports and how.
 

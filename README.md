@@ -5,7 +5,7 @@ An open-source, agent-native learning companion that runs inside [OpenClaw](http
 ## What it does
 
 - **Onboards you** with a 4-5 turn conversation about your dream career and learning style
-- **Sends daily tasks** via Discord, matched to your skill level and preferred formats
+- **Sends daily tasks** via Discord, WhatsApp, Telegram, or any OpenClaw channel, matched to your skill level and preferred formats
 - **Checks in** each evening — accepts any response format, zero guilt
 - **Tests understanding** with teach-back prompts and gates level advancement
 - **Adapts silently** — adjusts difficulty, format, and pacing based on your behavior
@@ -19,7 +19,7 @@ An open-source, agent-native learning companion that runs inside [OpenClaw](http
 ### Prerequisites
 
 - [OpenClaw](https://github.com/openclaw/openclaw) installed and running (Node.js v22+)
-- A Discord account (optional — Prong works via direct conversation too)
+- A messaging account (optional — Prong works via direct conversation too)
 
 ### Install
 
@@ -34,7 +34,11 @@ git clone https://github.com/[your-username]/prongagent ~/.openclaw/workspace
 # ... (see Manual Installation below)
 ```
 
-### Set up Discord (optional)
+### Set up a messaging channel (optional)
+
+ProngAgent works with any OpenClaw-supported channel. Pick one:
+
+#### Discord
 
 ```bash
 # Create a Discord bot at https://discord.com/developers/applications
@@ -44,13 +48,32 @@ openclaw config set channels.discord.token '"YOUR_BOT_TOKEN"' --json
 openclaw config set channels.discord.enabled true --json
 ```
 
+#### WhatsApp
+
+<!-- verify these commands against OpenClaw docs before shipping -->
+```bash
+openclaw config set channels.whatsapp.enabled true --json
+openclaw channels login whatsapp
+# Follow the QR code pairing flow
+```
+
+#### Telegram
+
+<!-- verify these commands against OpenClaw docs before shipping -->
+```bash
+openclaw config set channels.telegram.enabled true --json
+openclaw config set channels.telegram.botToken '"YOUR_BOT_TOKEN"' --json
+```
+
+ProngAgent works with any OpenClaw-supported channel. See [OpenClaw channels docs](https://github.com/openclaw/openclaw) for the full list.
+
 ### Start
 
 ```bash
 openclaw start
 ```
 
-Message Prong via Discord or the OpenClaw CLI. On first run, `BOOTSTRAP.md` triggers onboarding automatically.
+Message Prong via your configured channel or the OpenClaw CLI. On first run, `BOOTSTRAP.md` triggers onboarding automatically.
 
 ### Set up scheduled messages (optional)
 
@@ -61,13 +84,13 @@ After onboarding, set up daily task delivery and evening check-ins:
 openclaw cron add --name "Daily Plan" --cron "0 8 * * 1-5" \
   --tz "America/New_York" --session isolated \
   --message "Run the daily-plan skill in daily_message mode." \
-  --announce --channel discord
+  --announce
 
 # Evening check-in (weekdays at 8pm)
 openclaw cron add --name "Check-in" --cron "0 20 * * 1-5" \
   --tz "America/New_York" --session isolated \
   --message "Run the check-in skill." \
-  --announce --channel discord
+  --announce
 ```
 
 Adjust times, timezone, and days to match your `config/settings.md` preferences.
@@ -129,10 +152,10 @@ prongagent/
 └── README.md
 ```
 
-## Without Discord
+## Without a messaging channel
 
-ProngAgent works without Discord. You can:
-- Talk to Prong directly via any OpenClaw channel (CLI, web UI, WhatsApp, Telegram, etc.)
+ProngAgent works without a messaging channel. You can:
+- Talk to Prong directly via the OpenClaw CLI or web UI
 - Invoke skills manually ("what's my plan today?", "let's do a check-in")
 - Skip cron job setup — just interact when you want to
 

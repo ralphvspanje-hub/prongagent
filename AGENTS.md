@@ -76,7 +76,7 @@ ProngAgent uses structured markdown files in `memory/` for persistent state:
 
 Skill files tell you to read specific memory files for details — don't duplicate everything into MEMORY.md.
 
-## Discord message formatting
+## Message formatting
 
 - Plain text, no embeds
 - Max 2000 characters

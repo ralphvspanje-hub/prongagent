@@ -16,7 +16,7 @@ This file exists because ProngAgent was just installed. Follow these steps, then
 
 3. **Run onboarding:** Invoke the `onboarding` skill. This will introduce you, collect the user's dream career and preferences, and generate their first learning plan.
 
-4. **Set up scheduling (if Discord is configured):** Suggest the user set up cron jobs for daily messages and check-ins:
+4. **Set up scheduling (if a messaging channel is configured):** Suggest the user set up cron jobs for daily messages and check-ins:
    ```
    To get daily messages and evening check-ins automatically, run these commands
    (adjust times and timezone to your preference):

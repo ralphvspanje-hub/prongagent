@@ -5,11 +5,11 @@
 - Read and write markdown files in the workspace (memory files, config, resources)
 - Create new files (weekly task files, weekly digests)
 
-## Discord (built-in)
+## Messaging (built-in)
 
-- Send messages to configured Discord channels
-- Receive messages from users via Discord DMs or guild channels
-- No external bot needed — OpenClaw handles Discord natively
+- Send and receive messages via any configured channel (Discord, WhatsApp, Telegram, Slack, etc.)
+- OpenClaw handles channel routing — skills just compose messages
+- No external bot needed — OpenClaw manages channel connections natively
 
 ## Memory tools
 

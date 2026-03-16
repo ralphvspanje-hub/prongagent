@@ -268,7 +268,7 @@ Sound right? If so, I'll generate your first week's plan."
 
 1. Write all extracted data to `memory/user-profile.md`
 2. Trigger plan generation (call daily-plan skill with mode: full_plan)
-3. Send first day's tasks via Discord
+3. Send first day's tasks
 ```
 
 **`skills/daily-plan/SKILL.md`**:
@@ -277,7 +277,7 @@ Sound right? If so, I'll generate your first week's plan."
 ---
 trigger: scheduled
 frequency: daily
-description: Daily task generation + Discord delivery
+description: Daily task generation + delivery
 reads:
   - memory/user-profile.md
   - memory/current-plan.md
@@ -335,7 +335,7 @@ Generate tasks for one week.
 
 ### Mode: daily_message
 
-Compose and send the daily Discord message.
+Compose and send the daily message.
 
 1. Read today's tasks from current week file
 2. Check spaced repetition queue — if a concept is due, include one review question
@@ -418,13 +418,13 @@ Converted the workspace to OpenClaw's native format:
 
 1. **Skill file format** — Converted all skill files from flat `skills/X.md` to `skills/X/SKILL.md` with YAML frontmatter (trigger, frequency, description, reads, writes).
 2. **Workspace files** — Created OpenClaw workspace files: `AGENTS.md`, `SOUL.md`, `USER.md`, `IDENTITY.md`, `MEMORY.md`, `HEARTBEAT.md`, `BOOTSTRAP.md`, `TOOLS.md`.
-3. **Discord** — Discord is built in to OpenClaw; no bridge bot needed. Configured via `openclaw config set`, not a config file.
+3. **Discord** — Messaging is built in to OpenClaw; no bridge bot needed. Configured via `openclaw config set`, not a config file.
 4. **README** — Created `README.md` with installation instructions for cloning and running in OpenClaw.
-5. **Removed `config/discord-config.md`** — Discord configuration is handled by OpenClaw natively (`openclaw config set`).
+5. **Removed `config/discord-config.md`** — Messaging configuration is handled by OpenClaw natively (`openclaw config set`).
 
 ### Phase 0 exit gate
 
-You receive a personalized daily task list via Discord based on your onboarding conversation. If this doesn't work, fix before proceeding.
+You receive a personalized daily task list via messaging based on your onboarding conversation. If this doesn't work, fix before proceeding.
 
 ---
 
@@ -452,7 +452,7 @@ Expand `resources/curated-resources.md` with all 55+ resources from ProngGSD. En
 
 Use it yourself for a full week. Daily:
 
-- Morning: receive task list via Discord
+- Morning: receive task list via messaging
 - During day: do tasks (or don't)
 - Evening: agent checks in, you respond
 - Agent adapts tomorrow based on your response
@@ -544,13 +544,13 @@ Complete interview prep flow works end-to-end. Mock interview conducted with win
 
 ### Step 4.1: Decide if you need it (Day 1)
 
-After 12 weeks of Discord-only usage, honestly assess:
+After 12 weeks of messaging-only usage, honestly assess:
 
-- Do mock interviews work in Discord? Or do they need a dedicated UI?
+- Do mock interviews work in messaging? Or do they need a dedicated UI?
 - Do you ever want to browse your progress visually?
 - Is the win log useful to read/edit in a richer interface?
 
-If Discord covers 90% of needs, skip this phase or build only the mock interview UI.
+If messaging covers 90% of needs, skip this phase or build only the mock interview UI.
 
 ### Step 4.2: Minimal Vite app (Day 2-5)
 
@@ -567,9 +567,9 @@ Single-user, no auth. Reads from agent memory files. Two approaches:
 
 ### Step 4.3: Build pages in priority order (Day 5-14)
 
-Build only what Discord can't do well:
+Build only what messaging can't do well:
 
-1. **Mock interview UI** — Full chat interface. More space than Discord. Shows conversation history, feedback panel, mistake journal sidebar.
+1. **Mock interview UI** — Full chat interface. More space than messaging. Shows conversation history, feedback panel, mistake journal sidebar.
 2. **Win log editor** — View/edit STAR entries, see interview mapping, review candidates.
 3. **Progress dashboard** — Streak heatmap, pillar level cards, completion charts, spaced repetition stats.
 4. **Plan overview** — Multi-week timeline, task status by day.
@@ -577,7 +577,7 @@ Build only what Discord can't do well:
 
 ### Phase 4 exit gate
 
-Dashboard deployed locally. At least one feature (probably mock interviews) is genuinely better than Discord. If nothing is better, cut the dashboard.
+Dashboard deployed locally. At least one feature (probably mock interviews) is genuinely better than messaging. If nothing is better, cut the dashboard.
 
 ---
 
@@ -591,10 +591,10 @@ First-run experience uses `BOOTSTRAP.md` (self-deleting) — it runs once on fir
 
 README.md already exists with installation instructions. Polish it based on real user feedback:
 
-1. Prerequisites (OpenClaw, Discord account optional)
+1. Prerequisites (OpenClaw, messaging account optional)
 2. Clone repo
 3. Run `openclaw start` — onboarding begins automatically via BOOTSTRAP.md
-4. (Optional) Configure Discord via `openclaw config set`
+4. (Optional) Configure messaging channel via `openclaw config set`
 5. (Optional) Run the dashboard
 
 ### Step 5.3: Test with friend (Day 5-10)

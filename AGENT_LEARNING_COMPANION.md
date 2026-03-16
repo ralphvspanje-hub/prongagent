@@ -8,7 +8,7 @@
 
 ## 1. What This Is
 
-An **open-source, agent-native learning companion** that lives inside OpenClaw. Instead of a traditional web app the user has to open, the agent _is_ the product. It knows who you are, what you're learning, where you're stuck, and what's next. It reaches you via Discord, adapts autonomously, and tracks your progress through conversation and context — not checkboxes.
+An **open-source, agent-native learning companion** that lives inside OpenClaw. Instead of a traditional web app the user has to open, the agent _is_ the product. It knows who you are, what you're learning, where you're stuck, and what's next. It reaches you via messaging, adapts autonomously, and tracks your progress through conversation and context — not checkboxes.
 
 A lightweight **web dashboard** exists alongside it for things that need more space: mock interviews, progress visualization, and detailed plan views. The agent keeps the dashboard in sync. They share the same memory and context.
 
@@ -24,7 +24,7 @@ A lightweight **web dashboard** exists alongside it for things that need more sp
 | **User initiates**  | Opens app, checks tasks                           | Agent reaches out with daily plan                     |
 | **Tracking**        | Manual task completion                            | Conversational check-ins + OpenClaw context awareness |
 | **Adaptation**      | Explicit (mentor chat, block completion triggers) | Autonomous (agent adapts silently based on behavior)  |
-| **Onboarding**      | Structured multi-turn chat in web UI              | Conversational onboarding via Discord/agent           |
+| **Onboarding**      | Structured multi-turn chat in web UI              | Conversational onboarding via messaging/agent           |
 | **Data layer**      | Supabase (Postgres + Edge Functions)              | Agent memory files + lightweight local store          |
 | **Deployment**      | Vercel + Supabase cloud                           | Local OpenClaw install + optional dashboard           |
 | **Mock interviews** | In-app chat UI                                    | Dashboard (needs space + focus)                       |
@@ -43,7 +43,7 @@ Key insight: ProngGSD is a **destination** (you go to it). This is a **companion
 │  │ Skill Files     │  │ Memory Files    │  │ Tool/Action           │ │
 │  │ (.md)           │  │ (.md/.json)     │  │ Definitions           │ │
 │  │                 │  │                 │  │                       │ │
-│  │ - Onboarding    │  │ - User profile  │  │ - Discord messaging   │ │
+│  │ - Onboarding    │  │ - User profile  │  │ - Messaging (any channel)   │ │
 │  │ - Daily Plan    │  │ - Dream career  │  │ - Dashboard sync      │ │
 │  │ - Check-in      │  │ - Plan state    │  │ - Calendar read       │ │
 │  │ - Adaptation    │  │ - Progress      │  │ - File read/write     │ │
@@ -66,7 +66,7 @@ Key insight: ProngGSD is a **destination** (you go to it). This is a **companion
                  │            │            │
                  ▼            ▼            ▼
         ┌─────────────┐ ┌──────────┐ ┌──────────────┐
-        │ Discord     │ │ Dashboard│ │ OpenClaw     │
+        │ Messaging   │ │ Dashboard│ │ OpenClaw     │
         │ Bot         │ │ (Web)    │ │ Context      │
         │             │ │          │ │ (other apps, │
         │ Daily tasks │ │ Mock     │ │  calendar,   │
@@ -88,7 +88,7 @@ Key insight: ProngGSD is a **destination** (you go to it). This is a **companion
 - The agent reads OpenClaw's broader context (user identity, work patterns, calendar) to inform decisions
 - This is the core product — everything else is a surface
 
-**Layer 2: Discord (the daily interface)**
+**Layer 2: Messaging (the daily interface)**
 
 - Agent sends daily messages: "Here's your plan for today" with links, resources, explanations
 - User can reply conversationally: "I did the first two but got stuck on SQL joins"
@@ -98,7 +98,7 @@ Key insight: ProngGSD is a **destination** (you go to it). This is a **companion
 
 **Layer 3: Web Dashboard (the deep interface)**
 
-- Mock interviews (needs full chat UI, can't do this well in Discord)
+- Mock interviews (needs full chat UI, can't do this well in messaging)
 - Progress visualization (charts, heatmaps, pillar levels)
 - Full plan overview (all weeks, all tasks, all history)
 - Interview prep workspace (job description analysis, company research, resume context)
@@ -122,7 +122,7 @@ agent-learning-companion/
 ├── README.md                       # Setup instructions + architecture overview
 ├── skills/                         # What the agent can do (one directory per skill)
 │   ├── onboarding/SKILL.md         # First-time user setup: extract dream career, goals, experience
-│   ├── daily-plan/SKILL.md         # Generate + deliver daily tasks via Discord
+│   ├── daily-plan/SKILL.md         # Generate + deliver daily tasks
 │   ├── check-in/SKILL.md           # Evening/morning progress check-in conversation
 │   ├── adaptation/SKILL.md         # Autonomous plan adjustment based on behavior + context
 │   ├── weekly-review/SKILL.md      # Weekly narrative digest generation + plan adjustment
@@ -471,7 +471,7 @@ Numbers don't motivate. Stories do. Every week, the agent sends a narrative summ
 
 #### What it looks like
 
-Sent via Discord at the end of each week (Sunday evening or Monday morning, configurable):
+Sent at the end of each week (Sunday evening or Monday morning, configurable):
 
 ```
 Agent: "📊 Week 4 Recap
@@ -553,7 +553,7 @@ Knowledge decays. A concept learned 3 weeks ago fades unless it's reinforced. Th
 
 #### How it works
 
-Mixed into the daily Discord messages (not a separate session — zero friction):
+Mixed into the daily messages (not a separate session — zero friction):
 
 ```
 Agent: "Morning! Here's your plan for today:
@@ -632,7 +632,7 @@ This is intentionally simpler than SRS algorithms like SM-2. The agent is sendin
 ```
 Morning:
   Agent reads: user profile + current plan + yesterday's progress + calendar
-  Agent sends Discord message:
+  Agent sends message:
     "Morning! Here's your plan for today:
      1. 📖 Read: Python decorators deep dive (Real Python) [link]
      2. 💻 Practice: 2 medium LeetCode problems on trees [link]
@@ -690,14 +690,14 @@ Evening (or next morning):
 
 | ProngGSD Component                     | Port?      | How                                                                                                                           | Phase |
 | -------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |
-| Onboarding conversation structure      | ✅ Yes     | Adapt prompts to Discord/agent conversation format. Add dream career extraction.                                              | 0     |
+| Onboarding conversation structure      | ✅ Yes     | Adapt prompts to conversational agent format. Add dream career extraction.                                              | 0     |
 | Plan generation prompts                | ✅ Yes     | Core prompt logic reusable, output format changes to .md files instead of DB rows                                             | 0     |
 | Curated resources (55+)                | ✅ Yes     | Direct port as `resources/curated-resources.md`, categorized by pillar + level                                                | 1     |
 | Pillar/phase/weight system             | ✅ Yes     | Encode in memory files instead of DB tables                                                                                   | 0     |
 | Leveling thresholds                    | ✅ Yes     | Same logic, tracked in `progress.md`. Add teach-back gate before level-up.                                                    | 1     |
 | Pacing profiles                        | ✅ Yes     | Same concept, more dynamic with real observation + calendar awareness                                                         | 2     |
-| Interview onboarding                   | ✅ Yes     | Adapt to conversational Discord format (3-4 turns)                                                                            | 3     |
-| Mock interview prompts                 | ✅ Yes     | AI logic reusable. Add win log integration + delivery coaching. UI: Discord for quick rounds, dashboard for focused practice. | 3-4   |
+| Interview onboarding                   | ✅ Yes     | Adapt to conversational agent format (3-4 turns)                                                                            | 3     |
+| Mock interview prompts                 | ✅ Yes     | AI logic reusable. Add win log integration + delivery coaching. UI: messaging for quick rounds, dashboard for focused practice. | 3-4   |
 | Mistake journal                        | ✅ Yes     | Memory file instead of DB table. Add cross-mock pattern detection.                                                            | 3     |
 | Streak tracking                        | ✅ Yes     | Simpler — agent tracks directly in `progress.md`                                                                              | 1     |
 | Win log (Ralph_Win_Log.md format)      | ✅ Concept | Same STAR format. Three sources instead of manual: passive capture, extraction conversations, mock interview captures.        | 1-3   |
@@ -719,21 +719,21 @@ Evening (or next morning):
 
 ### Phase 0: Foundation & Validation (1-2 weeks)
 
-**Goal:** Prove the core loop works with OpenClaw + Discord
+**Goal:** Prove the core loop works with OpenClaw + messaging
 
 **Tasks:**
 
 - [ ] Convert to OpenClaw-native format — set up workspace files (AGENTS.md, SOUL.md, HEARTBEAT.md, etc.), directory-per-skill structure, and understand the memory system and tool capabilities
 - [ ] Build skill file: `onboarding.md` — agent has a first conversation with a new user, extracts dream career + current situation + experience level + learning preferences, writes `memory/user-profile.md`
 - [ ] Build skill file: `daily-plan.md` — agent reads user profile, generates a 1-week plan with pillar selection based on dream career, writes to `memory/current-plan.md` + `memory/plan-tasks/week-01.md`
-- [ ] Set up Discord bot integration — agent can send a message to a Discord channel and receive replies
+- [ ] Set up messaging channel — agent can send and receive messages
 - [ ] Create empty template memory files so the agent has a clean starting structure
 
-**Validation checkpoint:** Agent onboards you via Discord conversation, generates a plan, sends you Day 1 tasks as a Discord message with resource links. You reply, agent acknowledges.
+**Validation checkpoint:** Agent onboards you via conversation, generates a plan, sends you Day 1 tasks as a message with resource links. You reply, agent acknowledges.
 
-**What you learn:** Is the OpenClaw skill file format expressive enough? Can the agent reliably read/write structured memory? Is Discord integration smooth?
+**What you learn:** Is the OpenClaw skill file format expressive enough? Can the agent reliably read/write structured memory? Is messaging integration smooth?
 
-**Exit criteria:** You receive a personalized daily task list via Discord based on your onboarding conversation. If this doesn't work, stop and fix before proceeding.
+**Exit criteria:** You receive a personalized daily task list via messaging based on your onboarding conversation. If this doesn't work, stop and fix before proceeding.
 
 ---
 
@@ -743,7 +743,7 @@ Evening (or next morning):
 
 **Core loop tasks:**
 
-- [ ] Skill: `check-in.md` — evening/morning check-in conversation via Discord. Agent asks what user completed, notes skipped tasks, adjusts next day. Writes updates to `memory/progress.md` and `memory/history.md`.
+- [ ] Skill: `check-in.md` — evening/morning check-in conversation via messaging. Agent asks what user completed, notes skipped tasks, adjusts next day. Writes updates to `memory/progress.md` and `memory/history.md`.
 - [ ] Skill: `adaptation.md` — autonomous plan adjustment. Reads progress + check-in data, adjusts task difficulty/load. Writes every change to `memory/adaptation-log.md` with timestamp and reasoning.
 - [ ] Memory: progress tracking — streaks (consecutive days with at least 1 task completed), completion rates (tasks done / tasks assigned per week), pillar levels (blocks completed at level → threshold → level up)
 - [ ] Port curated resources from ProngGSD (55+ entries) into `resources/curated-resources.md`, categorized by pillar and difficulty level
@@ -788,7 +788,7 @@ Evening (or next morning):
 
 **Spaced repetition tasks (Section 3.10):**
 
-- [ ] Skill: `spaced-repetition.md` — manages the review schedule. When a concept is due for review, includes one review question in the daily Discord message.
+- [ ] Skill: `spaced-repetition.md` — manages the review schedule. When a concept is due for review, includes one review question in the daily message.
 - [ ] Memory: `memory/spaced-repetition.md` — tracks active review items (concept, pillar, last reviewed, next review, consecutive correct answers, status), retired/mastered items, and tomorrow's review queue. Format described in Section 3.10.
 - [ ] Simplified spacing algorithm per the table in Section 3.10 (3 days → 1 week → 2 weeks → 1 month → 3 months → retire). Correct answers increase interval. Wrong/skipped answers compress interval.
 - [ ] Integration: when a teach-back response is weak, the concept enters the spaced repetition queue at the shortest interval (review in 3 days).
@@ -797,7 +797,7 @@ Evening (or next morning):
 
 **Weekly narrative digest tasks (Section 3.9):**
 
-- [ ] Skill: `weekly-review.md` — generates weekly narrative digest at end of each week. Sent via Discord.
+- [ ] Skill: `weekly-review.md` — generates weekly narrative digest at end of each week. Sent via messaging.
 - [ ] Digest includes: narrative summary of focus areas, teach-back performance, stats (streak, pillar levels, completion rate) embedded in narrative, pattern observations, dream career connection, look-ahead for next week, adaptation question if agent noticed something worth adjusting. Full format described in Section 3.9.
 - [ ] Memory: `memory/weekly-digests/week-{N}.md` — one file per week, stores the full digest plus structured data (focus areas, tasks completed, pillar progress, teach-back results, observations, adaptations made).
 - [ ] Agent uses weekly review to also revisit dream career alignment — if conversations suggest a shift, surface it in the digest.
@@ -817,13 +817,13 @@ Evening (or next morning):
 **Interview prep tasks:**
 
 - [ ] Skill: `interview-prep.md` — detects job search intent (explicit: user says "I have an interview" / inferred: user mentions job applications, asks about resume, etc.). Offers to spin up crash course. Writes to `memory/interview-context.md`.
-- [ ] Interview onboarding conversation — port from ProngGSD's `gsd-interview-onboarding` prompts. 3-4 turn conversation to extract: target company, role, interview date, interview format (behavioral/technical/system design/mixed), weak areas, company context. Adapt prompts to conversational Discord format.
+- [ ] Interview onboarding conversation — port from ProngGSD's `gsd-interview-onboarding` prompts. 3-4 turn conversation to extract: target company, role, interview date, interview format (behavioral/technical/system design/mixed), weak areas, company context. Adapt prompts to conversational format.
 - [ ] Crash course plan generation — port from ProngGSD's `interview_plan` mode. Generate 1-3 week intensive plan with all blocks upfront. Interview-specific pillars use separate tracking.
 - [ ] Parallel plan support: interview prep runs alongside regular learning plan (same as ProngGSD's dual active plans). Daily messages include both.
 
 **Mock interview tasks:**
 
-- [ ] Skill: `mock-interview.md` — conducts mock interviews via Discord. Three modes: behavioral, technical, system design. Uses interview context (company, role, job description) to tailor questions.
+- [ ] Skill: `mock-interview.md` — conducts mock interviews via messaging. Three modes: behavioral, technical, system design. Uses interview context (company, role, job description) to tailor questions.
 - [ ] Mock interview has access to win log — suggests which achievement to use for each question, coaches delivery ("That was good, but you spent 90 seconds on the situation and 10 on the result. Flip it.")
 - [ ] Mistake journal in `memory/mistake-journal.md` — after each mock, agent asks what went wrong and saves structured entries (question, what they said, what would've been better, category tag).
 - [ ] Pattern detection across mistakes — "You've struggled with 'tell me about a failure' three times now. Let's work on that specifically."
@@ -845,22 +845,22 @@ Evening (or next morning):
 
 **Validation checkpoint:** Simulate full interview prep scenario: detection → onboarding → crash course → mock interview with win log coaching → mistake journal → portfolio project suggestion. Win log has 3+ polished entries with interview mapping.
 
-**What you learn:** Can mock interviews work in Discord, or do they really need the dashboard? Does win log extraction feel natural or forced? Do portfolio project suggestions feel relevant?
+**What you learn:** Can mock interviews work in messaging, or do they really need the dashboard? Does win log extraction feel natural or forced? Do portfolio project suggestions feel relevant?
 
-**Exit criteria:** Complete mock interview conducted via Discord with win log integration. Win log has entries mapped to question types. At least one portfolio project suggested (accepted or declined).
+**Exit criteria:** Complete mock interview conducted via messaging with win log integration. Win log has entries mapped to question types. At least one portfolio project suggested (accepted or declined).
 
 ---
 
 ### Phase 4: Web Dashboard (3-4 weeks)
 
-**Goal:** Visual interface for things that need more space than Discord
+**Goal:** Visual interface for things that need more space than messaging
 
 **Dashboard tasks:**
 
 - [ ] Lightweight Vite app — no auth, single user, reads from agent memory files via local file API or simple server. Tech: React + Vite + Tailwind (keep it simple).
 - [ ] Progress page: streak heatmap (from `progress.md`), pillar level cards, completion rate charts, teach-back performance summary, spaced repetition mastery count
 - [ ] Plan overview: full multi-week timeline view, current week highlighted, task status (done/pending/skipped)
-- [ ] Mock interview UI: dedicated chat interface for focused interview practice (Discord is too linear for serious mock interview sessions). Full conversation history, feedback display, mistake journal below.
+- [ ] Mock interview UI: dedicated chat interface for focused interview practice (messaging is too linear for serious mock interview sessions). Full conversation history, feedback display, mistake journal below.
 - [ ] Interview prep workspace: job description input, company context viewer, resume context viewer, win log with interview mapping (which stories to use for which questions)
 - [ ] Win log dashboard: view/edit polished wins (STAR format), see interview mapping, review candidates the agent flagged, add new wins manually
 - [ ] Portfolio projects: view active/completed projects, tasks breakdown, link to win log entry when completed
@@ -868,9 +868,9 @@ Evening (or next morning):
 - [ ] History: searchable log of completed tasks, filterable by pillar and week
 - [ ] Agent sync: dashboard reads from memory files (file watcher or polling), agent writes updates. Dashboard can also write (e.g., user edits a win log entry) and agent picks up changes.
 
-**Validation checkpoint:** Dashboard adds clear value that Discord alone can't provide. Mock interview UI is better than Discord for focused practice. Win log editing is easier in dashboard.
+**Validation checkpoint:** Dashboard adds clear value that messaging alone can't provide. Mock interview UI is better than messaging for focused practice. Win log editing is easier in dashboard.
 
-**Decision point:** Is the dashboard worth maintaining, or does the Discord interface cover 90% of needs? Be honest about this — if the dashboard is dead weight, cut it. Keep only the pages that genuinely need a visual interface.
+**Decision point:** Is the dashboard worth maintaining, or does the messaging interface cover 90% of needs? Be honest about this — if the dashboard is dead weight, cut it. Keep only the pages that genuinely need a visual interface.
 
 **Exit criteria:** Dashboard deployed locally, syncing with agent memory files. At least one mock interview conducted through dashboard. User finds it useful for at least 2 of: progress visualization, win log editing, mock interviews.
 
@@ -882,13 +882,13 @@ Evening (or next morning):
 
 **Tasks:**
 
-- [ ] Clean README with setup instructions (clone, configure OpenClaw, add Discord bot, run onboarding). Step-by-step, assumes no prior OpenClaw knowledge.
+- [ ] Clean README with setup instructions (clone, configure OpenClaw, configure messaging channel, run onboarding). Step-by-step, assumes no prior OpenClaw knowledge.
 - [ ] First-run experience: agent detects empty `memory/user-profile.md` and initiates onboarding automatically
 - [ ] Configuration docs: how to customize all settings in `config/settings.md` (message frequency, teach-back frequency, resource format preferences, quiet hours, days off, verbosity)
 - [ ] Template memory files for fresh start — all files present with empty/example structure so the agent knows the expected format
 - [ ] Error handling: what happens when memory files get corrupted or malformed? Agent should detect and self-heal or alert user.
 - [ ] Test with a friend — full end-to-end: install, onboard, use for 3+ days
-- [ ] Fix everything that breaks when it's not your machine (different OS, different OpenClaw version, different Discord setup)
+- [ ] Fix everything that breaks when it's not your machine (different OS, different OpenClaw version, different messaging setup)
 - [ ] GitHub repo, MIT license, contributing guide, issue templates
 - [ ] **Validation checkpoint:** Friend successfully installs, onboards, and uses it for 3+ days without your help
 
@@ -918,17 +918,17 @@ Evening (or next morning):
 2. **OpenClaw access.** Timeline depends on when you can actually build and test on the platform. The OpenClaw-native format is now documented — Phase 0 can start immediately.
 3. **Which LLM does the agent use?** OpenClaw agents presumably use whatever model the user configures. Does this affect your prompt design? (ProngGSD uses Gemini Flash Lite for cost — an OpenClaw agent might use Claude, GPT, etc.)
 4. **Open source from day one, or after v1 works?** I'd recommend getting through Phase 1 privately, then open-sourcing. No point open-sourcing something that doesn't work yet.
-5. **Dashboard scope.** My honest take: skip the dashboard until Phase 4 and see if you even need it. Mock interviews might work fine in Discord. Don't build a dashboard because it feels like a "real product" — build it only when Discord genuinely can't handle something.
+5. **Dashboard scope.** My honest take: skip the dashboard until Phase 4 and see if you even need it. Mock interviews might work fine in messaging. Don't build a dashboard because it feels like a "real product" — build it only when messaging genuinely can't handle something.
 
 ---
 
 ## 8. CTO Recommendation
 
-**Build this.** The insight is real: an agent that comes to you beats an app you go to. The friction reduction is the entire value proposition. The five additional features (teach-back, resource feedback, spaced repetition, weekly digests, portfolio projects) transform it from "todo list over Discord" into a genuine learning system that actively makes users better — not just organized.
+**Build this.** The insight is real: an agent that comes to you beats an app you go to. The friction reduction is the entire value proposition. The five additional features (teach-back, resource feedback, spaced repetition, weekly digests, portfolio projects) transform it from "todo list over messaging" into a genuine learning system that actively makes users better — not just organized.
 
 **But be disciplined:**
 
-- Phase 0 is validation. If OpenClaw can't reliably read/write structured memory or send Discord messages, the architecture doesn't work and you need to know that in week 1, not week 8.
+- Phase 0 is validation. If OpenClaw can't reliably read/write structured memory or send messages, the architecture doesn't work and you need to know that in week 1, not week 8.
 - Keep it file-based as long as possible. The moment you add a database, you add infrastructure, and infrastructure kills open-source adoption.
 - Don't build the dashboard until you've proven the agent loop. The dashboard is a nice-to-have. The agent loop is the product.
 - Port prompts from ProngGSD aggressively — that's months of iteration you don't have to redo. But adapt them to conversational format; don't just copy-paste.
@@ -941,6 +941,6 @@ Evening (or next morning):
 2. Write the skill files as detailed .md instruction sets — test them with Claude Code
 3. Write the memory templates with example data so the format is clear
 4. Port the curated resources from ProngGSD
-5. Convert to OpenClaw-native format (workspace files, directory-per-skill structure) + set up Discord
+5. Convert to OpenClaw-native format (workspace files, directory-per-skill structure) + set up messaging
 
-Start with Phase 0. Convert to OpenClaw-native format. Build the first skill file. Send yourself a Discord message with tomorrow's learning plan. If that feels magical, you've got something.
+Start with Phase 0. Convert to OpenClaw-native format. Build the first skill file. Send yourself a message with tomorrow's learning plan. If that feels magical, you've got something.

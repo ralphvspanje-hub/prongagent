@@ -1,6 +1,6 @@
 ---
 name: prongagent-daily-plan
-description: "Daily task generation and Discord delivery with resource matching"
+description: "Daily task generation and delivery with resource matching"
 tags: [learning, planning, daily]
 user-invocable: true
 metadata:
@@ -179,7 +179,7 @@ Increment current week in `memory/current-plan.md` if generating a new week (not
 
 ### Mode: daily_message
 
-Compose and send the daily Discord message. This is the user-facing output.
+Compose and send the daily message. This is the user-facing output.
 
 **Step 1: Check preconditions**
 
@@ -206,7 +206,7 @@ Read `memory/spaced-repetition.md`. If a concept is due for review today, includ
 
 **Step 5: Format the message**
 
-Strip `[searched]` and `[unvetted]` prefixes from resource names before composing the Discord message — those tags exist for internal tracking in the task file, not for the user. The user should see clean resource names.
+Strip `[searched]` and `[unvetted]` prefixes from resource names before composing the message — those tags exist for internal tracking in the task file, not for the user. The user should see clean resource names.
 
 Keep it concise — 5-8 lines max for normal verbosity. Adjust based on `config/settings.md` verbosity setting:
 
@@ -216,9 +216,9 @@ Keep it concise — 5-8 lines max for normal verbosity. Adjust based on `config/
 | normal | Task list + 1-2 lines of context/motivation |
 | detailed | Task list + context + dream career connection + streak info + review question |
 
-**Step 6: Send via Discord**
+**Step 6: Send the message**
 
-Send the formatted message to the configured Discord channel.
+Send the formatted message.
 
 ## Task format
 
