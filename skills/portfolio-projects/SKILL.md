@@ -196,13 +196,13 @@ Create 4-8 concrete tasks spread across 1-2 weeks. Each task follows the standar
 | Field | Value for project tasks |
 |-------|------------------------|
 | # | Task number for the day |
-| Action | "Design", "Build", "Implement", "Test", "Deploy", "Document" |
-| Resource | Project name + specific deliverable (e.g., "Transit Dashboard — set up API connection") |
+| Action | "Design", "Build", "Implement", "Test", "Deploy", "Document" + specific deliverable |
+| Search | N/A (they're building, not consuming) |
 | Platform | Where they'll work (e.g., "Local", "GitHub", "Vercel") |
-| URL | N/A (they're building, not consuming) |
-| Est. time | Realistic estimate for that task |
+| Size | Short / Medium / Long |
 | Pillar | Which skill pillar this task exercises |
 | Type | "practice" for all project tasks |
+| Why | How this project connects to dream career |
 | Status | "pending" |
 
 ### Step 3: Mix into the weekly plan

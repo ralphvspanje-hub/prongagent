@@ -221,6 +221,24 @@ Wait for confirmation. If they correct anything, update before proceeding.
 2. Ensure `memory/resume-context.md` is populated (if resume was provided)
 3. Trigger plan generation — call the daily-plan skill with mode: `full_plan`
 4. Send first day's tasks
+5. **Offer extended context (optional brain dump)** — after Day 1 tasks are sent, offer:
+
+> "One more thing — totally optional. If you want me to really understand your background, you can tell me your story in your own words. Career history, what you've enjoyed, what frustrated you, skills you're proud of, things that didn't make it onto your resume. You can type it out or just talk if you use voice input. The more I know, the better I can personalize your plan.
+>
+> Or skip this entirely — we can always do it later. Just say 'skip' or start talking."
+
+**If user provides content:**
+- Store the full narrative in `memory/user-profile.md` under `## Extended Context`
+- Extract key facts and add them to `## Extended Context → ### Key Facts Extracted`
+- If the narrative reveals new information that contradicts or enriches structured fields (skills, gaps, experience level, dream career motivation), update those fields too
+- Examples of valuable key facts: "struggled with math in college", "loved the data analysis part of marketing internship", "hates reading documentation", "learns best by building", "left last job because of toxic culture around overwork"
+
+**If user says skip/declines:**
+- Note in `memory/user-profile.md` under `## Extended Context`: "(Offered during onboarding, user skipped. Can re-offer after week 2.)"
+- Don't push. The weekly review or check-in can re-offer after the user has used the product for 2+ weeks
+
+**If user gives a very long response (500+ words):**
+- That's great — more context is always better. Summarize the key facts but keep the full narrative stored. This is the most differentiating data the agent has.
 
 ## Edge cases
 
@@ -281,6 +299,18 @@ After a successful onboarding with resume, `memory/user-profile.md` should look 
 - **LinkedIn summary:** (not provided)
 - **Current skills:** React, TypeScript, Next.js, basic Node.js, CSS/Tailwind, Git
 - **Current job situation:** employed-looking
+
+## Extended Context
+
+I got into coding through a bootcamp friend who showed me React — before that I was doing marketing analytics at a small firm. I actually loved the data side of marketing but hated the politics and client management. The agency job is fine but I'm just implementing designs, never making architecture decisions. What I really want is to own a feature end-to-end — database to UI. I'm intimidated by backend stuff because I never formally learned it, just copy-pasted Express routes. System design feels like a foreign language. But I pick things up fast when I can build something real.
+
+### Key Facts Extracted
+
+- Came to coding from marketing analytics — data intuition is a strength
+- Intimidated by backend/system design but motivated to learn
+- Learns best by building, not reading documentation
+- Frustrated by lack of architecture ownership at current job
+- Prior marketing experience = potential unique angle for product-focused roles
 ```
 
 And `memory/resume-context.md` should be populated:

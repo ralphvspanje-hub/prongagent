@@ -4,6 +4,20 @@ Tracks skill file iterations and product learnings. Every time a skill file chan
 
 ---
 
+## 2026-03-18 — Six ProngGSD-inspired upgrades (pre-dogfooding)
+
+**What happened:** CTO review identified six improvements to port from ProngGSD before dogfooding begins. All changes are to skill files and memory templates — no new infrastructure or skill directories.
+**Changed:**
+1. **Practice units: Short/Medium/Long** — Replaced freeform `Est. time` field with three fixed sizes: Short (~20min), Medium (~40min), Long (~60min). Updated task format table, time commitment mapping, examples, and all downstream references in `daily-plan`, `check-in`, `portfolio-projects`, and `plan-tasks/week-01.md` template.
+2. **Search-first resources** — Flipped resource priority system: search suggestions are now the DEFAULT (Priority 1), curated resources are gold-standard only (Priority 2), user-preferred platforms (Priority 3), platform discovery (Priority 4). Added banned platforms list (Udemy, Coursera, etc.), YouTube dominance rule (50-60%), search query quality guidelines. Removed `[searched]`/`[unvetted]` tag system. Updated `AGENTS.md`, `resource-feedback/SKILL.md` graduation system, and `curated-resources.md` header.
+3. **Enhanced task format** — Task format table rewritten: `Action` field is now a mini learning objective with self-check question for conceptual tasks. `Resource`+`URL` replaced with `Search` column. Added `Why` field for dream career connection. `Size` replaces `Est. time`.
+4. **Inline practice prompts** — Added `practice_prompt` as third task Type. These tasks ARE the question — user answers in conversation, agent evaluates using teach-back scale. 1-2/week regular, 2-3/week crash courses. Updated `check-in/SKILL.md` (evaluation during check-in) and `teach-back/SKILL.md` (exclusion from teach-back triggers).
+5. **Conversational weekly review** — Added Step 5 "Conversation phase" to `weekly-review/SKILL.md`: after sending narrative digest, agent asks 1-2 recall questions + difficulty check + adjustment prompt. Results logged to stored digest and progress. Interview prep mode gets 3-4 questions. Added "difficulty feedback contradicts completion data" trigger to `adaptation/SKILL.md` + weekly digest as a read source.
+6. **Deep onboarding: extended context** — Added optional Step 5 brain dump to `onboarding/SKILL.md`: after plan generation, user can share full background story via text or voice. Stored in `user-profile.md` under new `## Extended Context` section with key facts extracted. Daily-plan references extended context when framing task relevance.
+**File:** `skills/daily-plan/SKILL.md`, `skills/weekly-review/SKILL.md`, `skills/onboarding/SKILL.md`, `skills/check-in/SKILL.md`, `skills/teach-back/SKILL.md`, `skills/adaptation/SKILL.md`, `skills/resource-feedback/SKILL.md`, `skills/portfolio-projects/SKILL.md`, `memory/plan-tasks/week-01.md`, `memory/user-profile.md`, `resources/curated-resources.md`, `AGENTS.md`
+
+---
+
 ## 2026-03-16 — Channel-agnostic messaging
 
 **What happened:** ProngAgent hardcoded "Discord" throughout skill files, workspace files, README, and product docs, but OpenClaw supports 24+ messaging channels (WhatsApp, Telegram, Slack, Signal, etc.) natively via its Gateway layer. The agent never sends to a channel directly — it composes messages and the Gateway routes them. Made the entire repo channel-agnostic so the product accurately reflects the architecture.

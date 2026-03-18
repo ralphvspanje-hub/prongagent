@@ -125,9 +125,9 @@ Write to `memory/weekly-digests/week-{N}.md`:
 (or: First week — no comparison baseline)
 ```
 
-### Step 4: Compose the message
+### Step 4: Compose and send the narrative message
 
-This is the user-facing output. It weaves all 7 elements into a NARRATIVE — a story, not a report.
+This is the first user-facing output. It weaves all 7 elements into a NARRATIVE — a story, not a report.
 
 **The 7 required elements:**
 
@@ -222,6 +222,95 @@ If nothing needs adjusting, skip this element entirely.
 | concise | 5-8 lines | A + C + F only (narrative summary, key stats, look-ahead) |
 | normal | 10-15 lines | All 7 elements, woven together |
 | detailed | Full narrative, all elements expanded | All 7 elements with more context, examples, week-over-week detail |
+
+---
+
+## Step 5: Conversation phase (recap dialogue)
+
+After sending the narrative digest (Step 4), the weekly review becomes a **conversation**. This is where the agent assesses comprehension across the week's topics and collects user feedback — serving dual purpose as practice for the user and calibration signal for the agent.
+
+### Turn 1: Recall questions (immediately after digest)
+
+Ask 1-2 recall questions about the week's key concepts. Pick from completed conceptual tasks, targeting different pillars if possible.
+
+**How to pick questions:**
+- Choose concepts from tasks the user completed (status: "done") this week
+- Prefer conceptual tasks over practice tasks
+- Prefer different pillars for the 1-2 questions (breadth check)
+- Calibrate question depth to pillar level (use the teach-back calibration table from `skills/teach-back/SKILL.md`)
+- If the user had practice_prompt tasks this week, don't re-ask those — pick different concepts
+
+**Format:**
+
+> "Before we wrap up the week — quick check on what stuck:
+>
+> 1. [Question about concept from pillar A — calibrated to current level]
+> 2. [Question about concept from pillar B]
+>
+> 1-2 sentences each is fine."
+
+### Turn 2: Evaluate + difficulty check
+
+Evaluate the user's responses using the teach-back 4-tier scale:
+
+| Response quality | Action |
+|------------------|--------|
+| **Strong** | "Solid." Brief acknowledgment. |
+| **Partial** | Ask one targeted follow-up to find the gap. Note for reinforcement. |
+| **Can't explain** | "No worries — we'll revisit that next week." Note for reinforcement. |
+| **Skipped** | "No problem." Respect it. |
+
+After evaluating (or if they skip), ask about difficulty:
+
+> "How did this week feel overall? Too easy, about right, or too hard?"
+
+### Turn 3: Adjustment prompt + close
+
+Based on their difficulty feedback and recall performance:
+
+> "Anything you want me to change for next week? Different topics, more/less practice, different format?"
+
+Accept their response, acknowledge it, and close the conversation.
+
+### What to write after the conversation
+
+1. **Stored digest file** — append a `### Recap Conversation` section:
+   ```markdown
+   ### Recap Conversation
+
+   - Concept 1: [concept] — [Strong/Partial/Can't explain/Skipped]
+   - Concept 2: [concept] — [Strong/Partial/Can't explain/Skipped]
+   - Difficulty feedback: [too easy / about right / too hard / skipped]
+   - User adjustment request: [what they asked for, or "none"]
+   ```
+
+2. **`memory/progress.md` → Teach-Back Log** — log each recall question as a teach-back entry with trigger: "weekly_recap"
+
+3. **`memory/spaced-repetition.md`** — update SRS entries per teach-back rules (strong → advance interval, partial/can't explain → compress interval)
+
+4. **Flag for adaptation** — if difficulty feedback contradicts completion data (e.g., user says "too easy" but completion is 90%, or "too hard" but teach-backs are strong), flag this in the stored digest for the adaptation skill to review
+
+### Interview prep mode — enhanced conversation
+
+When plan type is `interview_prep`:
+
+- Ask **3-4 recall questions** instead of 1-2 (more assessment-heavy)
+- Frame as readiness check: "Let's make sure you're solid on the key areas before next week:"
+- Include at least one behavioral/STAR question if the crash course includes behavioral prep
+- Difficulty question becomes: "How confident are you feeling about the interview? Scale of 1-5 is fine."
+- Results feed directly into next week's crash course task selection — weak areas get more coverage
+- If interview is ≤5 days away, skip recall questions entirely — shift to confidence building: "You've put in the work. What are you most and least confident about?"
+
+### Edge case: user doesn't respond to recall questions
+
+If the user doesn't reply after the digest + questions (no response within the session):
+- Don't re-send the questions
+- Still write the stored digest (without the recap conversation section)
+- The weekly review is still valuable as a one-way digest — the conversation phase is an enhancement, not a requirement
+
+### Edge case: user only answers difficulty, skips recall
+
+Respect it. Log recall as "Skipped" for both questions. Process the difficulty feedback normally. Don't push.
 
 ---
 

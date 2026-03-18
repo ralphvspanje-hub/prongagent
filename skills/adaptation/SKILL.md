@@ -32,6 +32,7 @@ This skill has the widest read scope of any skill. Read ALL of the following bef
 | `memory/plan-tasks/week-{N}.md` | Current week task statuses — what's pending, done, skipped, partial. Task counts per day. |
 | `memory/user-profile.md` | Dream career, time commitment, pacing preference, days off, experience level |
 | `memory/spaced-repetition.md` | Active review items, queue length, concept statuses |
+| `memory/weekly-digests/week-{N}.md` | Latest weekly recap conversation results — recall question performance, difficulty feedback, user adjustment requests. Check the `### Recap Conversation` section. |
 | `config/settings.md` | Teach-back frequency, resource feedback frequency, days off, quiet hours, verbosity |
 | `memory/agent-observations.md` | Recent observations — check if any flagged issues affect current adaptation decisions. Also check for patterns across observations (same skill file flagged multiple times = systemic issue). |
 
@@ -279,6 +280,20 @@ If they confirm a shift → update `memory/user-profile.md` target role and trig
 2. Check if the resource formats match the user's learning style profile — if the user prefers video but all resources for this pillar are articles, switch formats
 
 **Do NOT just swap to different resources at the same level/format** — that was already tried and failed.
+
+#### Trigger: Weekly recap difficulty feedback contradicts completion data
+
+**Detection:** Read the most recent weekly digest's `### Recap Conversation` section. Compare the user's self-reported difficulty against objective signals:
+- User says "too easy" but completion rate is <70% → they may be bored, not challenged (topics aren't engaging, not that they're too hard)
+- User says "too hard" but teach-back results are strong → content is fine, volume or format may be the issue
+- User says "about right" but teach-backs are consistently weak → they think they're learning but retention is low (illusion of competence)
+
+**Response (pick 1):**
+1. **"Too easy" + low completion:** Topics may not feel relevant. Shift upcoming tasks toward dream-career-aligned content. Add a practice_prompt task that connects current material to the target role.
+2. **"Too hard" + strong teach-backs:** Reduce task count, not difficulty. The user is learning well but feeling overwhelmed by volume.
+3. **"About right" + weak teach-backs:** Increase practice_prompt frequency next week. Add more active recall opportunities — the user needs to realize they haven't locked in the concepts.
+
+**Log the discrepancy explicitly** — this is one of the most valuable signals the agent has.
 
 ---
 

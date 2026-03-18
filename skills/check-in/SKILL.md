@@ -116,9 +116,9 @@ In `memory/plan-tasks/week-{N}.md`, change the Status column for each of today's
 
 For each task marked "done", append a row to `memory/history.md`:
 
-| Date | Task | Pillar | Type | Resource | Time spent | Notes |
-|------|------|--------|------|----------|------------|-------|
-| [today] | [action + resource name] | [pillar] | [type] | [resource] | [est. time from plan] | [any user context, or blank] |
+| Date | Task | Pillar | Type | Resource | Size | Notes |
+|------|------|--------|------|----------|------|-------|
+| [today] | [action summary] | [pillar] | [type] | [search suggestion or curated resource name] | [Short/Medium/Long] | [any user context, or blank] |
 
 For tasks marked "partial", also append but note "(partial)" in the Notes column.
 
@@ -160,6 +160,16 @@ After processing, check two things. Do NOT act on them during this check-in — 
 - Roughly 1 in 3 conceptual tasks should trigger teach-back
 - If eligible: note which conceptual task to ask about
 - The teach-back skill will handle the prompt in a separate interaction
+- Tasks with Type = "practice_prompt" are NOT eligible for teach-back — they are already active recall
+
+**Practice prompt completion:**
+- If a task has Type = "practice_prompt", the user's response to the check-in may include their answer to the practice prompt question. Process it as follows:
+  - Evaluate the response using the teach-back evaluation table (strong/partial/can't explain) from `skills/teach-back/SKILL.md`
+  - Give brief feedback (1-2 sentences) as part of the check-in response
+  - Mark the task as "done" if strong or partial, "partial" if can't explain but attempted
+  - Log the evaluation in `memory/progress.md` → Teach-Back Log (treat it as a teach-back entry with trigger: "practice_prompt")
+  - Update `memory/spaced-repetition.md` per the teach-back SRS entry rules
+- If the user doesn't answer the practice prompt during check-in (just reports other tasks), mark the practice_prompt task based on what they report (done/skipped like any other task)
 
 Do NOT ask resource feedback or teach-back questions during the check-in. The check-in ends cleanly after acknowledging the user's progress.
 

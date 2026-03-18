@@ -22,7 +22,7 @@ metadata:
 - `memory/plan-tasks/week-{N}.md` — to find the most recently completed task
 - `memory/resource-feedback.md` — existing ratings, learning style profile
 - `memory/progress.md` — total tasks completed (to know when to trigger)
-- `resources/curated-resources.md` — to check if a searched resource should be promoted
+- `resources/curated-resources.md` — to check if a user-discovered resource should be promoted to gold-standard
 
 ## What to write
 
@@ -53,7 +53,7 @@ Do NOT ask follow-up questions about why. The rating is enough. Move on.
 |------|----------|----------|------|--------|-------|--------|
 | 2026-03-16 | Decorators deep dive | Real Python | Article | great | Python | curated |
 
-The **Source** column tracks where the resource came from: `curated`, `searched`, or `user`.
+The **Source** column tracks where the resource came from: `curated` (from curated-resources.md), `search` (user found via search suggestion), or `user` (user-recommended platform/resource).
 
 2. **Update Learning Style Profile** — after 10+ ratings, auto-derive:
    - Preferred format: rank formats by average rating
@@ -78,24 +78,28 @@ The **Source** column tracks where the resource came from: `curated`, `searched`
 | User rates everything as "great" | Reduce feedback frequency — rely more on teach-back performance |
 | User rates everything as "didn't click" | Resources aren't the problem — difficulty level might be wrong. Trigger adaptation skill. |
 
-## Graduation system: [searched] → curated
+## Graduation system: user-discovered → curated gold-standard
 
-When a resource that was found via web search proves its quality through real usage, it should be promoted to the curated list. This is how the curated resource library grows organically.
+When a resource the user found via search suggestion proves its quality through real usage, it can be promoted to the curated gold-standard list. This is how `resources/curated-resources.md` grows organically with proven resources.
 
 **Promotion rules:**
 
-1. Track ratings for `[searched]` resources (Source column = `searched` in feedback table)
-2. When a searched resource accumulates **3 "great" ratings** (across any number of tasks or users), it qualifies for promotion
+1. Track ratings for resources with Source = `search` or `user` in the feedback table
+2. When a resource accumulates **3 "great" ratings**, it qualifies for promotion to gold-standard
 3. On promotion:
-   - Add the resource to `resources/curated-resources.md` under the appropriate pillar/level section
-   - Remove the `[searched]` prefix — it's now a first-class curated resource
-   - Add a note in the Description: `(promoted from search — 3x great)`
+   - Add the resource to `resources/curated-resources.md` under the appropriate pillar/level section with full URL
+   - Add a note in the Description: `(promoted — 3x great)`
    - Log the promotion in `memory/resource-feedback.md` under a `## Promotions` section
-4. Resources rated "didn't click" 3 times should be **blocklisted** — add them to a `## Blocklist` section in `memory/resource-feedback.md` so the agent never searches for them again
+4. Resources rated "didn't click" 3 times should be **blocklisted** — add them to a `## Blocklist` section in `memory/resource-feedback.md` so the agent avoids recommending them
 
-**Promotion check:** Run the promotion check every time a new rating is recorded for a searched resource. Don't wait for a batch — promote as soon as the threshold is hit.
+**Preferred platforms tracking:**
 
-**[unvetted] resources:** Resources marked `[unvetted]` in curated-resources.md follow the same graduation path. They need 3 "great" ratings to lose the `[unvetted]` prefix. If they get 3 "didn't click" ratings, remove them from curated-resources.md entirely.
+In addition to individual resources, the agent tracks which platforms the user prefers for different task types:
+
+- When a user rates a platform's resources consistently well (3+ "great" ratings for the same platform), note it as a preferred platform in the Learning Style Profile
+- When crafting search suggestions (daily-plan Priority 3), direct search queries to these preferred platforms: "Search for [topic] on [preferred platform]"
+
+**Promotion check:** Run the promotion check every time a new rating is recorded. Don't wait for a batch.
 
 ## Example promotion
 

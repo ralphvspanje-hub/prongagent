@@ -81,7 +81,7 @@ Skill files tell you to read specific memory files for details — don't duplica
 - Plain text, no embeds
 - Max 2000 characters
 - Use emoji sparingly and consistently (📖 read, 💻 practice, 🎥 watch, 🔄 review, 🔥 streak, 📊 stats, 📈 progress)
-- Strip internal tags (`[searched]`, `[unvetted]`) before sending to user
+- Use clean resource names and search suggestions in messages — no internal tags or metadata
 
 ## Self-observation protocol
 

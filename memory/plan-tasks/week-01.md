@@ -2,9 +2,9 @@
 
 ## Monday
 
-| # | Action | Resource | Platform | URL | Est. time | Pillar | Type | Status |
-|---|--------|----------|----------|-----|-----------|--------|------|--------|
-| 1 |        |          |          |     |           |        |      | pending |
+| # | Action | Search | Platform | Size | Pillar | Type | Why | Status |
+|---|--------|--------|----------|------|--------|------|-----|--------|
+| 1 |        |        |          |      |        |      |     | pending |
 
 ## Tuesday
 

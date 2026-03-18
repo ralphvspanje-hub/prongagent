@@ -20,6 +20,7 @@ Three activation paths:
 - Maximum 1 scheduled teach-back per day
 - Do NOT trigger during another conversation — queue it for the next interaction
 - Do NOT trigger on practice tasks (LeetCode, coding exercises, etc.) — those are already active recall
+- Do NOT trigger on practice_prompt tasks — those are already active recall evaluated during check-in
 
 **2. LEVEL-UP GATE** — when check-in reports a pillar at 5/5 blocks at current level.
 - This is mandatory, not probabilistic — the user MUST pass teach-back to level up
@@ -339,6 +340,8 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 - **Level-up gate fails twice for same pillar/level:** Log for the adaptation skill in `memory/adaptation-log.md`. Don't keep retrying in a loop — let adaptation review whether the resources or thresholds need adjusting.
 
 - **Practice tasks (LeetCode, coding exercises, etc.):** NEVER trigger teach-back on these. They're already active recall by nature.
+
+- **Practice prompt tasks:** NEVER trigger teach-back on these. They are already evaluated as active recall during check-in. The check-in skill handles response evaluation and SRS entry for practice_prompt tasks.
 
 - **Maximum 1 scheduled teach-back per day:** Level-up gates are exempt from this limit since they're triggered by a milestone.
 

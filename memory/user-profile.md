@@ -28,3 +28,11 @@
 - **LinkedIn summary:**
 - **Current skills:**
 - **Current job situation:** (employed-happy / employed-looking / unemployed / student)
+
+## Extended Context
+
+(Optional — user's own words about their background, motivations, and story. Populated during or after onboarding. The user can type or use voice input to share as much as they want.)
+
+### Key Facts Extracted
+
+(Agent-extracted highlights from the narrative above — specific details that should influence task framing, resource selection, and motivation messaging.)

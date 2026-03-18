@@ -1,6 +1,10 @@
-# Curated Resources
+# Curated Resources — Gold Standard
 
-Organized by pillar and level. Used by `skills/daily-plan.md` and other skills to assign tasks.
+**These are resources we KNOW are excellent.** Search suggestions are the primary delivery method for daily tasks (see daily-plan skill). This list is for resources that have been vetted and confirmed high-quality — either by the developer during setup, or promoted from user ratings (3x "great" via the resource-feedback graduation system).
+
+Only add resources here that you are confident are: free (or have substantial free content), actively maintained, and genuinely good for the listed level. When in doubt, use a search suggestion instead.
+
+Organized by pillar and level. Referenced by `skills/daily-plan/SKILL.md` as Priority 2 resources.
 
 **Levels:** 1 = Beginner, 2 = Foundations, 3 = Intermediate, 4 = Applied, 5 = Advanced/Mastery
 

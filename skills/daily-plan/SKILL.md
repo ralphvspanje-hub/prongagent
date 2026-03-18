@@ -124,19 +124,21 @@ Read `config/settings.md` for days off — this is the source of truth. (`memory
 
 For each day, assign tasks that fit within the user's daily time commitment. Use this table as a **guideline, not a rule** — the agent should optimize for learning quality, not hitting a task count:
 
-| Time commitment | Typical tasks | Typical total time |
-|-----------------|---------------|-------------------|
-| 15min | 1 task | ~15 min |
-| 30min | 1-2 tasks | ~30 min |
-| 1hr | 1-3 tasks | ~50-60 min |
-| 2hr+ | 2-4 tasks | ~90-120 min |
+| Time commitment | Typical tasks | Typical sizes |
+|-----------------|---------------|---------------|
+| 15min | 1 task | 1 Short |
+| 30min | 1-2 tasks | 1-2 Short |
+| 1hr | 1-3 tasks | Mix of Short + Medium |
+| 2hr+ | 2-4 tasks | Mix of Short + Medium + Long allowed |
 
-**Single-task days are fine.** A focused 1-hour deep practice session (e.g., SQL exercises, a long-form tutorial, a hands-on build) can be more valuable than 3 short tasks with context-switching. Use single-task days when:
-- The best available resource is longer than a typical task (45min-1.5hr) and is exceptionally well-matched to the user's level, pillar, and dream career
+**Size definitions:** Short (~20min) = quick concept video, short read, practice questions, brief exercise. Medium (~40min) = standard tutorial, moderate exercises, documentation deep-dive, hands-on practice. Long (~60min) = full lecture, comprehensive tutorial, complex hands-on project, in-depth course. Only these three sizes are allowed — no arbitrary minute values.
+
+**Single-task days are fine.** A focused Medium or Long deep practice session (e.g., SQL exercises, a long-form tutorial, a hands-on build) can be more valuable than 3 Short tasks with context-switching. Use single-task days when:
+- A Medium or Long task is exceptionally well-matched to the user's level, pillar, and dream career
 - The task is practice-heavy and benefits from sustained focus (coding, building, exercises)
 - The user's resource feedback shows they prefer longer deep-dive formats
 
-**Time flexibility:** The daily time commitment is a target, not a hard cap. If a resource is exceptionally well-matched (right pillar, right level, highly rated platform, directly tied to dream career), it can exceed the daily budget by up to 50%. When this happens: assign only that one task for the day, and note in the daily message why ("Today's a deeper dive — this one's worth the extra time"). Never exceed on consecutive days.
+**Time flexibility:** The daily time commitment is a target, not a hard cap. If a Long task is exceptionally well-matched (right pillar, right level, directly tied to dream career), a 30min/day user can get one Long task instead of their usual Short tasks. When this happens: assign only that one task for the day, and note in the daily message why ("Today's a deeper dive — this one's worth the extra time"). Never exceed on consecutive days.
 
 For each task, specify all fields in the task format (see below).
 
@@ -155,19 +157,26 @@ For each task, specify all fields in the task format (see below).
    - Level 4: expert resources, complex problems, system-level thinking
    - Level 5: mastery-level challenges, teaching others, original work
 
-5. **Resource selection** — three priority tiers:
-   - **Priority 1: Curated** — pull from `resources/curated-resources.md` first. Match pillar + level. These are vetted and preferred.
-   - **Priority 2: Web search** — when curated doesn't cover the pillar/level, search YouTube, Google, etc. for "[topic] [level] tutorial/course". Mark these resources with a `[searched]` prefix in the task file. Include the actual URL you found — do not fabricate URLs.
-   - **Priority 3: User-suggested** — resources the user mentions in conversation. Add them to the task as-is with no prefix (the user vouched for them).
-   - **Fast-moving topics exception:** For pillars like AI, current tech trends, or any topic where content goes stale quickly, prefer searched resources over curated even when curated entries exist. Curated AI resources from 6 months ago may already be outdated.
-   - Resources marked `[unvetted]` in `curated-resources.md` are placeholders without verified URLs — treat them as Priority 2 (search for the actual URL before assigning).
-   - **Priority 4: Search suggestion** — when the agent can't find a specific high-quality resource but knows the topic is important, provide a search query instead of a link. Format the task with URL set to `N/A` and Resource as: `🔍 Search: "[exact query]" on [platform]`. Use sparingly — this is a fallback, not a default. Most common for: niche topics, company-specific interview prep, content that changes weekly (AI news, new framework releases).
+5. **Resource selection** — four priority tiers (search-first approach):
+   - **Priority 1: Search suggestions (DEFAULT)** — the primary delivery method. The agent crafts a good search query, the user picks the best resource themselves. Format: `Search: "[topic] [level] tutorial" on YouTube` or `Search: "[topic] practice problems" on LeetCode`. This produces better results than curated links because: users pick resources that match their learning style, no hallucinated or stale URLs, and users develop resource-finding skills. **YouTube dominance:** 50-60% of search suggestions should target YouTube — it has the widest coverage and users can preview before committing.
+   - **Priority 2: Curated gold-standard** — use ONLY for resources in `resources/curated-resources.md` that are genuinely vetted and confirmed excellent. These are the "we know this one is gold" entries. Don't default to curated just because an entry exists — a good search suggestion often beats a mediocre curated link.
+   - **Priority 3: User-preferred platforms** — resources or platforms the user has told the agent they like (tracked in `resource-feedback.md`). "You said you like freeCodeCamp for Python — search there for decorators."
+   - **Priority 4: Platform discovery** — for skills with well-known free platforms (coding: LeetCode, HackerRank, Exercism, Codewars; SQL: SQLBolt, Mode Analytics, HackerRank SQL; data: Kaggle), suggest 2-3 free platforms and ask the user to try one and report back. "Find a free interactive SQL trainer you like — popular options: SQLBolt, Mode Analytics, HackerRank SQL. Try one this week and tell me which clicks." Use in the first 1-2 weeks for practice-type tasks.
+   - **Banned platforms:** Never recommend paid or paywalled platforms: Udemy, Coursera, edX, LinkedIn Learning, Pluralsight, DataCamp, Codecademy Pro. Free tiers of otherwise-paid platforms are fine if the free content is substantial.
+   - **Fast-moving topics exception:** For pillars like AI, current tech trends, or any topic where content goes stale quickly, always use search suggestions (Priority 1) — curated resources for these topics go stale within months.
 
-6. **URL handling** — for curated resources, use the URL from `curated-resources.md`. For searched resources, use the URL you found during search. For search suggestion tasks (Priority 4), set URL to `N/A` — the search query in the resource name IS the guidance. For self-guided tasks or tasks without a specific URL (e.g., "draft STAR stories"), set URL to `N/A`. Never fabricate URLs — if you can't find a working URL, use a search suggestion (Priority 4) instead.
+6. **Search query quality** — search suggestions are only as good as the query. Craft specific, level-appropriate queries:
+   - Include the topic AND the level: "python decorators beginner tutorial" not just "python decorators"
+   - Include the format when relevant: "SQL joins visual explanation" for conceptual, "SQL joins practice exercises" for practice
+   - Never name specific creators or channels — let the user pick
+   - For YouTube: add "tutorial", "explained", or "crash course" to improve results
+   - For practice platforms: add "free", "interactive", or "exercises"
 
-7. **No repeats within a week** — don't assign the same resource twice in one week. Check previous weeks too — avoid re-assigning resources the user already completed (check `memory/history.md`).
+7. **URL handling** — most tasks will have no URL (search suggestions are the default). Only Priority 2 curated gold-standard resources have URLs. For self-guided tasks (e.g., "draft STAR stories"), leave the Search field as `N/A`. Never fabricate URLs.
 
-8. **Platform preferences** — respect platform ratings from `resource-feedback.md`. If the user rated a platform "didn't click" multiple times, avoid it.
+8. **No repeats within a week** — don't assign the same resource or search query twice in one week. Check previous weeks too — avoid re-assigning topics the user already completed (check `memory/history.md`).
+
+9. **Platform preferences** — respect platform ratings from `resource-feedback.md`. If the user rated a platform "didn't click" multiple times, avoid it.
 
 **Step 4: Write to file**
 
@@ -206,7 +215,9 @@ Read `memory/spaced-repetition.md`. If a concept is due for review today, includ
 
 **Step 5: Format the message**
 
-Strip `[searched]` and `[unvetted]` prefixes from resource names before composing the message — those tags exist for internal tracking in the task file, not for the user. The user should see clean resource names.
+For each task, present: the learning objective (Action), the search suggestion or curated link (Search), the size, and the dream career connection (Why). For practice_prompt tasks, present the question directly — the user answers in conversation.
+
+If the user has extended context in `memory/user-profile.md` (§ Extended Context), reference specific details when framing "why this matters" — e.g., "You mentioned loving the data analysis part of your marketing internship — this SQL work builds directly on that."
 
 Keep it concise — 5-8 lines max for normal verbosity. Adjust based on `config/settings.md` verbosity setting:
 
@@ -227,29 +238,42 @@ Each task in the weekly file must include all these fields:
 | Field | Description | Examples |
 |-------|-------------|----------|
 | # | Task number for the day | 1, 2, 3 |
-| Action | Verb describing what to do | "Read", "Practice", "Watch", "Build", "Complete", "Review" |
-| Resource | Specific resource name | "Python decorators deep dive", "LeetCode #206 Reverse Linked List" |
-| Platform | Where the resource lives | "Real Python", "LeetCode", "YouTube", "freeCodeCamp", "Coursera" |
-| URL | Direct link to the resource | Full URL (from curated-resources.md or known) |
-| Est. time | How long it should take | "15 min", "20 min", "45 min", "1 hr" |
+| Action | Mini learning objective — what to learn/do, not just a verb. For conceptual tasks, include a self-check question: "After this, you should be able to answer: [question]" | "Learn Python decorators — what they are, when to use them, how to write a simple one. Self-check: What's the difference between @decorator syntax and calling the decorator function directly?" |
+| Search | Search suggestion (default) or curated URL. Format: `Search: "[query]" on [platform]`. For curated gold-standard resources, use the actual URL. For self-guided tasks, use `N/A`. | `Search: "python decorators explained beginner" on YouTube` |
+| Platform | Where the user should search or the curated resource lives | "YouTube", "LeetCode", "freeCodeCamp", "HackerRank" |
+| Size | Task size — only three values allowed | Short (~20min), Medium (~40min), Long (~60min) |
 | Pillar | Which skill pillar this serves | "Python", "DSA", "System Design", "Databases" |
-| Type | Affects teach-back eligibility | "conceptual" or "practice" |
+| Type | Affects teach-back eligibility + task delivery | "conceptual", "practice", or "practice_prompt" |
+| Why | Dream career connection (1 sentence) | "Decorators are table stakes for Python frameworks used at [dream career] companies" |
 | Status | Current state | "pending", "done", "skipped", "partial" |
+
+### Task types
+
+- **conceptual** — learning tasks: reading, watching, studying. Eligible for teach-back prompts (~1 in 3). Always include a self-check question in the Action field.
+- **practice** — hands-on tasks: coding, building, exercises on external platforms. Not eligible for teach-back (they're already active recall).
+- **practice_prompt** — the task IS a question the user answers in conversation. No external resource needed. The agent asks the question, evaluates the response using the teach-back evaluation table (strong/partial/can't explain/skipped), gives feedback, and marks done/partial. Platform = "ProngAgent", Search = `N/A`. Format the Action as: "Practice prompt: [question]. Reply when ready." Frequency: 1-2 per week for regular plans, 2-3 per week for crash courses. Mix across pillars. These are NOT eligible for additional teach-back (they already are active recall).
 
 ## Example daily message (normal verbosity)
 
 ```
 Morning! Here's your plan for today:
 
-1. 📖 Read: Python decorators deep dive (Real Python) [link] ~20min
-2. 💻 Practice: 2 medium LeetCode problems on trees [link] ~40min
-3. 🎥 Watch: System design — load balancers (YouTube) [link] ~15min
+1. 📖 Learn Python decorators — what they are, when to use them, how
+   to write a simple one. Search: "python decorators explained beginner"
+   on YouTube [Short]
+   Self-check: What's the difference between @decorator and calling the function directly?
 
-🔄 Quick review: What's the difference between a stack and a queue?
+2. 💻 Practice tree traversal — BFS vs DFS, when to use each.
+   Search: "binary tree traversal practice problems" on LeetCode [Medium]
+   Decorators are table stakes for Python frameworks used at [dream career] companies.
+
+3. ❓ Practice prompt: Explain the difference between a stack and a queue.
+   Give a real-world example of when you'd use each. Reply when ready. [Short]
+
+🔄 Quick review: What does Big O notation tell you about an algorithm?
 
 Yesterday you finished the SQL section — that's 8 days in a row now.
-The tree problems build directly on the recursion you practiced last
-week. This is core for [dream role] interviews.
+The tree problems build directly on the recursion you practiced last week.
 ```
 
 ## Example daily message (concise verbosity)
@@ -257,11 +281,11 @@ week. This is core for [dream role] interviews.
 ```
 Today's tasks:
 
-1. 📖 Python decorators (Real Python) ~20min
-2. 💻 LeetCode trees x2 ~40min
-3. 🎥 Load balancers (YouTube) ~15min
+1. 📖 Python decorators — Search: "python decorators explained beginner" on YouTube [Short]
+2. 💻 Tree traversal — Search: "binary tree BFS DFS practice" on LeetCode [Medium]
+3. ❓ Practice prompt: stack vs. queue — explain + real-world example [Short]
 
-🔄 Review: stack vs. queue?
+🔄 Review: What does Big O notation tell you?
 ```
 
 ## Example full_plan output
@@ -301,18 +325,18 @@ After running mode: `full_plan`, `memory/current-plan.md` should look like:
 
 ## Monday
 
-| # | Action | Resource | Platform | URL | Est. time | Pillar | Type | Status |
-|---|--------|----------|----------|-----|-----------|--------|------|--------|
-| 1 | Read | REST API design principles | Real Python | [url] | 25 min | Backend Architecture | conceptual | pending |
-| 2 | Practice | SQL joins exercises | Mode Analytics | [url] | 20 min | Databases | practice | pending |
-| 3 | Watch | System design intro — scalability | YouTube | [url] | 15 min | System Design | conceptual | pending |
+| # | Action | Search | Platform | Size | Pillar | Type | Why | Status |
+|---|--------|--------|----------|------|--------|------|-----|--------|
+| 1 | Learn REST API design principles — request/response cycle, HTTP methods, status codes. Self-check: When would you use PUT vs PATCH? | Search: "REST API design principles beginner" on YouTube | YouTube | Short | Backend Architecture | conceptual | API design is the foundation of every backend role | pending |
+| 2 | Practice SQL joins — INNER, LEFT, RIGHT, FULL OUTER with real data | Search: "SQL joins practice exercises free" on SQLBolt | SQLBolt | Medium | Databases | practice | Every data-touching role requires fluent SQL joins | pending |
+| 3 | Practice prompt: Explain scalability — what does it mean for a system to "scale horizontally" vs "vertically"? Give an example of each. Reply when ready. | N/A | ProngAgent | Short | System Design | practice_prompt | System design questions come up in every senior interview | pending |
 
 ## Tuesday
 
-| # | Action | Resource | Platform | URL | Est. time | Pillar | Type | Status |
-|---|--------|----------|----------|-----|-----------|--------|------|--------|
-| 1 | Complete | Express.js routing tutorial | freeCodeCamp | [url] | 30 min | Backend Architecture | practice | pending |
-| 2 | Read | Database indexing explained | Use The Index, Luke | [url] | 20 min | Databases | conceptual | pending |
+| # | Action | Search | Platform | Size | Pillar | Type | Why | Status |
+|---|--------|--------|----------|------|--------|------|-----|--------|
+| 1 | Learn Express.js routing — how routes, middleware, and request handlers work together. Self-check: What's the difference between app.use() and app.get()? | Search: "express.js routing tutorial beginner" on YouTube | YouTube | Medium | Backend Architecture | conceptual | Express is the most common Node.js framework in production | pending |
+| 2 | Learn database indexing — what indexes do, when to add them, and the tradeoff with write speed. Self-check: Why might adding an index slow down INSERT operations? | Fundamentals of Database Indexing | Use The Index, Luke | Medium | Databases | conceptual | Query optimization separates junior from senior DB work | pending |
 
 ## Wednesday
 
@@ -334,13 +358,13 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 - Two rules in the same or different skill files contradicted each other
 
 **Daily-plan-specific:**
-- Couldn't find any suitable resource for a pillar/level combo after exhausting all 4 priority tiers (log the pillar, level, and what you tried)
-- The time flexibility rule (50% over budget) was used — log which resource and why it justified exceeding the daily budget
+- Couldn't craft a useful search suggestion for a pillar/level combo — topic is too niche or specialized for general search (log the pillar, level, and what you tried)
+- The time flexibility rule was used (Long task for a Short-commitment user) — log which task and why it justified exceeding the daily budget
 - A ramp-up rule (Week 1 gentle start) felt too aggressive or too gentle for this specific user (log the user's profile and what felt off)
 
 ## Edge cases
 
-- **No curated resources for a pillar/level:** Fall back to Priority 2 (web search). Mark the resource `[searched]` in the task file. The resource-feedback skill will collect ratings, and resources rated "great" 3 times get promoted to curated automatically.
+- **No curated resources for a pillar/level:** This is the normal case — most tasks use search suggestions (Priority 1). Only flag this as an observation if you can't even craft a good search query for the topic.
 - **User completes all tasks early:** Generate the next week immediately. Don't make them wait.
 - **User hasn't done any tasks for 3+ days:** Don't generate a new week. The check-in and adaptation skills handle this — daily-plan just generates and sends.
 - **Interview prep mode:** When `plan type` is `interview_prep` in `memory/current-plan.md`, daily-plan operates differently:
