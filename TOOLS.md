@@ -3,6 +3,8 @@
 ## File operations
 
 - Read and write markdown files in the workspace (memory files, config, resources)
+- Read PDFs (resume, LinkedIn exports, cover letters) — use the Read tool with the file path
+- Read images (screenshots, photos sent via Telegram)
 - Create new files (weekly task files, weekly digests)
 
 ## Messaging (built-in)
