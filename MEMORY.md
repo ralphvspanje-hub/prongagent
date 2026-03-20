@@ -13,6 +13,12 @@
 - **Pillar levels:** (not started)
 - **Active interview prep:** none
 
+## User model highlights
+
+(Top 2-3 insights from `memory/user-model.md` — updated as patterns emerge)
+
+- (no observations yet)
+
 ## Key preferences
 
 (Populated from onboarding and usage patterns)

@@ -7,3 +7,4 @@ Lightweight checks only. If something needs attention, note it — don't do heav
 - [ ] Check `memory/progress.md` — if last active date is 3+ days ago and no absence ping has been sent, flag for adaptation skill
 - [ ] Check `memory/win-log/candidates.md` — if 3+ draft entries, note for next interaction
 - [ ] Check `memory/agent-observations.md` — if 5+ unreviewed entries, mention to user in next interaction
+- [ ] If `job_scan_active` is true in `config/settings.md`, check if last scan in `memory/job-scan-state.md` is 2+ days old (scan may have been missed)

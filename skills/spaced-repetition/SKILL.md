@@ -31,6 +31,8 @@ Two activation paths:
 |------|-----------------|
 | `memory/spaced-repetition.md` | Active Review Items table (due dates, consecutive correct, status), Retired table, Review Queue |
 | `memory/user-profile.md` | Dream career, target role (for framing review questions) |
+| `memory/user-model.md` | Knowledge Anchors (for framing review questions using analogies that work), Communication Style (for question tone) |
+| `memory/concept-links.md` | Use `builds-on` and `applies-to` connections to add context to review questions — instead of testing a concept in isolation, reference a connected concept: "When you used GROUP BY last week, what would a window function let you do differently?" |
 | `memory/current-plan.md` | Pillar levels (for calibrating question difficulty) |
 | `memory/progress.md` | Teach-back log (cross-reference — avoid reviewing a concept teach-back already covered today) |
 | `config/settings.md` | Spaced repetition frequency (default: 1 review per day max) |
@@ -44,18 +46,48 @@ Two activation paths:
 
 ---
 
+## Skill files
+
+| File | When to use |
+|------|------------|
+| `scripts/srs-calculator.ts` | Step 1 of queue management — run this to get due/overdue concepts |
+
+### scripts/srs-calculator.ts
+
+**What it does:** Reads spaced-repetition.md, calculates which concepts are due/overdue today.
+
+**Usage:** `bun run skills/spaced-repetition/scripts/srs-calculator.ts <path-to-spaced-repetition.md> [today-date]`
+
+- `path-to-spaced-repetition.md` — typically `memory/spaced-repetition.md`
+- `today-date` — YYYY-MM-DD (defaults to today if omitted)
+
+**Output:**
+```
+due_count: 3
+overdue_count: 1
+
+## Due Concepts (priority order)
+| Concept | Pillar | Next review | Days overdue | Consecutive correct | Status |
+...
+```
+
+Concepts are sorted by priority: overdue first (most overdue at top), then by lowest consecutive correct count.
+
+**Why scripted:** Date comparison and interval calculation across multiple table rows should be deterministic.
+
+---
+
 ## Queue management (daily, before daily message)
 
-### Step 1: Read Active Review Items
+### Step 1: Calculate due concepts
 
-Read `memory/spaced-repetition.md` → Active Review Items table. Check the "Next review" column against today's date.
+Run `scripts/srs-calculator.ts` to get the due/overdue list:
 
-Categorize items:
-- **Overdue:** Next review date is before today
-- **Due today:** Next review date is today
-- **Not due:** Next review date is in the future
+```bash
+bun run skills/spaced-repetition/scripts/srs-calculator.ts "memory/spaced-repetition.md"
+```
 
-If no items are overdue or due today → write nothing to Review Queue. The daily message will skip the review section.
+Use the output to determine what's due. If `due_count: 0` → write nothing to Review Queue. The daily message will skip the review section.
 
 ### Step 2: Pick the highest-priority item
 

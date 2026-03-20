@@ -10,6 +10,13 @@ metadata:
 
 # Portfolio Project Suggestions Skill
 
+## Skill files
+
+| File | When to read |
+|------|-------------|
+| `references/project-generation.md` | Before generating any project suggestion — contains the 5-factor decision framework and additional considerations |
+| `examples/scenarios.md` | When you need example conversations for skill block completion, interview prep, building gap, user declines, or user's own idea |
+
 ## When to trigger
 
 Four activation paths:
@@ -49,6 +56,7 @@ Read ALL of the following before generating a project suggestion:
 | `memory/history.md` | Completed tasks — what skills have they actually practiced recently? What pillars dominate? |
 | `memory/resume-context.md` | Existing projects — don't suggest projects similar to what they've already built |
 | `memory/resource-feedback.md` | Learning style — do they prefer building or studying? Platform preferences. |
+| `memory/user-model.md` | Motivation Drivers (how to pitch the project), Growth Edges (readiness signals), Knowledge Anchors (what they're strong at — build on it) |
 | `memory/interview-context.md` | If interview prep is active — tailor project to target company's domain and tech stack |
 | `memory/win-log/wins.md` | Existing wins — don't duplicate portfolio stories they already have for this skill area |
 | `memory/win-log/interview-mapping.md` | Question type coverage — a project can fill a gap (e.g., no "creativity/innovation" story) |
@@ -70,73 +78,7 @@ Read ALL of the following before generating a project suggestion:
 
 ---
 
-## Project generation
-
-### The 5 factors
-
-When generating a project suggestion, consider all five:
-
-**A. DREAM CAREER** — what projects impress hiring managers in that field?
-
-Read `memory/user-profile.md` → Target role. Match the project to what that role values:
-- Data science roles → data pipeline projects, analysis dashboards, ML experiments
-- PM roles → product teardowns with data, user research projects, prototype builds
-- Frontend roles → polished UI projects, design systems, interactive tools
-- Backend roles → API services, data processing pipelines, infrastructure tools
-- Full-stack roles → complete working apps with real users
-
-Don't suggest generic projects (todo apps, calculators) unless the user is a complete beginner. Dream-career-aligned projects stand out.
-
-**B. CURRENT SKILL LEVEL** — stretch but don't overwhelm.
-
-Read `memory/current-plan.md` → Pillar levels and `memory/progress.md` → Pillar Levels. The project should be one level above the user's comfort zone:
-
-| User's highest relevant pillar level | Project complexity |
-|--------------------------------------|-------------------|
-| Level 1 | Guided project — follow a tutorial, then customize. "Follow this tutorial to build X, then add your own twist." |
-| Level 2 | Structured project — clear requirements, known patterns, but the user builds it independently. |
-| Level 3 | Open-ended project — defined goal, user chooses the approach. Real-world complexity. |
-| Level 4-5 | Ambitious project — novel problem, multiple technologies, deployment, real users. |
-
-**C. SKILLS RECENTLY PRACTICED** — reinforce, don't distract.
-
-Read `memory/history.md` for completed tasks in the last 2-3 weeks. The project should use skills the user has been actively learning, so it reinforces rather than introduces new things. A user who's been doing SQL + Python tasks should get a data project, not a React frontend project.
-
-Exception: if the user has been doing only one pillar for weeks, the project can bridge two pillars to create variety.
-
-**D. TIME COMMITMENT** — match to pacing profile.
-
-Read `memory/user-profile.md` → Pacing and Daily time commitment. Scale the project accordingly:
-
-| Pacing | Project scope | Estimated hours |
-|--------|--------------|-----------------|
-| Relaxed | Weekend project | 4-8 hours |
-| Moderate | 1-2 week project | 8-16 hours |
-| Intensive | Multi-week project | 16-30 hours |
-
-For 30min/day users, even a "weekend project" spans 1-2 weeks of plan tasks. Account for this when breaking into tasks.
-
-**E. PUBLIC DATA/APIs** — minimize setup barriers.
-
-Prefer projects using free, public resources:
-- Government open data (census, transit, weather, public health)
-- Public APIs (GitHub API, OpenWeatherMap, REST Countries, PokéAPI, etc.)
-- Open datasets (Kaggle, UCI ML Repository, data.gov)
-- Free tier services (Supabase, Vercel, Netlify, GitHub Pages)
-
-If no free option exists for the project concept, mention the cost upfront. Never suggest projects that require paid tools/APIs without disclosure.
-
-### Additional considerations
-
-**Don't duplicate existing projects:**
-- Read `memory/resume-context.md` → Key Projects. If the user already built a React dashboard, don't suggest another React dashboard. Suggest something that uses different skills or a different domain.
-- Read `memory/win-log/wins.md`. If they already have a polished win for a particular skill area, suggest a project in a different area — fill portfolio gaps, don't stack duplicates.
-
-**Fill interview mapping gaps:**
-- Read `memory/win-log/interview-mapping.md`. If the user is missing a "Creativity / Innovation" story, a novel project can fill that gap. If they're missing "Technical Problem Solving," suggest something with a clear technical challenge.
-
-**Interview-specific tailoring:**
-- If `memory/interview-context.md` → Status = `active`, tailor the project to the target company's domain. Preparing for StreamCo? Suggest a travel data project. Preparing for Stripe? Suggest a payments-related tool.
+Before generating a suggestion, read `references/project-generation.md` for the 5-factor decision framework.
 
 ---
 
@@ -420,141 +362,4 @@ If `memory/interview-context.md` → Status = `active` and Days remaining is 14-
 
 > "You've got enough time for a quick project that'll look great for [company]. This one's scoped tight — [X hours] total, all wrapped up before your final prep days."
 
----
-
-## Example: skill block completion trigger
-
-```
-[User just passed the Level 2 → Level 3 gate for SQL & Data Analysis]
-
-Agent: "You just hit Level 3 in SQL — that means you can write complex queries
-        independently. Nice milestone.
-
-        For a Product Manager role, here's a project that would be strong for
-        your portfolio:
-
-        📊 Project: Product Metrics Dashboard
-        - Uses: SQL (your newly leveled-up skill), Python, data visualization
-        - Scope: ~10 hours over 2 weeks (fits your 30min/day schedule)
-        - Why it's good: PMs who can pull their own data and build dashboards
-          stand out immediately. This shows you don't just talk about data —
-          you work with it. Uses public e-commerce data so no setup barriers.
-        - Stretch: Add cohort analysis to show retention trends
-
-        Want me to break this into tasks and add it to your plan? Or would
-        you prefer something different?"
-
-User: "That sounds good, let's do it."
-
-Agent: "Great. I've added it to your plan:
-
-        Week 5:
-        - Mon: Design — sketch dashboard layout + define key metrics (~30min)
-        - Tue: Build — set up Python project, connect to dataset (~30min)
-        - Wed: Build — write SQL queries for 3 core metrics (~30min)
-        - Thu: Implement — build visualization for first metric (~30min)
-        - Fri: Implement — add remaining visualizations (~30min)
-
-        Week 6:
-        - Mon: Implement — interactivity + filtering (~30min)
-        - Tue: Test — edge cases, data validation (~30min)
-        - Wed: Deploy — push to GitHub, add README (~30min)
-
-        Mixed in with your regular learning tasks. Let's build this."
-```
-
-## Example: interview prep trigger
-
-```
-[Interview prep is active for StreamCo Product Analyst, 18 days out]
-
-Agent: "For a Product Analyst role at StreamCo, a data project in the
-        travel domain would stand out. Here's one:
-
-        📊 Project: Hotel Pricing Analysis Tool
-        - Uses: SQL, Python, pandas, data visualization
-        - Scope: ~6 hours over 1 week (tight scope for interview timeline)
-        - Why it's good: Shows StreamCo you understand their domain.
-          Analyzing hotel pricing data demonstrates the exact analytical
-          thinking they hire for. Uses public Kaggle hotel booking data.
-        - Stretch: Skip the stretch — focus on shipping a clean v1
-
-        Want me to add this to your interview prep plan?"
-```
-
-## Example: building gap trigger
-
-```
-[Adaptation flags: no Build/Create tasks completed in 3+ weeks]
-
-Agent: "You've been reading and watching for a while — solid foundation
-        building. But building something would cement these skills in a way
-        that's hard to replicate by studying alone. Interested in a project?
-
-        🤖 Project: AI-Powered Study Notes Summarizer
-        - Uses: Python (Level 2), API integration, text processing
-        - Scope: ~8 hours over 2 weekends
-        - Why it's good: For a PM role, building with AI shows you understand
-          the technology your teams will ship. Plus, it's a tool you'd
-          actually use.
-        - Stretch: Add a simple UI with Streamlit
-
-        Want me to scope this out, or would you rather build something else?"
-```
-
-## Example: user declines
-
-```
-Agent: [suggests a project]
-
-User: "Not right now, I want to focus on studying."
-
-Agent: "No problem. I'll check back in a few weeks. Keep crushing the
-        learning tasks."
-
-[Agent tracks: decline count = 1. Next suggestion not before 3 weeks.]
-
----
-
-[3 weeks later, another trigger fires]
-
-Agent: [suggests a different project]
-
-User: "I'm still not feeling a project."
-
-Agent: "Totally fine — everyone learns differently. I won't suggest projects
-        unless you ask. Just say 'suggest a project' whenever you're ready."
-
-[Agent tracks: decline count = 2. Suggestion frequency capped at 1/month,
- only via skill block completion or manual request.]
-```
-
-## Example: user brings their own idea
-
-```
-User: "I want to build a Chrome extension that tracks time spent on
-       different websites."
-
-Agent: "Love it — that's a great portfolio piece, especially for PM roles
-        where understanding user behavior matters. Let me help you scope it.
-
-        How much time do you want to spend on it — quick weekend build or
-        something more polished?"
-
-User: "Weekend build, maybe 6-8 hours."
-
-Agent: "Perfect. Here's how I'd break it down:
-
-        📦 Project: Website Time Tracker (Chrome Extension)
-        - Uses: JavaScript, Chrome Extension APIs, basic data viz
-        - Scope: ~7 hours over 1 week
-
-        Tasks:
-        - Day 1: Design — define features, sketch the popup UI (~30min)
-        - Day 2: Build — Chrome extension boilerplate, tab tracking logic (~1.5hr)
-        - Day 3: Build — data storage (chrome.storage), daily/weekly aggregation (~1.5hr)
-        - Day 4: Implement — popup UI with time breakdown chart (~1.5hr)
-        - Day 5: Test + Deploy — test across sites, package, publish to Chrome Web Store (~1.5hr)
-
-        Want me to add these to your plan?"
-```
+For full example conversations, see `examples/scenarios.md`.

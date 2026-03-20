@@ -34,6 +34,7 @@ This skill has the widest read scope of any skill. Read ALL of the following bef
 | `memory/spaced-repetition.md` | Active review items, queue length, concept statuses |
 | `memory/weekly-digests/week-{N}.md` | Latest weekly recap conversation results — recall question performance, difficulty feedback, user adjustment requests. Check the `### Recap Conversation` section. |
 | `config/settings.md` | Teach-back frequency, resource feedback frequency, days off, quiet hours, verbosity |
+| `memory/user-model.md` | Learning Patterns, Motivation Drivers, Avoidance Patterns — primary input for understanding WHY completion/teach-back patterns look the way they do. Cross-reference behavioral signals with quantitative data. |
 | `memory/agent-observations.md` | Recent observations — check if any flagged issues affect current adaptation decisions. Also check for patterns across observations (same skill file flagged multiple times = systemic issue). |
 
 ## What to write
@@ -45,6 +46,7 @@ This skill has the widest read scope of any skill. Read ALL of the following bef
 | `memory/plan-tasks/week-{N}.md` | Task additions, removals, swaps for UPCOMING days only |
 | `config/settings.md` | Frequency adjustments (teach-back, resource feedback) |
 | `memory/win-log/candidates.md` | Passive win capture when user describes achievements |
+| `memory/user-model.md` | Update sections when adaptation analysis reveals patterns: Learning Patterns (from completion + resource data), Avoidance Patterns (from pillar skip analysis), Growth Edges (from teach-back trends). Adaptation has the widest read scope and is best positioned to synthesize cross-skill observations into the user model. |
 | `memory/agent-observations.md` | Append observation if adaptation notices something about its own rules during trigger analysis (e.g., conflicting triggers, cooldown blocking an obviously needed change, conservative default feeling wrong) |
 
 ### Adaptation log entry format
@@ -91,6 +93,10 @@ Bad: "Reduced tasks"
 ### Rule 6: Conservative default
 
 When in doubt, don't adapt. False positives (unnecessary changes) are worse than false negatives (missing an opportunity to adjust). If the signal is weak or ambiguous, wait for more data.
+
+### Rule 9: Cross-reference with user model
+
+Before making any adaptation, check `memory/user-model.md` for context that explains the pattern. A pillar skip rate of 80% means something different if the user model shows "avoids system design due to anxiety" vs "skips articles but watches videos." The user model turns quantitative signals into informed decisions. If the user model has relevant observations, reference them in the adaptation log reasoning.
 
 ### Rule 7: Respect explicit user preferences
 

@@ -2,6 +2,10 @@
 
 (STAR-format achievement entries, ready for interview use)
 
+## Source files
+- Full win log: `files/` (place your detailed win log here)
+- STAR story bank: `files/` (place your story bank CSV here)
+
 <!-- Format for each entry:
 
 ## [Title that names the insight, not the task]

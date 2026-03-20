@@ -25,7 +25,7 @@ prongagent/                        # OpenClaw workspace template
 ├── AGENT_LEARNING_COMPANION.md    # Product report (full spec)
 ├── IMPLEMENTATION_GUIDE.md        # Step-by-step build guide
 ├── FUTURE_IDEAS.md                # Parked ideas
-├── skills/                        # THE PRODUCT — 12 skill directories
+├── skills/                        # THE PRODUCT — 15 skill directories
 │   ├── onboarding/SKILL.md        # First-time user setup: dream career, goals, prefs
 │   ├── daily-plan/SKILL.md        # Daily task generation + delivery
 │   ├── check-in/SKILL.md          # Evening progress check-in conversation
@@ -36,8 +36,10 @@ prongagent/                        # OpenClaw workspace template
 │   ├── spaced-repetition/SKILL.md # Review scheduling + retention pings
 │   ├── win-log/SKILL.md           # Achievement extraction + interview mapping
 │   ├── portfolio-projects/SKILL.md# Dream-career-aligned project suggestions
+│   ├── career-mentor/SKILL.md     # Freeform career advisor — resume, cover letters, LinkedIn, strategy
 │   ├── interview-prep/SKILL.md    # Job search detection + crash course
-│   └── mock-interview/SKILL.md    # Mock interview conductor + coaching
+│   ├── mock-interview/SKILL.md    # Mock interview conductor + coaching
+│   └── auto-linking/SKILL.md      # Silent concept cross-referencing after check-in/teach-back
 ├── memory/                        # Agent's persistent state (templates until first use)
 │   ├── user-profile.md            # User identity, dream career, preferences
 │   ├── current-plan.md            # Active plan: pillars, levels, weeks
@@ -50,6 +52,8 @@ prongagent/                        # OpenClaw workspace template
 │   ├── mistake-journal.md         # Mock interview mistakes + patterns
 │   ├── resume-context.md          # Resume/LinkedIn parsed context
 │   ├── interview-context.md       # Target company, role, date, prep status
+│   ├── user-model.md              # Progressive mental model of the user (agent-maintained)
+│   ├── concept-links.md           # Cross-references between learned concepts (auto-linking)
 │   ├── agent-observations.md      # Self-observations about skill file issues
 │   ├── win-log/                   # Achievement system
 │   │   ├── wins.md                # Polished wins (STAR format)

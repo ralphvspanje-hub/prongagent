@@ -28,12 +28,36 @@ Do NOT trigger if:
 - `memory/history.md` — to avoid duplicate entries if user checks in twice
 - `config/settings.md` — check-in time, teach-back frequency, resource feedback frequency, verbosity
 - `memory/user-profile.md` — name, dream career (for warm responses)
+- `memory/user-model.md` — communication style (for response tone and length), motivation drivers (for framing acknowledgments)
 
 ## What to write
 
 - `memory/plan-tasks/week-{N}.md` — update task statuses (pending → done/skipped/partial)
 - `memory/history.md` — append one row per completed task (append-only, never delete)
 - `memory/progress.md` — update streak, completion counts, pillar blocks
+- `memory/user-model.md` — append observation to Observation Log if the check-in reveals: completion patterns (time-of-day, which pillars get done vs skipped), communication style signals (response length, tone), engagement signals (enthusiasm vs. terse reporting)
+- `session-log.md` (this skill directory) — after execution if anything notable happened
+
+## Session log
+
+This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
+
+After execution, append an entry if anything notable happened. Don't log routine executions.
+
+**What to log:**
+- How the user reports (terse vs detailed), what format they use
+- "User always says 'did all 3' — doesn't elaborate" → keep responses equally terse
+- Notable patterns in what gets completed vs skipped
+
+**Entry format:**
+```markdown
+### YYYY-MM-DD — [brief title]
+- **Context:** [what triggered the skill]
+- **Notable:** [what's worth remembering for next time]
+- **User reaction:** [accepted / pushed back / modified / skipped]
+```
+
+**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ## Conversation flow
 
@@ -99,6 +123,36 @@ If they're still vague after the clarifying question, mark what you can confiden
 
 This is the last turn. Acknowledge, update, done.
 
+## Skill files
+
+| File | When to use |
+|------|------------|
+| `scripts/streak-counter.ts` | Step 3 (Update progress) — run this to calculate updated streak values |
+
+### scripts/streak-counter.ts
+
+**What it does:** Reads progress.md and calculates the updated streak based on tasks completed today.
+
+**Usage:** `bun run skills/check-in/scripts/streak-counter.ts <path-to-progress.md> <tasks-completed-today>`
+
+- `path-to-progress.md` — typically `memory/progress.md`
+- `tasks-completed-today` — integer count of done + partial tasks
+
+**Output:**
+```
+current_streak: 8
+previous_streak: 7
+longest_streak: 12
+is_new_record: false
+last_active: 2026-03-20
+tasks_completed_today: 2
+tasks_completed_all_time: 47
+```
+
+**Why scripted:** Streak counting requires date awareness (was yesterday the last active day, or was there a gap?) and sequential logic that an LLM can miscount.
+
+---
+
 ## Processing logic (after extracting task statuses)
 
 ### Step 1: Update task statuses
@@ -128,17 +182,25 @@ Do NOT append skipped tasks — history is for completed work only.
 
 ### Step 3: Update progress
 
-In `memory/progress.md`:
+Run `scripts/streak-counter.ts` to calculate updated streak values:
+
+```bash
+bun run skills/check-in/scripts/streak-counter.ts "memory/progress.md" <tasks-completed-today>
+```
+
+Use the output values to update `memory/progress.md`:
 
 **Streak:**
-- If the user completed ≥1 task today (done or partial): increment streak by 1
-- If the user completed 0 tasks: reset streak to 0
-- Update "Last active" to today's date
-- If new streak > longest streak: update longest streak
+- Set **Current** to `current_streak` from the script output
+- Set **Longest** to `longest_streak` from the script output
+- Set **Last active** to `last_active` from the script output
+- If `is_new_record: true`, mention the new record in the response
+
+Do NOT manually calculate streak logic — the script handles date gaps, same-day check-ins, and reset logic.
 
 **Completion:**
+- Set "All time" to `tasks_completed_all_time` from the script output
 - Increment "This week" completed count by number of done + partial tasks
-- Increment "All time" completed count by number of done + partial tasks
 
 **Pillar Levels — blocks:**
 - Each "done" task adds +1 block to that task's pillar
@@ -171,11 +233,16 @@ After processing, check two things. Do NOT act on them during this check-in — 
   - Update `memory/spaced-repetition.md` per the teach-back SRS entry rules
 - If the user doesn't answer the practice prompt during check-in (just reports other tasks), mark the practice_prompt task based on what they report (done/skipped like any other task)
 
+**Auto-linking:**
+- After all processing is complete, if at least 1 task was marked "done", trigger `skills/auto-linking/SKILL.md` silently. Auto-linking cross-references new completions with existing knowledge — it runs in the background and writes to `memory/concept-links.md`. No user-facing output.
+
 Do NOT ask resource feedback or teach-back questions during the check-in. The check-in ends cleanly after acknowledging the user's progress.
 
 ## Response to user
 
 After processing, send ONE closing message. Keep it warm and brief. Match verbosity from `config/settings.md`.
+
+Read `memory/user-model.md` → Communication Style to calibrate response tone and length. If the user checks in with terse messages ("2/3"), respond tersely. If they elaborate, match their energy. If user-model.md has no data yet, default to the warm-but-brief examples below.
 
 ### What to include
 
@@ -257,3 +324,15 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 - **User mentions they loved a resource:** Note it in the history entry's Notes column. The resource-feedback skill may follow up later, but don't ask for a rating here.
 
 - **Weekend / day off check-in:** If the user checks in on a configured day off, process it normally. They chose to work — respect that and log it.
+
+---
+
+## Hooks
+
+While this skill is active, enforce these constraints:
+
+| Hook | What it prevents | Why |
+|------|-----------------|-----|
+| No guilt language | Using phrases like "you should have", "you missed", "you only did X", or any language that implies the user fell short | Check-in is the highest-risk moment for making the user feel bad — reinforces SOUL.md's zero-guilt principle |
+| No interrogation on zero | Asking why the user completed 0 tasks — just log it and move on with "No worries. Tomorrow's a fresh start." | Asking "what happened?" when they did nothing puts them on the defensive |
+| One follow-up max | Asking more than 1 clarifying question before closing the check-in | The check-in should be quick — multiple follow-ups make it feel like a report, not a text to a friend |

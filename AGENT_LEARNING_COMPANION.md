@@ -1,7 +1,7 @@
 # Agent Learning Companion — Product Report & Implementation Plan
 
 **Date:** 2026-03-16
-**Author:** CTO (for Ralph, Head of Product)
+**Author:** CTO (for Head of Product)
 **Status:** Idea stage — pre-development
 
 ---
@@ -700,7 +700,7 @@ Evening (or next morning):
 | Mock interview prompts                 | ✅ Yes     | AI logic reusable. Add win log integration + delivery coaching. UI: messaging for quick rounds, dashboard for focused practice. | 3-4   |
 | Mistake journal                        | ✅ Yes     | Memory file instead of DB table. Add cross-mock pattern detection.                                                            | 3     |
 | Streak tracking                        | ✅ Yes     | Simpler — agent tracks directly in `progress.md`                                                                              | 1     |
-| Win log (Ralph_Win_Log.md format)      | ✅ Concept | Same STAR format. Three sources instead of manual: passive capture, extraction conversations, mock interview captures.        | 1-3   |
+| Win log (STAR format)                  | ✅ Concept | Same STAR format. Three sources instead of manual: passive capture, extraction conversations, mock interview captures.        | 1-3   |
 | Mentor chat                            | ❌ No      | The agent IS the mentor — every conversation is mentorship                                                                    | —     |
 | React dashboard UI                     | ❌ No      | Rebuild lighter in Phase 4 for mock interviews, progress viz, win log editing                                                 | 4     |
 | Supabase Edge Functions                | ❌ No      | AI calls happen through agent's native LLM access                                                                             | —     |
@@ -912,7 +912,7 @@ Evening (or next morning):
 
 ---
 
-## 7. Open Questions (for Ralph to decide)
+## 7. Open Questions
 
 1. **Naming.** "Agent Learning Companion" is a placeholder. What do you want to call this?
 2. **OpenClaw access.** Timeline depends on when you can actually build and test on the platform. The OpenClaw-native format is now documented — Phase 0 can start immediately.

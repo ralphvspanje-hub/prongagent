@@ -2,6 +2,11 @@
 
 (parsed from user's resume/LinkedIn — used for win extraction and interview prep)
 
+## Source files
+- Full CV: `files/` (place your resume PDF here)
+- Tailored versions: `files/` (place your CV variants here)
+- LinkedIn export: `files/` (place your LinkedIn PDF here)
+
 ## Work Experience
 
 <!-- Format for each entry:

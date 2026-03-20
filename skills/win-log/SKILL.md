@@ -10,6 +10,17 @@ metadata:
 
 # Win Log Skill
 
+## Skill files
+
+| File | When to read |
+|------|-------------|
+| `modes/extraction.md` | Entering extraction mode (proactive win mining) |
+| `modes/mock-capture.md` | Receiving a flagged moment from mock-interview skill |
+| `references/star-format.md` | Drafting any win into STAR format |
+| `references/interview-mapping.md` | After saving a win -- mapping to question types and detecting gaps |
+| `examples/win-extraction.md` | Reference examples of passive review, mock capture, and gap detection flows |
+| `session-log.md` | At skill start — read last 5-10 entries for continuity |
+
 ## When to trigger
 
 Three activation paths (modes):
@@ -23,11 +34,13 @@ Three activation paths (modes):
 - Trigger: interview prep activates and win log has < 5 polished entries in `memory/win-log/wins.md`, OR user explicitly asks to work on wins ("help me with my win log", "let's work on interview stories", etc.)
 - Read `memory/resume-context.md` for roles and projects to mine
 - If no resume context exists, use open-ended conversation instead
+- When entering extraction mode, read `modes/extraction.md`.
 
 **3. MOCK CAPTURE** — receive flagged moments from the mock-interview skill.
 - Trigger: mock-interview skill flags a strong answer or a real achievement mentioned during a mock
 - Lighter touch than extraction — the user already told the story, just needs STAR formatting
 - Do NOT trigger independently — always receives from mock-interview skill
+- When receiving a mock-interview flag, read `modes/mock-capture.md`.
 
 ## What to read
 
@@ -41,6 +54,8 @@ Three activation paths (modes):
 | `memory/interview-context.md` | Target company, role, date — for tailoring wins when interview prep is active |
 | `memory/mistake-journal.md` | Mock interview mistakes — cross-reference to avoid surfacing stories the user struggled to tell |
 | `memory/progress.md` | Pillar levels, teach-back log — for identifying learning plan wins (portfolio projects, pillar mastery) |
+| `memory/user-model.md` | Communication Style (how to prompt extraction — some users need questions, others narrate freely), Knowledge Anchors (for framing STAR stories using the user's strongest mental models) |
+| `files/` (win log, STAR bank) | When extracting or mapping wins |
 | `config/settings.md` | Verbosity preference |
 
 ## What to write
@@ -51,6 +66,29 @@ Three activation paths (modes):
 | `memory/win-log/candidates.md` | Update status: `draft` → `surfaced to user` → `accepted → wins.md` or `rejected` |
 | `memory/win-log/interview-mapping.md` | Update category assignments + gap analysis after every new polished win |
 | `memory/resume-context.md` | Update "Win extraction status" for processed roles/projects: `not started` → `extracted` → `polished` |
+| `memory/user-model.md` | Append observation: Knowledge Anchors (how they tell stories — technical detail vs. narrative), Teaching Ability (can they explain impact clearly?), Communication Style (do they need prompting or narrate freely?) |
+| `session-log.md` (this skill directory) | After execution if anything notable happened |
+
+## Session log
+
+This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
+
+After execution, append an entry if anything notable happened. Don't log routine executions.
+
+**What to log:**
+- Which wins the user approved, which they edited, which they rejected
+- "User tends to undersell — always adds more impact than they initially describe"
+- STAR formatting preferences, story framing that resonated
+
+**Entry format:**
+```markdown
+### YYYY-MM-DD — [brief title]
+- **Context:** [what triggered the skill]
+- **Notable:** [what's worth remembering for next time]
+- **User reaction:** [accepted / pushed back / modified / skipped]
+```
+
+**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ---
 
@@ -81,236 +119,16 @@ Rank by interview usefulness:
 
 | User says | Action |
 |-----------|--------|
-| Yes / sure / let's do it | Move into extraction flow for this candidate (see Extraction Turn 1-3 below, but pre-filled with the candidate's raw notes) |
+| Yes / sure / let's do it | Move into extraction flow for this candidate (read `modes/extraction.md`, but pre-filled with the candidate's raw notes) |
 | No / not now / skip | Update candidate status to `surfaced to user`. Note the date. Don't re-surface this specific candidate for at least 2 weeks. |
 | "I don't see that as a win" / rejection | Update candidate status to `rejected`. Never re-surface. |
 | "Not now but remind me later" | Keep as `draft`. Try again next week. |
 
 ---
 
-## Mode: EXTRACTION
+When drafting a win, read `references/star-format.md` for the template.
 
-### Conversation flow
-
-**Pre-check: Pick the target**
-
-If resume context exists (`memory/resume-context.md` has roles/projects):
-- Pick a role or project with Win extraction status = `not started`
-- Prefer roles/projects most relevant to the dream career
-- Update status to `extracted` when you start the conversation
-
-If no resume context exists:
-- Use open-ended questions (see edge cases)
-
-If interview prep is active (`memory/interview-context.md` → Status = active):
-- Prioritize wins that fill gaps in `memory/win-log/interview-mapping.md`
-- Prioritize wins relevant to the target company's likely questions
-
-**Turn 1: Set up the situation**
-
-Reference the specific role/project from the resume:
-
-> "Tell me about [project/role from resume]. What was the situation when you started — what was already in place, and what needed to happen?"
-
-If working from a candidate (passive review → extraction):
-
-> "You [what happened from candidate raw notes]. Walk me through the situation — what were you working with?"
-
-Keep it conversational. Don't say "tell me the S in STAR."
-
-**Turn 2: Find the constraint and the action**
-
-> "What was tricky about it? What made this harder than it sounds? And what did YOU specifically do — not the team, your contribution?"
-
-Push gently for specifics if the user is vague:
-- "When you say 'helped with the project,' what was your specific role?"
-- "What decision did you make that someone else might have made differently?"
-- "Was there an obvious approach you rejected? Why?"
-
-**Turn 3: Get the result**
-
-> "What happened? Any concrete outcomes — numbers, metrics, feedback, things that changed?"
-
-If user is vague on results:
-- "Did it ship? Is anyone using it?"
-- "How did it compare to before you touched it?"
-- "What feedback did you get?"
-
-If user genuinely has no concrete numbers, that's okay — frame the result around impact or what changed.
-
-**After Turn 3: Draft the STAR entry**
-
-Compose the win in STAR format (see format below) and present it to the user:
-
-> "Here's how I'd frame that as an interview story:
->
-> ### [Title — names the insight, not the task]
->
-> **S:** [2-3 sentences]
-> **T:** [2-3 sentences]
-> **A:** [2-3 sentences]
-> **R:** [2-3 sentences]
->
-> How's that? Want to edit anything, or should I save it?"
-
-**Handle the response:**
-
-| User says | Action |
-|-----------|--------|
-| Looks good / save it / approve | Write to `wins.md`, update `interview-mapping.md`, update `resume-context.md` status to `polished` |
-| [Edits something] | Apply their edits, show the updated version, ask for approval again |
-| This isn't really a win / reject | Respect it. Don't argue. If from candidates.md, mark as `rejected`. Don't re-surface. |
-
-**Offer to continue:**
-
-After saving a win, if more roles/projects haven't been extracted:
-
-> "Nice — that's [N] polished wins now. Want to do another, or call it here?"
-
-Don't push past 2-3 extractions in one session. Quality over quantity.
-
----
-
-## Mode: MOCK CAPTURE
-
-### Receiving a flagged moment from mock-interview
-
-The mock-interview skill identifies a strong answer or real achievement during the mock and passes it to this skill.
-
-**Step 1: Acknowledge the moment**
-
-> "That answer about [topic] was strong. Want me to save it as a polished win?"
-
-**Step 2: Light-touch extraction**
-
-The user already told the story during the mock — you have the content. Draft the STAR entry from what they said, filling in any gaps:
-
-- If the story was complete (clear situation, action, result): draft immediately
-- If the story was missing the result or context: ask ONE follow-up question, not the full 3-turn extraction
-
-> "Quick — what was the concrete outcome of that? Any numbers or feedback?"
-
-**Step 3: Present the draft**
-
-Same as extraction — show the STAR entry, ask for approval.
-
-**Step 4: Compare with existing wins**
-
-If the user told the same story in a previous mock (check `memory/win-log/wins.md`):
-- Don't create a duplicate
-- Instead, note delivery improvement: "You told this story last time too — your delivery is much tighter now. The version from today is stronger. Want me to update the saved version?"
-
----
-
-## STAR Format
-
-Every polished win in `memory/win-log/wins.md` follows this exact structure:
-
-```markdown
-### [Title that names the insight, not the task]
-
-- **Source:** observed / extracted / mock-capture
-- **Date added:** YYYY-MM-DD
-- **Pillar:** Which skill area this relates to (or "career" for non-learning-plan wins)
-
-**S:** The situation — what system, what stage, what was already in place. (2-3 sentences)
-**T:** The constraint or challenge — what made this non-trivial. (2-3 sentences)
-**A:** The reasoning — why you rejected obvious approaches, what you chose and why. (2-3 sentences)
-**R:** The outcome — what now works and why it matters. (2-3 sentences)
-
-**Best for question type:** [primary type] (also: [secondary type if applicable])
-```
-
-### Title rules
-
-- Name the INSIGHT or decision, not the task
-- Good: "Chose event-driven over polling to handle scale"
-- Good: "Ran user interviews before writing code to avoid building the wrong thing"
-- Bad: "Fixed the notification system"
-- Bad: "Worked on the database"
-
-### Content rules
-
-- Focus on the USER's specific contribution, not the team's
-- Include concrete numbers/outcomes in R when possible
-- Keep each section to 2-3 sentences — tight enough to tell in an interview without rambling
-- If the user's words are stronger than your draft, use their words
-- Don't inflate — a small win told honestly is better than a big win that sounds fake
-
----
-
-## Interview Mapping
-
-After every new polished win is saved to `wins.md`, update `memory/win-log/interview-mapping.md`.
-
-### Question types
-
-| Category | What it tests | Example interview question |
-|----------|--------------|---------------------------|
-| Leadership / Initiative | Driving change, taking ownership without being asked | "Tell me about a time you led a project or initiative" |
-| Technical Problem Solving | Debugging, architecture, technical decisions | "Describe a difficult technical problem you solved" |
-| Failure / Learning | Handling setbacks, growth mindset | "Tell me about a time you failed and what you learned" |
-| Collaboration / Conflict | Working with others, resolving disagreements | "Describe a time you disagreed with a teammate" |
-| Creativity / Innovation | Novel approaches, thinking differently | "Tell me about a time you came up with a creative solution" |
-| Time Pressure / Prioritization | Working under constraints, making tradeoffs | "Tell me about a time you had to deliver under a tight deadline" |
-
-### Mapping rules
-
-- Each win maps to 1-2 question types
-- Mark the strongest mapping (the question type this story best answers)
-- A win can be a backup for a second category
-- Format in `interview-mapping.md`:
-
-```markdown
-## Leadership / Initiative
-
-- [Win title] (strongest — [why this fits])
-- [Another win title] (backup — [why this also works])
-
-## Technical Problem Solving
-
-- [Win title] (strongest — [why])
-...
-```
-
-### Gap detection
-
-After EVERY new win is added, scan the full mapping. Run this check:
-
-1. Count polished wins per question type
-2. If any question type has 0 wins AND total polished wins ≥ 5: flag it
-
-Surface the gap to the user:
-
-> "You've got [N] solid wins now, but I notice you don't have a [gap category] story yet. Most interviews ask about this. Want to think of one?"
-
-If multiple gaps exist, flag the most commonly asked one first:
-1. Failure / Learning (almost always asked)
-2. Collaboration / Conflict (very common)
-3. Leadership / Initiative (common for PM/senior roles)
-4. Time Pressure / Prioritization
-5. Creativity / Innovation
-6. Technical Problem Solving
-
-### Imbalance detection
-
-If all wins map to the same 1-2 categories:
-
-> "All your stories are [category]. Interviewers also ask about [missing categories]. Want to work on those?"
-
----
-
-## Integration with mock interviews
-
-The mock-interview skill has full access to `wins.md` and `interview-mapping.md`. Win-log provides:
-
-1. **Story suggestions for specific question types:** When the mock-interview skill needs a story for a behavioral question, it looks up the mapping and suggests the strongest win for that category.
-
-2. **Gap alerts:** If the mock-interview skill encounters a question type with no mapped wins, it notes it as a coaching point: "You didn't have a ready story for that question type. Want to work on one after the mock?"
-
-3. **Delivery tracking:** If the user tells the same win story across multiple mocks, note improvements in delivery (tighter framing, better numbers, clearer structure). Track in the win entry or in a note appended to the mock-interview feedback.
-
-4. **Polished stories for practice:** The user can review their wins before a mock or real interview. The mapping serves as an interview cheat sheet: "For leadership questions, lead with [win title]. For failure questions, use [other win title]."
+After saving a win, read `references/interview-mapping.md` for mapping and gap detection.
 
 ---
 
@@ -421,135 +239,3 @@ These learning plan events are win-worthy:
 - Teach-back response was surprisingly deep (flagged by teach-back skill in candidates.md)
 
 Frame these as "self-directed learning" wins — interviewers value demonstrated learning ability.
-
----
-
-## Example: passive review → extraction
-
-```
-Agent: "I've noticed something from your learning log worth capturing. Two weeks
-        ago you were struggling with SQL window functions — couldn't explain them
-        in the teach-back. This week you nailed the Level 2 gate on the first try,
-        including a correlated subquery question. That's a real skill-building story.
-
-        Want to polish this into an interview-ready win?"
-
-User:  "Sure, but is that really impressive enough for an interview?"
-
-Agent: "Absolutely. Interviewers love 'I identified a gap, worked on it
-        systematically, and can now demonstrate mastery.' It shows self-awareness
-        and follow-through. Let me ask a few questions to frame it right.
-
-        What was the situation — what were you trying to learn and why?"
-
-User:  "I was preparing for PM interviews and realized I couldn't query my own
-        data. Like, I understood conceptually what a JOIN does but couldn't write
-        one without Googling every syntax detail."
-
-Agent: "Good. What made this tricky? What did you try that didn't work at first?"
-
-User:  "I tried just reading documentation but it didn't stick. I switched to
-        doing actual exercises on real datasets — Mode Analytics problems. The
-        window functions in particular took me like 3 different resources before
-        it clicked."
-
-Agent: "And the result?"
-
-User:  "I can now write complex queries from scratch. I actually used SQL to
-        pull data for a class project last week and my professor commented that
-        my analysis was more detailed than most students who've been using SQL
-        for years."
-
-Agent: "Here's how I'd frame that:
-
-        ### Identified SQL as a gap and closed it through deliberate practice
-
-        **S:** Preparing for Product Manager interviews. Had conceptual
-        understanding of databases but couldn't write queries beyond basic
-        SELECT statements — a critical gap for data-driven PM roles.
-        **T:** Documentation and passive learning weren't sticking.
-        Window functions and JOINs required a different approach — the
-        syntax was secondary to understanding how data flows through
-        these operations.
-        **A:** Switched from reading docs to hands-on exercises with
-        real datasets (Mode Analytics). Tried 3 different resources for
-        window functions until finding one that clicked. Practiced daily
-        for 3 weeks, building complexity gradually.
-        **R:** Can now write complex queries from scratch. Used SQL to
-        pull data for a university project — professor noted the analysis
-        was more detailed than most students with years of SQL experience.
-        Passed the Level 2 SQL gate on the first attempt.
-
-        **Best for question type:** Technical Problem Solving (also: Initiative / Self-Direction)
-
-        How's that? Want to change anything?"
-
-User:  "That's good. Save it."
-
-Agent: "Saved. That's your 3rd polished win. Quick note: you don't have
-        a failure/learning story yet — most interviews ask this. Want to
-        think of one next time?"
-```
-
-## Example: mock capture
-
-```
-[During mock interview, user gives a strong answer about building RetainIt]
-
-Agent: "That answer about running 7 user interviews before writing code
-        for RetainIt was really strong — it shows product thinking, not just
-        engineering. Want me to save it as a polished win?"
-
-User:  "Yeah, that felt like a good answer."
-
-Agent: "Quick — what was the concrete outcome of the user research?
-        Did it change what you built?"
-
-User:  "Totally. I discovered the 'Google Effect' — people don't retain
-        info they know they can look up. That insight shaped the entire
-        app's spaced repetition approach. Without those interviews I
-        would've just built a flashcard app."
-
-Agent: "Here's the draft:
-
-        ### Ran user interviews before writing code to avoid building the wrong thing
-
-        **S:** Building RetainIt, an AI-powered knowledge retention app.
-        Had a working concept for a flashcard-style app but no validation
-        that the core assumption — people want to memorize facts — was
-        correct.
-        **T:** Most developers skip user research and jump to building.
-        Needed to validate the core value proposition before investing
-        months of development, but had no UX research background.
-        **A:** Conducted 7 structured user interviews before writing a
-        line of code. Discovered the 'Google Effect' — people don't
-        retain information they know they can look up. This insight
-        reframed the product from 'memorize facts' to 'build lasting
-        knowledge through spaced repetition.'
-        **R:** The app's entire architecture was shaped by this research.
-        RetainIt uses FSRS-based spaced repetition instead of simple
-        flashcards — a fundamentally different product than what would
-        have been built without the interviews. Live at retainit.app.
-
-        **Best for question type:** Creativity / Innovation (also: Initiative / Self-Direction)
-
-        Save it?"
-```
-
-## Example: gap detection
-
-```
-Agent: "You've got 5 polished wins now — nice set. Here's your coverage:
-
-        ✅ Leadership / Initiative — 1 story
-        ✅ Technical Problem Solving — 2 stories
-        ✅ Creativity / Innovation — 1 story
-        ✅ Initiative / Self-Direction — 1 story (backup)
-        ❌ Failure / Learning — no story yet
-        ❌ Collaboration / Conflict — no story yet
-
-        Most interviews ask about failure and what you learned from it.
-        Can you think of a time something went wrong — a project that
-        didn't work out, a bad decision, a deadline you missed? The key
-        is showing what you learned, not the failure itself."
-```

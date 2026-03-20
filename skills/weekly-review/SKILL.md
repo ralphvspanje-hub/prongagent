@@ -10,6 +10,56 @@ metadata:
 
 # Weekly Review Skill
 
+## Skill files
+
+| File | When to use |
+|------|------------|
+| `references/digest-format.md` | Step 3 — writing the stored digest to `memory/weekly-digests/` |
+| `references/narrative-guide.md` | Step 4 — composing and sending the user-facing narrative message |
+| `session-log.md` | At skill start — read last 5-10 entries for continuity |
+| `examples/sample-digest.md` | When you need reference examples of the narrative message or stored digest |
+| `scripts/stats-compiler.ts` | Step 1 (Gather the data) — run this first to compile weekly statistics |
+
+### scripts/stats-compiler.ts
+
+**What it does:** Reads progress.md, history.md, and the week file to compile weekly statistics.
+
+**Usage:** `bun run skills/weekly-review/scripts/stats-compiler.ts <progress.md> <history.md> <week-file.md>`
+
+- All three paths are required
+
+**Output:**
+```
+## Weekly Stats
+completion_rate: 75%
+tasks_completed: 9
+tasks_total: 12
+current_streak: 5
+longest_streak: 12
+
+## Pillar Breakdown
+| Pillar | Tasks completed | % of total |
+| SQL & Data Analysis | 4 | 44% |
+| Product Sense | 3 | 33% |
+| Behavioral | 2 | 22% |
+
+## Teach-Back Results
+| Concept | Result |
+| LEFT JOIN vs INNER JOIN | Strong |
+| Product metrics | Partial |
+```
+
+**Why scripted:** Compiling stats from multiple files with counting, percentages, and date filtering is error-prone for LLMs.
+
+## Configuration
+
+This skill uses `config.json` for user preferences. If it doesn't exist, use the defaults below and offer to save the user's preferences.
+
+| Field | Default | What it controls |
+|-------|---------|-----------------|
+| `include_adaptation_details` | `false` | Show full adaptation details in the digest (vs. one-line summary) |
+| `comparison_depth` | `"summary"` | Week-over-week comparison depth (`summary`, `detailed`) |
+
 ## When to trigger
 
 Three activation paths:
@@ -39,15 +89,41 @@ Read ALL of the following before generating the digest:
 | `memory/adaptation-log.md` | Adaptations made this week — what changed and why |
 | `memory/spaced-repetition.md` | Active review count, retired (mastered) count, concepts that keep resetting (can't lock in), queue status |
 | `memory/weekly-digests/week-{N-1}.md` | Previous week's digest — for week-over-week comparison |
+| `skills/weekly-review/config.json` | Adaptation detail level, comparison depth |
 | `config/settings.md` | Weekly review day, verbosity preference |
+| `memory/user-model.md` | Communication Style (for narrative tone), Motivation Drivers (for framing progress), Growth Edges (for highlighting breakthroughs) |
+| `memory/concept-links.md` | Cross-Pillar Bridges and new connections this week — highlight in the narrative: "Your SQL and Product Sense pillars are starting to connect." Concept Clusters to show knowledge consolidation. |
 | `memory/agent-observations.md` | Count observations logged this week — mention in the digest if any were logged: "I logged [N] observations this week about my own instructions. Worth reviewing if you want to fine-tune how I work." |
 
 ## What to write
 
 - `memory/weekly-digests/week-{N}.md` — the stored digest (structured format for agent records and future comparison)
+- `memory/user-model.md` — append observation to Observation Log: how the user responds to the digest (engaged vs dismissive → communication style), difficulty self-assessment accuracy (growth edges), motivation signals from the recap conversation
 - Message — the user-facing narrative (warmer, shorter, story-driven)
+- `session-log.md` (this skill directory) — after execution if anything notable happened
 
 These are TWO separate outputs. The stored digest is structured data. The message is a narrative woven from that data.
+
+## Session log
+
+This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
+
+After execution, append an entry if anything notable happened. Don't log routine executions.
+
+**What to log:**
+- What the user engaged with in the digest, what they skipped
+- "User always asks about pillar progress, ignores streak stats" → lead with pillars
+- Format or framing preferences that emerge from user reactions
+
+**Entry format:**
+```markdown
+### YYYY-MM-DD — [brief title]
+- **Context:** [what triggered the skill]
+- **Notable:** [what's worth remembering for next time]
+- **User reaction:** [accepted / pushed back / modified / skipped]
+```
+
+**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ---
 
@@ -55,13 +131,17 @@ These are TWO separate outputs. The stored digest is structured data. The messag
 
 ### Step 1: Gather the data
 
-Read all files listed above. Calculate:
+Run `scripts/stats-compiler.ts` to compile the core statistics:
 
-- **Completion rate:** done + partial tasks / total assigned tasks for this week (from `memory/plan-tasks/week-{N}.md`)
-- **Pillar breakdown:** which pillars had the most completed tasks, which had the most skips
-- **Streak status:** current streak, whether it's a personal best, how it compares to last week
-- **Teach-back results this week:** filter `memory/progress.md` → Teach-Back Log for entries dated this week. Note which were strong, partial, can't-explain
-- **SRS stats:** count active review items, retired items, any concepts with consecutive correct = 0 (struggling concepts)
+```bash
+bun run skills/weekly-review/scripts/stats-compiler.ts "memory/progress.md" "memory/history.md" "memory/plan-tasks/week-{N}.md"
+```
+
+Use the script output for completion rate, pillar breakdown, streak info, and teach-back results. Do NOT manually count tasks or calculate percentages — the script handles this.
+
+Then read the remaining files for qualitative data the script doesn't cover:
+
+- **SRS stats:** count active review items, retired items, any concepts with consecutive correct = 0 (struggling concepts) from `memory/spaced-repetition.md`
 - **Adaptations this week:** filter `memory/adaptation-log.md` for entries dated this week
 - **Resource feedback this week:** filter `memory/resource-feedback.md` → Recent Feedback for this week's entries
 
@@ -79,149 +159,11 @@ This enables week-over-week comparison. If no previous digest exists (first week
 
 ### Step 3: Write the stored digest
 
-Write to `memory/weekly-digests/week-{N}.md`:
-
-```markdown
-## Week {N} Digest ({start-date} to {end-date})
-
-### Focus areas: [list pillars with the most completed tasks]
-
-### Tasks: {completed}/{total} completed ({percentage}%)
-
-### Streak: {current} days {(personal best) if applicable}
-
-### Pillar progress:
-
-- {Pillar}: Level {N}, {X}/5 blocks at level {(leveled up this week!) if applicable}
-- ...
-
-### Teach-back results:
-
-- {Concept}: {Strong/Partial/Can't explain} {(improved from {previous} — confirmed improvement) if applicable}
-- ...
-(or: No teach-backs this week)
-
-### SRS stats:
-
-- Active concepts: {count}
-- Retired (mastered) this month: {count}
-- Struggling concepts: {list any with consecutive correct = 0}
-
-### Observations:
-
-- {Pattern observation 1}
-- {Pattern observation 2}
-- ...
-
-### Adaptations made:
-
-- {Summary of adaptations this week, or "None"}
-
-### Week-over-week:
-
-- Completion: {last week}% → {this week}%
-- Streak: {last week} → {this week}
-- Notable changes: {what improved or declined}
-(or: First week — no comparison baseline)
-```
+Read `references/digest-format.md` for the stored digest template.
 
 ### Step 4: Compose and send the narrative message
 
-This is the first user-facing output. It weaves all 7 elements into a NARRATIVE — a story, not a report.
-
-**The 7 required elements:**
-
-#### A. NARRATIVE SUMMARY
-
-Open with what the user focused on this week. What improved? What's still developing? Reference specific tasks and topics by name.
-
-- Good: "This week was all about SQL and product sense. The SQL work is clicking — you finished 4 tasks there without skipping any."
-- Bad: "You completed 8/13 tasks across 4 pillars."
-
-#### B. TEACH-BACK PERFORMANCE
-
-Which concepts are solid vs. need reinforcement? Reference specific teach-back results from `memory/progress.md` → Teach-Back Log.
-
-- If a concept improved from a previous weak result, celebrate it specifically: "You nailed the teach-back on window functions this week — that one tripped you up two weeks ago."
-- If a concept was weak, frame as "developing": "Load balancing is still developing — you were fuzzy on failover, which is totally normal for a new topic. I've added a focused exercise."
-- If NO teach-backs happened this week: skip this element entirely. Don't mention its absence.
-
-#### C. STATS (embedded in narrative)
-
-Streak, pillar levels, completion rate — but woven into the story, not a raw table.
-
-- Streak: mention if it's notable (5+, 10+, new record). "That's 12 days in a row — your longest yet."
-- Pillar levels: mention level-ups or near-level-ups. "SQL is at Level 2 with 4/5 blocks — one more and you'll hit the gate."
-- Completion rate: use as context, not judgment. "8 out of 10 tasks done — solid week."
-- Week-over-week changes (if previous digest exists): "Your completion jumped from 60% to 85% this week."
-
-Stats can also be presented as a small visual block within the narrative (emoji + short lines), matching the example from Section 3.9:
-
-```
-🔥 Streak: 12 days (your longest yet)
-📈 SQL: Level 2 → almost Level 3 (2 more blocks)
-🆕 System Design: Level 1 (just started)
-```
-
-#### D. PATTERN OBSERVATION
-
-What trends did the agent notice? Surface non-judgmentally:
-
-- Skipping certain task types consistently
-- Completion speed changes (faster = getting easier, slower = might need adjustment)
-- Format preferences from resource feedback (videos rated great, articles meh)
-- Pillar avoidance patterns
-- Time-of-day patterns if visible
-
-**Always frame as observation + question, not judgment:**
-- Good: "I noticed you skipped LeetCode twice this week — want me to reduce coding practice to 2x/week?"
-- Bad: "You skipped LeetCode twice. You should do more coding practice."
-
-If no patterns are notable this week, skip this element.
-
-#### E. DREAM CAREER CONNECTION
-
-Remind them how this week's work connects to the bigger goal. Read `memory/user-profile.md` → Target role.
-
-- "This week's SQL work is directly relevant to Product Manager roles — data-driven PMs who can query their own metrics stand out."
-- Reference the specific dream role, not a generic career.
-- Keep it to 1-2 sentences. Don't force it if the connection is weak.
-
-#### F. LOOK-AHEAD
-
-What's coming next week and why. Preview:
-
-- Focus areas (which pillars)
-- Any new topics being introduced
-- How next week builds on this week
-- If a pillar is close to leveling up, mention the upcoming gate
-
-Keep to 1-2 sentences.
-
-#### G. ADAPTATION QUESTION
-
-If the agent noticed something worth adjusting (from `memory/adaptation-log.md` or from pattern observations), ask ONE question. Not a survey — one specific "should I change X?" question.
-
-- "I noticed you skipped the LeetCode tasks twice — want me to swap coding practice for more product case studies?"
-- "Your SQL teach-backs are strong but System Design is shaky — want me to shift more time there?"
-
-If nothing needs adjusting, skip this element entirely.
-
----
-
-## Tone rules
-
-- **Conversational, warm, like a coach who knows you.** Not a teacher grading papers.
-- **Encouraging without being fake.** Acknowledge struggles honestly: "System Design is newer territory and it shows — that's expected, not a problem."
-- **"Numbers don't motivate. Stories do."** — the product report's exact framing. Lead with narrative, embed stats naturally.
-- **NEVER guilt trip** about missed tasks or low completion. Frame everything as data for adjustment: "Quiet week — that's useful info. Want me to lighten the load?"
-- **Adjust length by verbosity setting** (from `config/settings.md`):
-
-| Verbosity | Message length | Elements |
-|-----------|----------------------|----------|
-| concise | 5-8 lines | A + C + F only (narrative summary, key stats, look-ahead) |
-| normal | 10-15 lines | All 7 elements, woven together |
-| detailed | Full narrative, all elements expanded | All 7 elements with more context, examples, week-over-week detail |
+Read `references/narrative-guide.md` for the 7-element composition guide and tone rules.
 
 ---
 
@@ -314,98 +256,6 @@ Respect it. Log recall as "Skipped" for both questions. Process the difficulty f
 
 ---
 
-## Example message (normal verbosity)
-
-```
-Agent: "📊 Week 4 Recap
-
-        This week you focused on SQL and system design. The SQL work is
-        paying off — you nailed the teach-back on window functions, which
-        tripped you up two weeks ago. Real progress there.
-
-        System design is newer territory. You watched 3 videos and rated
-        them all 'great', but when I asked you to explain load balancing,
-        you were fuzzy on failover. That's normal for week 1 of a new topic.
-        I've added a hands-on exercise for next week.
-
-        🔥 Streak: 12 days (your longest yet)
-        📈 SQL: Level 2 → almost Level 3 (2 more blocks)
-        🆕 System Design: Level 1 (just started — give it time)
-
-        One thing I noticed: you skipped the LeetCode tasks twice this week.
-        No judgment — want me to reduce coding practice to 2x/week instead
-        of daily? Or was this just a busy week?
-
-        Looking ahead: next week I'm introducing API design, which bridges
-        your Python skills and system design knowledge. It's directly relevant
-        to Product Manager roles — PMs who understand APIs make better
-        technical tradeoff calls.
-
-        Keep going. You're 4 weeks into a path most people never start. 💪"
-```
-
-## Example message (concise verbosity)
-
-```
-Agent: "📊 Week 4 Recap
-
-        Strong SQL week — window functions teach-back was solid.
-        System Design just getting started.
-
-        🔥 12-day streak (record)
-        📈 SQL almost Level 3 | System Design Level 1
-
-        Next week: API design, bridging your Python and system design work."
-```
-
-## Example stored digest
-
-```markdown
-## Week 4 Digest (2026-03-10 to 2026-03-16)
-
-### Focus areas: SQL & Data Analysis, System Design
-
-### Tasks: 12/15 completed (80%)
-
-### Streak: 12 days (personal best)
-
-### Pillar progress:
-
-- SQL & Data Analysis: Level 2, 4/5 blocks at level
-- System Design: Level 1, 1/5 blocks at level
-- Behavioral & Communication: Level 2, 3/5 blocks at level
-
-### Teach-back results:
-
-- SQL window functions: Strong (was Partial 2 weeks ago — confirmed improvement)
-- Load balancing: Partial (failover gap — remediation task added)
-
-### SRS stats:
-
-- Active concepts: 6
-- Retired (mastered) this month: 2
-- Struggling concepts: LEFT JOIN vs INNER JOIN (consecutive correct = 0)
-
-### Observations:
-
-- Skipped LeetCode 2x this week — asked user about preference adjustment
-- All video resources rated "great" — user may prefer video for new topics
-- SQL completion speed increasing (avg 25min → 18min this week)
-
-### Adaptations made:
-
-- Added hands-on load balancing exercise to Week 5
-- Shifted system design resources from article to video (user preference)
-
-### Week-over-week:
-
-- Completion: 67% → 80%
-- Streak: 5 → 12
-- Notable changes: SQL teach-back improved from partial to strong. System Design added as new pillar.
-```
-
----
-
 ## Spaced repetition stats in the narrative
 
 Include SRS performance naturally in the digest:
@@ -434,8 +284,6 @@ If it's the first week (no previous digest), skip comparisons entirely. Don't me
 
 ---
 
-## Edge cases
-
 ## Self-observation triggers
 
 Write an entry to `memory/agent-observations.md` if any of the following occur:
@@ -451,6 +299,8 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 - Week-over-week comparison was misleading — e.g., different number of active days, plan type changed mid-week, or days off shifted (log what made the comparison unreliable)
 
 ---
+
+## Edge cases
 
 ### First week (no previous digest)
 
@@ -526,4 +376,8 @@ Skip format preference observations in element D. Don't mention the absence.
 
 If the plan switched from `learning` to `interview_prep` (or vice versa) during the week, acknowledge the transition:
 
-- "Midweek you activated interview prep mode — the plan shifted focus to [company/role]. Here's how both halves went."
+- "Midweek you activated interview prep mode — the plan shifted focus to [company/role]. Here's both halves went."
+
+## Examples
+
+See `examples/sample-digest.md` for example outputs.

@@ -1,5 +1,8 @@
 # Interview Context
 
+## Source files
+- Technical prep notes: `files/` (place your prep notes here)
+
 ## Active Interview Prep
 
 - **Status:** inactive
@@ -30,3 +33,7 @@
 - [ ] Mock interviews completed: 0
 - [ ] Key concepts reviewed via spaced repetition
 - [ ] Portfolio project relevant to role identified
+
+## Job Posting History
+
+(career-mentor skill appends parsed summaries here when the user shares job postings)

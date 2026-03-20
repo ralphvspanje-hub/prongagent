@@ -1,8 +1,44 @@
-# Test data with real personal info
+# Personal data
 test/
 
 # Local tooling
 .claude/
 
+# Per-skill user configs (personal preferences)
+skills/*/config.json
+
+# Per-skill session logs (personal data, append-only)
+skills/*/session-log.md
+
 # OpenClaw generated files
 .clawhub/
+
+# Obsidian
+.obsidian/
+
+# Environment
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# User files (personal career documents)
+files/*
+!files/README.md
+!files/job-tracker/
+files/job-tracker/*
+!files/job-tracker/.gitkeep
+
+# Development briefs (not part of the product)
+BRIEF_*.md
+PROMPT_PHASES.md

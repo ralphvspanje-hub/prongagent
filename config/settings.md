@@ -16,3 +16,8 @@
 
 - **Verbosity:** normal
 - **Weekly review day:** Friday
+
+## Job Scan
+
+- **job_scan_active:** false
+- **job_tracker_path:** files/job-tracker/job_tracker.md

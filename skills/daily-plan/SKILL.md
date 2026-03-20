@@ -10,6 +10,50 @@ metadata:
 
 # Daily Plan Skill
 
+## Skill files
+
+| File | When to read |
+|------|-------------|
+| `modes/full-plan.md` | When generating the initial plan after onboarding (mode: full_plan) |
+| `references/task-format.md` | When generating tasks — contains field definitions, task types, resource selection rules (5-9), and example outputs |
+| `session-log.md` | At skill start — read last 5-10 entries for continuity |
+| `scripts/task-selector.ts` | Step 3 of weekly mode — run this to check pillar distribution before generating tasks |
+
+### scripts/task-selector.ts
+
+**What it does:** Reads current-plan.md (pillar weights) and the current week file, calculates which pillars are under-represented.
+
+**Usage:** `bun run skills/daily-plan/scripts/task-selector.ts <path-to-current-plan.md> <path-to-week-file.md>`
+
+- `path-to-current-plan.md` — typically `memory/current-plan.md`
+- `path-to-week-file.md` — typically `memory/plan-tasks/week-{N}.md`
+
+**Output:**
+```
+total_tasks_this_week: 12
+
+## Pillar Distribution
+| Pillar | Target weight | Actual count | Actual % | Gap | Needs tasks |
+| Python | 40% | 3 | 25% | +15% | yes |
+| SQL | 30% | 5 | 42% | -12% | no |
+| Product Sense | 30% | 4 | 33% | -3% | no |
+
+## Recommendation
+Prioritize: Python
+```
+
+**Why scripted:** Percentage distribution math across pillars should be exact, not estimated by LLM reasoning.
+
+## Configuration
+
+This skill uses `config.json` for user preferences. If it doesn't exist, use the defaults below and offer to save the user's preferences.
+
+| Field | Default | What it controls |
+|-------|---------|-----------------|
+| `youtube_percentage` | `50` | Target percentage of video-based resources (0-100) |
+| `prefer_interactive` | `false` | Prioritize interactive/hands-on resources over passive ones |
+| `include_practice_prompts` | `true` | Include practice prompt tasks in daily plans |
+
 ## When to trigger
 
 - Every morning at the configured time (from `config/settings.md`)
@@ -26,7 +70,10 @@ metadata:
 - `memory/spaced-repetition.md` — check if any concepts are due for review today
 - `memory/resource-feedback.md` — learning style profile (preferred formats, platform ratings)
 - `memory/adaptation-log.md` — recent adaptations (avoid contradicting recent changes)
+- `memory/user-model.md` — learning patterns (format preferences, session length), motivation drivers (for task framing), knowledge anchors (for analogies and "why" connections)
+- `memory/concept-links.md` — existing concept connections for task framing: "This builds on [concept] you learned last week." Use `builds-on` links to create continuity between days.
 - `resources/curated-resources.md` — available resources by pillar and level
+- `skills/daily-plan/config.json` — resource format preferences (YouTube %, interactive, practice prompts)
 - `config/settings.md` — message timing, verbosity, days off, quiet hours
 
 ## What to write
@@ -34,6 +81,28 @@ metadata:
 - `memory/current-plan.md` — plan outline (mode: full_plan)
 - `memory/plan-tasks/week-{N}.md` — weekly task files (mode: weekly)
 - `memory/progress.md` — update pillar levels section after plan generation
+- `session-log.md` (this skill directory) — after execution if anything notable happened
+
+## Session log
+
+This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
+
+After execution, append an entry if anything notable happened. Don't log routine executions.
+
+**What to log:**
+- Which task types the user completed vs skipped (supplements adaptation skill)
+- "User always does the YouTube task first" → put it first
+- Resource format preferences that emerge from completion patterns
+
+**Entry format:**
+```markdown
+### YYYY-MM-DD — [brief title]
+- **Context:** [what triggered the skill]
+- **Notable:** [what's worth remembering for next time]
+- **User reaction:** [accepted / pushed back / modified / skipped]
+```
+
+**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ## Modes
 
@@ -41,72 +110,7 @@ metadata:
 
 Triggered after onboarding. Generates the overall multi-week learning plan.
 
-**Step 0: Precondition check**
-
-Before generating, verify `memory/user-profile.md` has non-empty values for:
-- Target role (Dream Career → Target role)
-- Daily time commitment (Learning Preferences → Daily time commitment)
-- At least one known gap (Dream Career → Known gaps)
-
-If any of these are empty, abort plan generation and trigger the onboarding skill instead. Do not attempt to generate a plan from incomplete profile data.
-
-**Step 1: Select pillars (2-4)**
-
-Analyze the dream career and known gaps from `memory/user-profile.md`. Pick 2-4 skill pillars that close the biggest gaps toward the target role.
-
-How to choose:
-- Map the dream role to its core competencies (e.g., "Senior Full-Stack Engineer" → backend architecture, databases, system design, testing)
-- Cross-reference with the user's known gaps — prioritize gaps over strengths
-- Cross-reference with `resources/curated-resources.md` — only pick pillars you have resources for
-- If the user has resume context, use their existing skills to identify what's genuinely missing vs. what they think is missing
-
-Example pillar selection for "Senior Full-Stack Engineer":
-| Pillar | Why |
-|--------|-----|
-| Backend Architecture | Gap: user only has basic Node.js, needs API design + patterns |
-| Databases | Gap: only basic CRUD, needs query optimization + data modeling |
-| System Design | Gap: no exposure, critical for senior roles |
-| Testing | Gap: mentioned by user, important for production code quality |
-
-**Step 2: Set initial pillar levels**
-
-Each pillar has levels 1-5. Set initial levels based on the user's experience:
-
-| User's experience with this pillar | Starting level |
-|-------------------------------------|----------------|
-| No exposure | Level 1 |
-| Some basics / coursework | Level 1 |
-| Has used it at work (basic) | Level 2 |
-| Comfortable, uses regularly | Level 3 |
-| Strong, could teach others | Level 4 |
-
-Never start at Level 5 — that's mastery, earned through the program.
-
-**Block definition:** A "block" is one completed task in that pillar. Each level requires 5 blocks (completed tasks) to level up. When a pillar reaches 5/5 blocks, increment its level by 1 and reset blocks to 0/5. The adaptation skill may adjust the blocks-per-level threshold based on teach-back results.
-
-**Step 3: Set pillar weights**
-
-Weights determine how many tasks per week go to each pillar. Heavier weight = more daily tasks from that pillar.
-
-- Weight the biggest gaps higher (they need more time)
-- Weight user's strengths lower (maintenance mode)
-- Weights should sum to 100%
-- Reassessed during adaptation (if a pillar levels up fast, shift weight to slower ones)
-
-**Step 4: Outline the plan**
-
-Write to `memory/current-plan.md`:
-- Plan duration: 8-12 weeks (default 8 for moderate pacing, 12 for relaxed)
-- Which pillars focus in which weeks (not rigid — adaptation will shift this)
-- Plan type: `learning` (or `interview_prep` if user is actively job hunting with a timeline)
-
-**Step 5: Generate Week 1**
-
-Immediately proceed to mode: `weekly` to generate the first week's tasks.
-
-**Step 6: Send Day 1**
-
-After Week 1 is generated, immediately proceed to mode: `daily_message` to send the first day's tasks. The user should receive their first tasks in the same session as onboarding — don't make them wait until tomorrow.
+When generating the initial plan, read `modes/full-plan.md` for the 6-step process.
 
 ### Mode: weekly
 
@@ -120,7 +124,15 @@ Read `memory/current-plan.md` for current week number. Create `memory/plan-tasks
 
 Read `config/settings.md` for days off — this is the source of truth. (`memory/user-profile.md` may also list days off from onboarding; if they conflict, `config/settings.md` wins. The onboarding skill should sync user preferences to settings.) Skip days off entirely (leave them blank or mark "day off").
 
-**Step 3: Generate tasks for each active day**
+**Step 3: Check pillar distribution and generate tasks**
+
+Before generating tasks, run `scripts/task-selector.ts` to check current pillar distribution:
+
+```bash
+bun run skills/daily-plan/scripts/task-selector.ts "memory/current-plan.md" "memory/plan-tasks/week-{N}.md"
+```
+
+Use the Recommendation output to prioritize under-represented pillars when selecting tasks for the remaining days. Do NOT manually calculate pillar percentages — the script handles distribution math.
 
 For each day, assign tasks that fit within the user's daily time commitment. Use this table as a **guideline, not a rule** — the agent should optimize for learning quality, not hitting a task count:
 
@@ -140,7 +152,7 @@ For each day, assign tasks that fit within the user's daily time commitment. Use
 
 **Time flexibility:** The daily time commitment is a target, not a hard cap. If a Long task is exceptionally well-matched (right pillar, right level, directly tied to dream career), a 30min/day user can get one Long task instead of their usual Short tasks. When this happens: assign only that one task for the day, and note in the daily message why ("Today's a deeper dive — this one's worth the extra time"). Never exceed on consecutive days.
 
-For each task, specify all fields in the task format (see below).
+For each task, specify all fields in the task format (see `references/task-format.md`).
 
 **Task selection rules:**
 
@@ -157,26 +169,7 @@ For each task, specify all fields in the task format (see below).
    - Level 4: expert resources, complex problems, system-level thinking
    - Level 5: mastery-level challenges, teaching others, original work
 
-5. **Resource selection** — four priority tiers (search-first approach):
-   - **Priority 1: Search suggestions (DEFAULT)** — the primary delivery method. The agent crafts a good search query, the user picks the best resource themselves. Format: `Search: "[topic] [level] tutorial" on YouTube` or `Search: "[topic] practice problems" on LeetCode`. This produces better results than curated links because: users pick resources that match their learning style, no hallucinated or stale URLs, and users develop resource-finding skills. **YouTube dominance:** 50-60% of search suggestions should target YouTube — it has the widest coverage and users can preview before committing.
-   - **Priority 2: Curated gold-standard** — use ONLY for resources in `resources/curated-resources.md` that are genuinely vetted and confirmed excellent. These are the "we know this one is gold" entries. Don't default to curated just because an entry exists — a good search suggestion often beats a mediocre curated link.
-   - **Priority 3: User-preferred platforms** — resources or platforms the user has told the agent they like (tracked in `resource-feedback.md`). "You said you like freeCodeCamp for Python — search there for decorators."
-   - **Priority 4: Platform discovery** — for skills with well-known free platforms (coding: LeetCode, HackerRank, Exercism, Codewars; SQL: SQLBolt, Mode Analytics, HackerRank SQL; data: Kaggle), suggest 2-3 free platforms and ask the user to try one and report back. "Find a free interactive SQL trainer you like — popular options: SQLBolt, Mode Analytics, HackerRank SQL. Try one this week and tell me which clicks." Use in the first 1-2 weeks for practice-type tasks.
-   - **Banned platforms:** Never recommend paid or paywalled platforms: Udemy, Coursera, edX, LinkedIn Learning, Pluralsight, DataCamp, Codecademy Pro. Free tiers of otherwise-paid platforms are fine if the free content is substantial.
-   - **Fast-moving topics exception:** For pillars like AI, current tech trends, or any topic where content goes stale quickly, always use search suggestions (Priority 1) — curated resources for these topics go stale within months.
-
-6. **Search query quality** — search suggestions are only as good as the query. Craft specific, level-appropriate queries:
-   - Include the topic AND the level: "python decorators beginner tutorial" not just "python decorators"
-   - Include the format when relevant: "SQL joins visual explanation" for conceptual, "SQL joins practice exercises" for practice
-   - Never name specific creators or channels — let the user pick
-   - For YouTube: add "tutorial", "explained", or "crash course" to improve results
-   - For practice platforms: add "free", "interactive", or "exercises"
-
-7. **URL handling** — most tasks will have no URL (search suggestions are the default). Only Priority 2 curated gold-standard resources have URLs. For self-guided tasks (e.g., "draft STAR stories"), leave the Search field as `N/A`. Never fabricate URLs.
-
-8. **No repeats within a week** — don't assign the same resource or search query twice in one week. Check previous weeks too — avoid re-assigning topics the user already completed (check `memory/history.md`).
-
-9. **Platform preferences** — respect platform ratings from `resource-feedback.md`. If the user rated a platform "didn't click" multiple times, avoid it.
+For resource selection rules and task format spec, read `references/task-format.md`.
 
 **Step 4: Write to file**
 
@@ -206,6 +199,12 @@ Read `memory/spaced-repetition.md`. If a concept is due for review today, includ
 
 **Step 4: Add context**
 
+Read `memory/user-model.md` to personalize the message:
+- Use Knowledge Anchors to frame "Why" connections: reference the user's prior domain knowledge ("You've worked with marketing analytics — this SQL work builds directly on that data intuition")
+- Use Motivation Drivers to pick the right framing: if the user is energized by dream career connections, lead with that. If streaks motivate them, emphasize the streak.
+- Use Learning Patterns to note format matches: if you know they prefer video and today's task is a video, no need to mention it. If it's an article and they usually prefer video, acknowledge: "This one's a read — give it a shot, the interactive examples are worth it."
+- If user-model.md is empty (early days), fall back to `user-profile.md` context only. Don't mention the user model's absence.
+
 - Reference yesterday's progress if relevant:
   - Streak going? → "That's [N] days in a row now."
   - Missed yesterday? → "Let's pick up where you left off." (no guilt)
@@ -230,122 +229,6 @@ Keep it concise — 5-8 lines max for normal verbosity. Adjust based on `config/
 **Step 6: Send the message**
 
 Send the formatted message.
-
-## Task format
-
-Each task in the weekly file must include all these fields:
-
-| Field | Description | Examples |
-|-------|-------------|----------|
-| # | Task number for the day | 1, 2, 3 |
-| Action | Mini learning objective — what to learn/do, not just a verb. For conceptual tasks, include a self-check question: "After this, you should be able to answer: [question]" | "Learn Python decorators — what they are, when to use them, how to write a simple one. Self-check: What's the difference between @decorator syntax and calling the decorator function directly?" |
-| Search | Search suggestion (default) or curated URL. Format: `Search: "[query]" on [platform]`. For curated gold-standard resources, use the actual URL. For self-guided tasks, use `N/A`. | `Search: "python decorators explained beginner" on YouTube` |
-| Platform | Where the user should search or the curated resource lives | "YouTube", "LeetCode", "freeCodeCamp", "HackerRank" |
-| Size | Task size — only three values allowed | Short (~20min), Medium (~40min), Long (~60min) |
-| Pillar | Which skill pillar this serves | "Python", "DSA", "System Design", "Databases" |
-| Type | Affects teach-back eligibility + task delivery | "conceptual", "practice", or "practice_prompt" |
-| Why | Dream career connection (1 sentence) | "Decorators are table stakes for Python frameworks used at [dream career] companies" |
-| Status | Current state | "pending", "done", "skipped", "partial" |
-
-### Task types
-
-- **conceptual** — learning tasks: reading, watching, studying. Eligible for teach-back prompts (~1 in 3). Always include a self-check question in the Action field.
-- **practice** — hands-on tasks: coding, building, exercises on external platforms. Not eligible for teach-back (they're already active recall).
-- **practice_prompt** — the task IS a question the user answers in conversation. No external resource needed. The agent asks the question, evaluates the response using the teach-back evaluation table (strong/partial/can't explain/skipped), gives feedback, and marks done/partial. Platform = "ProngAgent", Search = `N/A`. Format the Action as: "Practice prompt: [question]. Reply when ready." Frequency: 1-2 per week for regular plans, 2-3 per week for crash courses. Mix across pillars. These are NOT eligible for additional teach-back (they already are active recall).
-
-## Example daily message (normal verbosity)
-
-```
-Morning! Here's your plan for today:
-
-1. 📖 Learn Python decorators — what they are, when to use them, how
-   to write a simple one. Search: "python decorators explained beginner"
-   on YouTube [Short]
-   Self-check: What's the difference between @decorator and calling the function directly?
-
-2. 💻 Practice tree traversal — BFS vs DFS, when to use each.
-   Search: "binary tree traversal practice problems" on LeetCode [Medium]
-   Decorators are table stakes for Python frameworks used at [dream career] companies.
-
-3. ❓ Practice prompt: Explain the difference between a stack and a queue.
-   Give a real-world example of when you'd use each. Reply when ready. [Short]
-
-🔄 Quick review: What does Big O notation tell you about an algorithm?
-
-Yesterday you finished the SQL section — that's 8 days in a row now.
-The tree problems build directly on the recursion you practiced last week.
-```
-
-## Example daily message (concise verbosity)
-
-```
-Today's tasks:
-
-1. 📖 Python decorators — Search: "python decorators explained beginner" on YouTube [Short]
-2. 💻 Tree traversal — Search: "binary tree BFS DFS practice" on LeetCode [Medium]
-3. ❓ Practice prompt: stack vs. queue — explain + real-world example [Short]
-
-🔄 Review: What does Big O notation tell you?
-```
-
-## Example full_plan output
-
-After running mode: `full_plan`, `memory/current-plan.md` should look like:
-
-```markdown
-# Current Learning Plan
-
-## Plan Info
-
-- **Created:** 2026-03-16
-- **Current week:** 1
-- **Total weeks:** 8
-- **Plan type:** learning
-
-## Pillars
-
-| Pillar | Level | Blocks at level | Weight |
-| ------ | ----- | --------------- | ------ |
-| Backend Architecture | 1 | 0/5 | 30% |
-| Databases | 2 | 0/5 | 25% |
-| System Design | 1 | 0/5 | 30% |
-| Testing | 1 | 0/5 | 15% |
-
-## Portfolio Projects
-
-(none yet)
-```
-
-## Example weekly output
-
-`memory/plan-tasks/week-01.md` after generation:
-
-```markdown
-# Week 1 Tasks
-
-## Monday
-
-| # | Action | Search | Platform | Size | Pillar | Type | Why | Status |
-|---|--------|--------|----------|------|--------|------|-----|--------|
-| 1 | Learn REST API design principles — request/response cycle, HTTP methods, status codes. Self-check: When would you use PUT vs PATCH? | Search: "REST API design principles beginner" on YouTube | YouTube | Short | Backend Architecture | conceptual | API design is the foundation of every backend role | pending |
-| 2 | Practice SQL joins — INNER, LEFT, RIGHT, FULL OUTER with real data | Search: "SQL joins practice exercises free" on SQLBolt | SQLBolt | Medium | Databases | practice | Every data-touching role requires fluent SQL joins | pending |
-| 3 | Practice prompt: Explain scalability — what does it mean for a system to "scale horizontally" vs "vertically"? Give an example of each. Reply when ready. | N/A | ProngAgent | Short | System Design | practice_prompt | System design questions come up in every senior interview | pending |
-
-## Tuesday
-
-| # | Action | Search | Platform | Size | Pillar | Type | Why | Status |
-|---|--------|--------|----------|------|--------|------|-----|--------|
-| 1 | Learn Express.js routing — how routes, middleware, and request handlers work together. Self-check: What's the difference between app.use() and app.get()? | Search: "express.js routing tutorial beginner" on YouTube | YouTube | Medium | Backend Architecture | conceptual | Express is the most common Node.js framework in production | pending |
-| 2 | Learn database indexing — what indexes do, when to add them, and the tradeoff with write speed. Self-check: Why might adding an index slow down INSERT operations? | Fundamentals of Database Indexing | Use The Index, Luke | Medium | Databases | conceptual | Query optimization separates junior from senior DB work | pending |
-
-## Wednesday
-
-...
-
-## Sunday
-
-(day off)
-```
 
 ## Self-observation triggers
 

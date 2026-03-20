@@ -28,12 +28,14 @@ important piece of information — it drives everything downstream.
 
 - `memory/user-profile.md` — check which fields are empty (if redoing onboarding, some may already be filled)
 - `memory/resume-context.md` — check if resume data already exists from a previous session
+- `memory/user-model.md` — check if observations exist from a previous session (if redoing onboarding)
 - `config/settings.md` — check verbosity preference (default to normal for new users)
 
 ## What to write when done
 
 - `memory/user-profile.md` — all extracted fields
 - `memory/resume-context.md` — parsed resume/LinkedIn data (if provided)
+- `memory/user-model.md` — seed initial observations from the conversation: Communication Style (how they respond — terse, elaborate, emoji-heavy), Knowledge Anchors (domains they reference confidently), Motivation Drivers (what excites them about the dream career). Also seed from Extended Context if provided.
 
 ## Conversation flow
 

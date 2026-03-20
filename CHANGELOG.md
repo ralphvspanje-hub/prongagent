@@ -4,6 +4,88 @@ Tracks skill file iterations and product learnings. Every time a skill file chan
 
 ---
 
+## 2026-03-20 — Brief 4: Per-skill session logging
+
+**What happened:** Individual skills had no memory of their own past executions. The agent couldn't learn from what worked, what the user preferred, or what to avoid repeating. Added append-only `session-log.md` to 9 skills — the agent reads the last 5-10 entries at skill start for continuity and appends an entry after execution if anything notable happened.
+**Changed:** Added to each skill's SKILL.md: a `session-log.md` row in the Skill files table (read at start), a `session-log.md` row in the What to write section (write after execution), and a `## Session log` section with skill-specific guidance on what to log, the entry format, and archival rules (summarize into `session-log-archive.md` at ~100 entries). Added `skills/*/session-log.md` to `.gitignore` (personal data). Skills that got session logs: career-mentor, job-scan, mock-interview, daily-plan, check-in, teach-back, weekly-review, interview-prep, win-log. Excluded: auto-linking (silent, no user interaction), adaptation (already logs to adaptation-log.md), resource-feedback (too lightweight), spaced-repetition (silent, results go to spaced-repetition.md).
+**Files:** `.gitignore`, `skills/{career-mentor,job-scan,mock-interview,daily-plan,check-in,teach-back,weekly-review,interview-prep,win-log}/SKILL.md`
+
+---
+
+## 2026-03-20 — Brief 2: Deterministic scripts for 5 skills
+
+**What happened:** Skills relied entirely on LLM reasoning for deterministic operations like counting streaks, calculating date intervals, parsing large markdown files, and computing pillar distribution percentages. These operations are error-prone for LLMs — miscounting rows, miscalculating intervals, missing entries. Added small TypeScript utility scripts (run via Bun) that handle these operations and output structured text for the agent to act on.
+**Changed:** Created 5 scripts in `scripts/` subdirectories: job-scan/parse-tracker.ts (extracts active jobs, identifies new/urgent by date), spaced-repetition/srs-calculator.ts (calculates due/overdue concepts with priority ranking), check-in/streak-counter.ts (streak math with date gap detection), daily-plan/task-selector.ts (pillar weight distribution gap analysis), weekly-review/stats-compiler.ts (weekly stats from multiple files). Updated all 5 SKILL.md files with Skill files tables documenting each script (usage, args, output format, why scripted) and modified the relevant mode steps to call the script first instead of manually parsing. Scripts are read-only analyzers — they never modify memory files.
+**Files:** `skills/{job-scan,spaced-repetition,check-in,daily-plan,weekly-review}/scripts/*.ts`, `skills/{job-scan,spaced-repetition,check-in,daily-plan,weekly-review}/SKILL.md`
+
+---
+
+## 2026-03-20 — Brief 5: On-demand hooks for 5 skills
+
+**What happened:** ProngAgent had no self-enforced behavioral constraints during skill execution. Added `## Hooks` sections — agent-enforced guardrails that activate when a skill runs and deactivate when it ends.
+**Changed:** Added hooks to 5 skill files: interview-prep (focus mode + plan freeze — blocks non-interview tasks and adaptation changes during crash course), mock-interview (no meta-breaks, no mid-session coaching, no reading win-log during questions), career-mentor (honesty guard on fit scores, constraint transparency, no hedging on apply decisions), check-in (no guilt language, no interrogation on zero completion, one follow-up max), job-scan (field-level write lock, no deletions, no restructuring, corruption abort on shared tracker file).
+**Files:** `skills/{interview-prep,mock-interview,career-mentor,check-in,job-scan}/SKILL.md`
+
+---
+
+## 2026-03-20 — Brief 3: Per-skill config.json files (5 skills)
+
+**What happened:** Following Anthropic's skill best practices ("store setup information in a config.json file in the skill directory"), added per-skill configuration files for skills with user-configurable preferences that shouldn't be re-asked every session.
+**Changed:** Created `config.json` with sensible defaults in 5 skill directories: career-mentor (cover letter tone, resume output format, LinkedIn strategy), job-scan (tracker path, fit score threshold, surfacing prefs), mock-interview (default mode, difficulty, follow-up depth), daily-plan (YouTube %, interactive preference, practice prompts), weekly-review (adaptation details, comparison depth). Each SKILL.md now has a Configuration section documenting fields/defaults and references config.json in its "What to read" table. Job-scan's `job_tracker_path` references updated from `config/settings.md` to `config.json`. Added `skills/*/config.json` to `.gitignore` so configs stay personal.
+**Files:** `skills/{career-mentor,job-scan,mock-interview,daily-plan,weekly-review}/config.json`, `skills/{career-mentor,job-scan,mock-interview,daily-plan,weekly-review}/SKILL.md`, `.gitignore`
+
+---
+
+## 2026-03-20 — Brief 1: Progressive disclosure split (7 skills)
+
+**What happened:** ProngAgent's largest skill files were monolithic — the agent loaded 400-738 lines even when it only needed one mode. Following Anthropic's skill best practices ("Think of the entire file system as a form of context engineering and progressive disclosure"), split 7 skills into core SKILL.md + on-demand sub-files.
+**Changed:** Each SKILL.md now contains: frontmatter, triggers, what-to-read/write tables, edge cases, self-observation triggers, and a new "Skill files" reference table. Mode-specific protocols, reference templates, and example conversations were extracted into `modes/`, `references/`, and `examples/` subdirectories. Total: 28 sub-files created across 7 skills. No behavior or logic changed — purely structural.
+**Files:** mock-interview (738→244, 6 sub-files), interview-prep (685→209, 5 sub-files), career-mentor (557→303, 5 sub-files), portfolio-projects (561→366, 2 sub-files), weekly-review (533→314, 3 sub-files), win-log (557→217, 5 sub-files), daily-plan (405→211, 2 sub-files)
+
+## 2026-03-20 — Daily Plan: progressive disclosure split
+
+**What happened:** The daily-plan SKILL.md was 405 lines — too large for a single file. Split into progressive disclosure sub-files without changing any behavior or logic.
+**Changed:** Extracted Mode: full_plan (Steps 0-6) to `modes/full-plan.md`. Extracted task format fields, task types, resource selection rules 5-9, and all example outputs to `references/task-format.md`. Added "Skill files" reference table to SKILL.md after frontmatter. Replaced extracted sections with read-references. SKILL.md went from 405 to 211 lines.
+**File:** `skills/daily-plan/SKILL.md`, `skills/daily-plan/modes/full-plan.md`, `skills/daily-plan/references/task-format.md`
+
+## 2026-03-20 — Weekly Review: progressive disclosure split
+
+**What happened:** The weekly-review SKILL.md was 533 lines — too large for a single file. Split into progressive disclosure sub-files without changing any behavior or logic.
+**Changed:** Extracted Step 4 composition guide (7 required elements + tone rules) to `references/narrative-guide.md`. Extracted Step 3 stored digest template to `references/digest-format.md`. Extracted all example outputs to `examples/sample-digest.md`. Added "Skill files" reference table to SKILL.md after frontmatter. Replaced extracted sections with read-references. SKILL.md went from 533 to 314 lines.
+**File:** `skills/weekly-review/SKILL.md`, `skills/weekly-review/references/narrative-guide.md`, `skills/weekly-review/references/digest-format.md`, `skills/weekly-review/examples/sample-digest.md`
+
+## 2026-03-20 — User Model: agent builds a mental model of the user
+
+**What happened:** Added a progressive user model system. Instead of the user maintaining a "second brain," the agent builds a mental model of the user across 6 dimensions (learning patterns, motivation drivers, communication style, knowledge anchors, avoidance patterns, growth edges). Every skill reads this model to personalize output — tone, framing, analogies, difficulty. 10 skills write observations after interactions. The model starts empty and builds organically over time.
+**Changed:** Created `memory/user-model.md` template. Added `memory/user-model.md` to "What to read" in all 14 existing skill files. Added write instructions to 10 skills (onboarding, check-in, teach-back, resource-feedback, weekly-review, adaptation, mock-interview, win-log, career-mentor, job-scan). Added behavior guidance for how to use the model in 5 key skills (daily-plan, check-in, teach-back, adaptation, weekly-review). Updated `AGENTS.md`, `MEMORY.md`, `CLAUDE.md`.
+**File:** `memory/user-model.md`, all 14 `skills/*/SKILL.md`, `AGENTS.md`, `MEMORY.md`, `CLAUDE.md`
+
+---
+
+## 2026-03-20 — New skill: auto-linking (concept cross-referencing)
+
+**What happened:** Added a silent skill that runs after check-in and teach-back to cross-reference new learnings with existing knowledge. Creates a concept connection map with relationship types (builds-on, contrasts, applies-to, bridges-pillars, analogous) and strength levels (mentioned → demonstrated → strong). Other skills read this map to enrich output: daily-plan frames tasks with continuity, teach-back creates cross-concept questions, weekly-review highlights cross-pillar bridges, career-mentor uses clusters for gap analysis.
+**Changed:** Created `skills/auto-linking/SKILL.md`. Created `memory/concept-links.md` template. Added trigger handoffs in check-in and teach-back skill files. Added `memory/concept-links.md` to "What to read" in daily-plan, teach-back, weekly-review, spaced-repetition, and career-mentor. Registered skill in `AGENTS.md` and `CLAUDE.md`.
+**File:** `skills/auto-linking/SKILL.md`, `memory/concept-links.md`, `skills/check-in/SKILL.md`, `skills/teach-back/SKILL.md`, `skills/daily-plan/SKILL.md`, `skills/weekly-review/SKILL.md`, `skills/spaced-repetition/SKILL.md`, `skills/career-mentor/SKILL.md`, `AGENTS.md`, `CLAUDE.md`
+
+---
+
+## 2026-03-20 — New skill: career-mentor
+
+**What happened:** Built the catch-all career advisor skill. Covers 6 modes: general advice, resume tailoring, cover letters, LinkedIn optimization, company evaluation, and strategy checks. Persists job posting summaries to `memory/interview-context.md` so postings shared via Telegram survive between sessions. Explicitly hands off to interview-prep when the user has an actual interview scheduled. Proactively challenges dream career alignment and nudges action over analysis paralysis.
+**Changed:** Created `skills/career-mentor/SKILL.md`. Added `## Job Posting History` section to `memory/interview-context.md`. Registered skill in `AGENTS.md` and `CLAUDE.md`.
+**File:** `skills/career-mentor/SKILL.md`, `memory/interview-context.md`, `AGENTS.md`, `CLAUDE.md`
+
+---
+
+## 2026-03-20 — New skill: job-scan
+
+**What happened:** Added job-scan skill to surface opportunities from external job tracker maintained by dispatch agent (Claude Cowork 7:09 AM scan). Two-way sync with shared `job_tracker.md` file — ProngAgent reads new jobs, surfaces them in the daily message, and writes user status updates back.
+**Changed:** Created `skills/job-scan/SKILL.md` with daily_scan and interactive modes. Created `memory/job-scan-state.md` template. Added `job_scan_active` toggle and `job_tracker_path` to `config/settings.md`. Registered skill in `AGENTS.md` and added staleness check to `HEARTBEAT.md`.
+**File:** `skills/job-scan/SKILL.md`, `memory/job-scan-state.md`, `config/settings.md`, `AGENTS.md`, `HEARTBEAT.md`
+
+---
+
 ## 2026-03-18 — Six ProngGSD-inspired upgrades (pre-dogfooding)
 
 **What happened:** CTO review identified six improvements to port from ProngGSD before dogfooding begins. All changes are to skill files and memory templates — no new infrastructure or skill directories.

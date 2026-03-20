@@ -40,6 +40,8 @@ Three activation paths:
 - `memory/user-profile.md` — dream career, target role (for contextualizing prompts)
 - `memory/spaced-repetition.md` — check if concept already has an SRS entry (update, don't duplicate)
 - `memory/adaptation-log.md` — check for repeated gate failures on same pillar
+- `memory/user-model.md` — Knowledge Anchors (for analogies and framing), Communication Style (for prompt tone), Avoidance Patterns (handle gently if topic is one they dodge)
+- `memory/concept-links.md` — use `contrasts` and `bridges-pillars` connections for cross-concept questions: "How does [concept A] relate to [concept B]?" These are higher-order questions that test real understanding.
 - `config/settings.md` — teach-back frequency, verbosity
 
 ## What to write
@@ -52,6 +54,29 @@ Three activation paths:
 - `memory/win-log/candidates.md` — flag surprisingly deep responses
 - `memory/adaptation-log.md` — log if level-up gate fails twice for same pillar/level
 - `config/settings.md` — reduce teach-back frequency if user skips 3+ times total
+- `memory/user-model.md` — append observation to Observation Log: concept stickiness (which topics click fast vs. need multiple attempts), teaching ability (how clearly they explain), knowledge anchors (analogies they use spontaneously), teach-back comfort (do they engage or avoid?)
+- `session-log.md` (this skill directory) — after execution if anything notable happened
+
+## Session log
+
+This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
+
+After execution, append an entry if anything notable happened. Don't log routine executions.
+
+**What to log:**
+- Which concepts were strong, which were weak, what follow-up helped
+- "Explaining with analogies worked better than definitions for this user"
+- Level-up gate outcomes and what made the difference
+
+**Entry format:**
+```markdown
+### YYYY-MM-DD — [brief title]
+- **Context:** [what triggered the skill]
+- **Notable:** [what's worth remembering for next time]
+- **User reaction:** [accepted / pushed back / modified / skipped]
+```
+
+**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ## Formulating the teach-back prompt
 
@@ -72,6 +97,14 @@ Good: "You have a users table and an orders table. A user placed an order yester
 | 3 | Application | "When would you use X instead of Y?" | "When would you use a CTE instead of a subquery?" |
 | 4 | Analysis | "What are the tradeoffs of X vs Y in scenario Z?" | "Your query is slow on a 10M row table — when would you add an index vs restructure the query?" |
 | 5 | Teaching | "Explain X to a junior who's never seen it" | "A new analyst asks you what a window function is — walk them through it with an example" |
+
+### Use the user model for better prompts
+
+Read `memory/user-model.md` before formulating:
+- **Knowledge Anchors → Analogies that work:** If the user thinks in terms of cooking analogies, frame the teach-back using one: "Think of a database index like a recipe book's index — what happens when you add a new recipe?"
+- **Communication Style → Prompt tone:** If the user prefers direct, skip the framing and just ask. If they engage more with context, add a brief setup.
+- **Avoidance Patterns:** If the topic is one they've been dodging, be extra warm in the setup: "This one's tricky — no pressure, just tell me what you remember."
+- If user-model.md is empty (early days), default to the standard prompt style below.
 
 ### Connect to dream career when natural
 
@@ -232,6 +265,13 @@ Append to the `## Teach-Back Log` section in `memory/progress.md`:
 ```
 
 For level-up gates, log each concept separately even if asked in the same turn.
+
+### Auto-linking trigger
+
+After every teach-back evaluation (regardless of response quality), trigger `skills/auto-linking/SKILL.md` silently. Teach-backs are especially valuable for auto-linking because:
+- Strong responses may reveal connections the user made spontaneously
+- Partial responses reveal gaps in the connection map
+- The concept being tested + its pillar + level is high-quality input for building links
 
 ## Spaced repetition entry format
 

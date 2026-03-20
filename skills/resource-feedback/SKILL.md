@@ -21,6 +21,7 @@ metadata:
 
 - `memory/plan-tasks/week-{N}.md` — to find the most recently completed task
 - `memory/resource-feedback.md` — existing ratings, learning style profile
+- `memory/user-model.md` — Learning Patterns (cross-reference format preferences with ratings)
 - `memory/progress.md` — total tasks completed (to know when to trigger)
 - `resources/curated-resources.md` — to check if a user-discovered resource should be promoted to gold-standard
 
@@ -28,6 +29,7 @@ metadata:
 
 - `memory/resource-feedback.md` — append rating, update learning style profile
 - `resources/curated-resources.md` — promote graduated resources (see graduation system below)
+- `memory/user-model.md` — append observation to Observation Log if rating reveals a pattern: format preferences beyond just ratings (e.g., user's comment tone when rating "great" vs "didn't click"), platform avoidance patterns
 
 ## How to ask
 

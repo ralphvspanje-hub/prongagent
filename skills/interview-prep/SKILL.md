@@ -10,6 +10,17 @@ metadata:
 
 # Interview Prep Skill
 
+## Skill files
+
+| File | When to read |
+|------|-------------|
+| `modes/onboarding.md` | At skill start — the 3-4 turn conversation to gather interview context (pre-check routing, company+role, timeline+format, readiness assessment, confirm+activate) |
+| `modes/activation.md` | After user confirms — the 7-step activation sequence (Steps A-G: write interview-context, change plan type, generate crash course, win log activation, SRS burst, config tightening, log activation) |
+| `modes/post-interview.md` | After interview date passes — check-in conversation, handle response, transition back to learning plan |
+| `references/crash-course-tasks.md` | During crash course generation — task types (technical, system design, behavioral, company research, mock interviews, take-home) and countdown/progress tracking integration |
+| `examples/activation-flow.md` | Reference — full activation flow example, post-interview check-in example, transition back example |
+| `session-log.md` | At skill start — read last 5-10 entries for continuity |
+
 ## When to trigger
 
 Two entry points:
@@ -32,6 +43,8 @@ Read ALL of the following before starting the interview onboarding conversation:
 | `memory/win-log/interview-mapping.md` | Check question type coverage — flag gaps |
 | `memory/progress.md` | Current pillar levels, blocks at level — assess readiness against job requirements |
 | `memory/spaced-repetition.md` | Active concepts — flag relevant ones for interview burst review |
+| `memory/user-model.md` | Communication Style (for coaching tone), Avoidance Patterns (topics they dodge — may need extra attention in prep), Growth Edges (confidence shifts, readiness signals) |
+| `files/` (technical prep notes) | When building crash course or assessing readiness |
 | `config/settings.md` | Schedule, frequencies — interview mode tightens adaptation settings |
 
 ## What to write
@@ -42,6 +55,28 @@ Read ALL of the following before starting the interview onboarding conversation:
 | `memory/current-plan.md` | Plan type change to `interview_prep`, pillar weight shifts, compressed timeline. Save previous plan state for restoration. |
 | `config/settings.md` | Tighten adaptation settings for interview mode (noted in file so adaptation skill reads them) |
 | `memory/adaptation-log.md` | Log the plan type change as an adaptation entry |
+| `session-log.md` (this skill directory) | After execution if anything notable happened |
+
+## Session log
+
+This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
+
+After execution, append an entry if anything notable happened. Don't log routine executions.
+
+**What to log:**
+- Company research that was useful, prep areas that mattered most
+- "User valued the culture fit analysis more than technical prep"
+- Timeline decisions, readiness shifts, what prep activities had the most impact
+
+**Entry format:**
+```markdown
+### YYYY-MM-DD — [brief title]
+- **Context:** [what triggered the skill]
+- **Notable:** [what's worth remembering for next time]
+- **User reaction:** [accepted / pushed back / modified / skipped]
+```
+
+**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ## Downstream triggers (after activation)
 
@@ -56,378 +91,15 @@ Read ALL of the following before starting the interview onboarding conversation:
 
 ## Interview onboarding conversation
 
-A 3-4 turn conversation to gather everything needed for a targeted crash course. Keep it focused — the user has an interview to prepare for, not a personality quiz to fill out.
-
-### Pre-check: edge case routing
-
-Before starting the conversation, check the timeline:
-
-- **Interview is tomorrow (or today):** Skip to ultra-compressed mode (see edge cases). Don't run the full onboarding.
-- **Interview is 2+ months away:** Don't switch to full `interview_prep` yet. Note the interview in `memory/interview-context.md` but keep plan type as `learning`. Shift pillar weights toward interview-relevant skills within the regular plan. Switch to `interview_prep` mode 3-4 weeks before the date.
-- **Already in `interview_prep` for another interview:** Handle the multi-interview case (see edge cases).
-
-### Turn 1: Company + role
-
-> "What company and role? Share the job posting if you have it — I'll pull out exactly what they're looking for."
-
-Accept whatever format:
-- **Full job posting:** Parse it — extract required skills, nice-to-haves, team info, company description, seniority level
-- **Company + role title only:** Work with that. Use general requirements for that role type. Note that details are incomplete — update if the user gets more info later.
-- **Just "an interview" (no company/role yet):** That's fine — recruiter outreach, still figuring it out. Do general interview prep (see edge cases).
-
-Extract:
-- **Company name** (or "unknown" if recruiter stage)
-- **Role title** (as specific as possible)
-- **Job description details:** required skills, nice-to-haves, team info, seniority expectations
-- **Industry/domain** (for company-specific prep — if Stripe, payments domain; if Spotify, audio streaming)
-
-### Turn 2: Timeline + format
-
-> "When is it? And do you know the format — phone screen, technical round, behavioral, take-home, panel?"
-
-Extract:
-- **Interview date** (exact date if known, "next week" or "in 2 weeks" if approximate — convert to absolute date)
-- **Interview format/stages:** phone screen, technical, behavioral, system design, take-home, panel, or unknown
-- **Any known details about the process** (number of rounds, who's interviewing, time limits)
-- **Calculate days remaining** from today
-
-If the user doesn't know the format:
-> "No worries — I'll prep you for the most likely formats for [role] at [company]. We can adjust when you know more."
-
-### Turn 3: Readiness assessment
-
-Compare job requirements against the user's current state. Read:
-- `memory/user-profile.md` → current skills, experience level
-- `memory/current-plan.md` → pillar levels
-- `memory/resume-context.md` → work experience, technologies
-- `memory/win-log/wins.md` → count polished wins
-- `memory/win-log/interview-mapping.md` → question type coverage
-
-Present the assessment:
-
-> "Based on your profile and the job requirements, here's where I think you stand:
->
-> **Strong:** [skills/experience that match the job requirements]
-> **Needs work:** [gaps between job requirements and current levels]
-> **Win log:** [X polished wins — need Y more / gaps in Z question type]
->
-> Does that match your read? Anything else you're worried about?"
-
-Be honest about gaps. If the user's pillar levels are very low for the job requirements:
-
-> "The job asks for [X] at a level you haven't reached yet. Here's what we can realistically cover in [days]. I'll prioritize the highest-impact areas."
-
-Don't sugarcoat, but don't discourage either. Frame it as triage — what's the highest-ROI prep given the timeline.
-
-### Turn 4: Confirm + activate
-
-> "Here's my plan:
->
-> - **Technical prep:** [brief — e.g., "focused SQL practice + system design fundamentals"]
-> - **Behavioral prep:** [brief — e.g., "polish 3-4 STAR stories, practice delivery"]
-> - **Company research:** [brief — e.g., "understand their stack, recent news, culture"]
-> - **Mock interviews:** [number] before the real thing
-> - **Timeline:** [days] days, starting tomorrow
->
-> I'll shift your daily tasks to focus on interview prep starting tomorrow. Your regular learning plan is paused but saved — we'll pick it back up after.
->
-> Sound good?"
-
-Wait for confirmation before activating. If they want changes, adjust the plan summary and re-confirm.
-
----
+Read `modes/onboarding.md` for the full onboarding flow. Summary: a 3-4 turn conversation that gathers company+role, timeline+format, assesses readiness, and presents a plan for confirmation. Check edge cases first — interview-tomorrow and 2+-months-away have special routing.
 
 ## What happens on activation
 
-After the user confirms, execute these steps in order:
-
-### Step A: Write interview-context.md
-
-Write all gathered info to `memory/interview-context.md`:
-
-```markdown
-# Interview Context
-
-## Active Interview Prep
-
-- **Status:** active
-- **Target company:** [company name]
-- **Target role:** [role title]
-- **Interview date:** YYYY-MM-DD
-- **Job description summary:** [key requirements, nice-to-haves]
-- **Key requirements:** [bulleted list of must-have skills from JD]
-- **Interview format:** [phone screen / technical / behavioral / system design / take-home / panel / unknown]
-- **Interview stages:** [what's known about the process]
-- **Prep started:** [today's date]
-- **Days remaining:** [calculated]
-
-## Readiness Assessment
-
-- **Strong areas:** [skills that match]
-- **Gap areas:** [skills that need work]
-- **Priority gaps:** [ranked by interview impact — what's most likely to come up]
-
-## Crash Course Plan
-
-(generated in Step C)
-
-## Company Research
-
-- **Company size:** [if known]
-- **Industry:** [domain]
-- **Tech stack (if known):** [technologies]
-- **Culture notes:** [from JD, company website, etc.]
-- **Recent news:** [anything notable]
-
-## Prep Checklist
-
-- [ ] Win log has 5+ polished entries
-- [ ] Interview mapping covers: leadership, technical, failure, collaboration
-- [ ] Mock interviews completed: 0
-- [ ] Key concepts reviewed via spaced repetition
-- [ ] Company research done
-- [ ] Portfolio project relevant to role identified (if time allows)
-
-## Post-Interview Notes
-
-(filled after the interview)
-```
-
-### Step B: Change plan type
-
-Update `memory/current-plan.md`:
-
-1. **Save the current plan state** — copy the current Pillars table, weights, and week number into a `## Saved Learning Plan` section at the bottom of the file. This is what gets restored after interview prep ends.
-
-2. **Change plan type** to `interview_prep`:
-
-```markdown
-## Plan Info
-
-- **Created:** [today's date]
-- **Current week:** 1
-- **Total weeks:** [days until interview / 7, rounded up, max 4]
-- **Plan type:** interview_prep
-- **Interview date:** YYYY-MM-DD
-- **Previous plan type:** learning
-```
-
-3. **Remap pillars** to interview requirements:
-   - Map each job requirement to a pillar
-   - Set weights based on gap severity (biggest gaps get highest weight)
-   - Compress levels — if the user is Level 1 in a critical skill and the interview is in 2 weeks, don't try to get them to Level 3. Focus on solid Level 2 fundamentals.
-   - Keep 2-4 pillars. Interview prep pillars may differ from learning plan pillars.
-
-Example pillar remapping for a PM interview:
-
-```markdown
-## Pillars
-
-| Pillar | Level | Blocks at level | Weight |
-| ------ | ----- | --------------- | ------ |
-| SQL & Data Analysis | 2 | 0/5 | 25% |
-| Product Sense & Case Interviews | 1 | 0/5 | 35% |
-| Behavioral & STAR Stories | 2 | 0/5 | 25% |
-| Company-Specific Research | 1 | 0/5 | 15% |
-```
-
-### Step C: Generate crash course
-
-Trigger the daily-plan skill with mode: `full_plan` in `interview_prep` context. The daily-plan skill reads plan type and adjusts accordingly (see daily-plan edge case for interview_prep mode). Key differences from a regular plan:
-
-- **Compressed timeline:** days until interview, not 8-12 weeks
-- **Pillar weights remapped** to interview requirements
-- **Task types shift** — see crash course task types below
-- **Daily tasks include** a mix of: technical practice + behavioral prep + company-specific research
-- **No ramp-up period** — full intensity from Day 1
-
-### Step D: Win log activation
-
-Check `memory/win-log/wins.md`:
-
-| Win count | Action |
-|-----------|--------|
-| < 5 polished wins | Trigger `skills/win-log/SKILL.md` extraction mode immediately. Flag in daily message: "Your win log needs work — I'll help you build STAR stories this week." |
-| 5+ wins but `interview-mapping.md` has gaps | Flag the specific gaps: "You're missing a [gap category] story. Let's work on that." |
-| 8+ wins, all question types covered | Note readiness: "Your win log is solid — [X] stories covering all major question types." |
-
-### Step E: SRS burst
-
-Notify the spaced-repetition skill to activate interview mode:
-
-- Pull all Active Review Items relevant to the target role to due-today
-- Pull relevant Retired items back into Active at due-today
-- This is a one-time burst — after the initial pull, concepts follow the normal spacing algorithm
-- "Relevant" = concept's pillar matches interview prep pillars OR concept directly relates to job requirements
-
-### Step F: Config tightening
-
-Add an interview mode section to `config/settings.md` (or update if it exists):
-
-```markdown
-## Interview Mode (active)
-
-- **Adaptation cooldown:** 1 day (was 3)
-- **Adaptation review cycle:** daily (was weekly pattern detection)
-- **New pillars:** blocked (stay focused on interview prep)
-- **Portfolio projects:** blocked unless directly relevant to target role
-- **Mock interview target:** 2+ before interview date
-```
-
-The adaptation skill reads these overrides when plan type is `interview_prep`.
-
-### Step G: Log the activation
-
-Write to `memory/adaptation-log.md`:
-
-```markdown
-## YYYY-MM-DD — Interview prep activated
-
-- **Trigger:** User confirmed interview at [company] for [role] on [date]
-- **Change:** Plan type changed from learning to interview_prep. Pillars remapped to interview requirements. Crash course generated. Win log extraction triggered. SRS burst activated.
-- **Reasoning:** [days] days until interview. Priority gaps: [list]. Win log has [X] polished entries ([sufficient/needs extraction]). Adaptation tightened to daily review cycle.
-- **Files modified:** memory/interview-context.md, memory/current-plan.md, config/settings.md
-```
-
----
-
-## Crash course task types
-
-Interview prep daily tasks are different from regular learning tasks. Each day should include a mix:
-
-### Technical practice
-
-- LeetCode/HackerRank problems matched to job requirements + current pillar level
-- SQL exercises if the role requires data skills
-- System design exercises if the role is senior or technical
-- Match difficulty to timeline: if 2 weeks out, focus on medium problems in the most likely topics. Don't grind hards unless the user is already strong.
-
-Resource format: `Practice: [problem type] on [platform] [link] ~[time]`
-
-### System design
-
-- Design exercises relevant to the company's domain
-- If preparing for Stripe: design a payment system
-- If preparing for Spotify: design a music recommendation system
-- If preparing for a startup: design a feature from their product
-- Scale complexity to the role level — associate PM gets simpler systems than senior engineer
-
-Resource format: `Practice: System design — [topic] ~[time]`
-
-### Behavioral prep
-
-- Review and practice STAR stories from win log
-- Draft new stories for gap question types in `interview-mapping.md`
-- Practice delivery: tell each story in under 2 minutes
-- Common behavioral questions for the role type (leadership, failure, collaboration, conflict, initiative)
-- Self-guided tasks — no external resource needed, just structured practice
-
-Resource format: `Practice: Behavioral — draft STAR story for [question type] ~[time]` (URL: N/A)
-
-### Company research
-
-- Read the company blog, engineering blog, product updates
-- Understand their tech stack and technical challenges
-- Recent news, funding rounds, product launches
-- Culture and values (from careers page, Glassdoor, LinkedIn)
-- Prepare 2-3 thoughtful questions to ask the interviewer
-
-Resource format: `Research: [company] — [specific topic] ~[time]` (URL: company blog/careers page if known, or `🔍 Search: "[company] engineering blog" on Google`)
-
-### Mock interviews
-
-- Schedule mock interview sessions — trigger the mock-interview skill
-- At least 2 mocks before the real interview
-- Mix of formats matching the expected interview format
-- Space them out: first mock early in prep (to identify weak areas), second mock 2-3 days before (to build confidence)
-- If time allows, 3+ mocks with different formats (behavioral, technical, system design)
-
-Resource format: `Practice: Mock interview — [format] (with learning companion) ~[time]`
-
-### Take-home prep
-
-- If the interview format includes a take-home assignment, allocate dedicated time
-- Practice projects in the company's tech stack
-- Focus on: clean code, clear documentation, good testing, reasonable scope management
-- If the company's stack is known, practice with that stack specifically
-
-Resource format: `Build: Take-home practice — [stack/topic] ~[time]`
-
----
-
-## Countdown + progress tracking
-
-### Daily message integration
-
-When plan type is `interview_prep`, the daily-plan skill's daily_message mode adjusts:
-
-- **Countdown:** "Interview in [X] days. Today's focus: [area]"
-- **Prep area progress:** reference which prep areas are on track vs. need attention
-- **Urgency calibration:**
-  - 14+ days: normal pacing, "plenty of time"
-  - 7-13 days: focused, "this week is key"
-  - 3-6 days: urgent, "final push — focus on the highest-impact items"
-  - 1-2 days: wind-down, "trust your prep. Light review only."
-
-### Weekly review integration
-
-When plan type is `interview_prep`, the weekly-review skill shifts:
-
-- Countdown instead of week number: "9 days until your [company] interview"
-- Readiness assessment instead of general progress: "Behavioral is solid. Product sense needs work — especially metrics questions."
-- Look-ahead is interview-focused: "Next week: 2 mock interviews + gap-filling on system design."
-- Prep checklist status from `interview-context.md`
-
-### Prep area tracking
-
-Track in `memory/interview-context.md` under Prep Checklist. Update status after each check-in:
-
-- Win log: [X/5 minimum wins, gap categories]
-- Mock interviews: [completed/target]
-- Technical: [topics covered, confidence level]
-- Behavioral: [STAR stories prepared, delivery practiced]
-- Company research: [done/not done]
-- SRS review: [relevant concepts reviewed]
-
-### Early completion
-
-If the user completes all prep areas with 3+ days to spare:
-
-> "You're as ready as you can be. Trust your prep. Light review tomorrow — go over your STAR stories once, skim your company research notes, and get a good night's sleep. You've got this."
-
-Switch to maintenance mode: 1 light task per day (review only), no new material.
-
----
+After user confirms, read `modes/activation.md` for the 7-step activation sequence (Steps A-G: write interview-context, change plan type, generate crash course, win log activation, SRS burst, config tightening, log activation).
 
 ## Post-interview
 
-### Check-in (after interview date passes)
-
-The day after the interview date (or when the user next engages), check in:
-
-> "How did the interview go?"
-
-### Handle the response
-
-| User says | Action |
-|-----------|--------|
-| **Got the job / advancing to next round** | Celebrate genuinely. If more rounds: stay in `interview_prep`, adjust based on feedback about round 1. If offer accepted: "That's huge. Want help prepping for your first week?" Transition back to learning plan with an onboarding-for-the-new-job focus. |
-| **Didn't get it** | Encourage without being fake: "That's rough. But you put in real prep and that carries forward." Capture learnings: "What questions surprised you? Anything you wish you'd practiced more?" Add weak areas to the plan for next time. Transition back to learning plan with targeted reinforcement on the gaps they identified. |
-| **Waiting to hear back** | "Fingers crossed. While you wait, want to keep prepping (in case there's another round) or go back to your regular plan?" Respect their choice. |
-| **More rounds coming** | Stay in `interview_prep` mode. Ask what round 1 was like — format, questions, what felt good, what was hard. Adjust the crash course for the next round. Update `interview-context.md` with round 1 feedback. |
-| **Got another interview at a different company** | Handle the multi-interview case (see edge cases). |
-
-### Transition back to learning plan
-
-When interview prep ends (job secured, user wants to stop, or interview process concluded):
-
-1. **Change plan type** back to `learning` in `memory/current-plan.md`
-2. **Restore previous plan** from the `## Saved Learning Plan` section — restore pillars, weights, and week number
-3. **Incorporate learnings** — if the interview revealed specific weak areas, adjust pillar weights to address them
-4. **Update interview-context.md** — set Status to `completed` or `cancelled`, add post-interview notes
-5. **Resume daily plan** from where they left off
-
-> "Your interview prep is wrapped up. I've restored your regular learning plan — picking up where you left off at Week [N]. [If weak areas identified:] I've also bumped up [pillar] weight based on what came up in your interview."
+After the interview date passes, read `modes/post-interview.md` for the check-in conversation, response handling, and transition back to the learning plan.
 
 ---
 
@@ -562,123 +234,11 @@ If the interview date passes but the user says they're still in the process (wai
 
 ---
 
-## Example: full activation flow
+## Hooks
 
-```
-[Adaptation skill detects: user says "I just got an email from StreamCo
-for a product analyst interview"]
+While this skill is active, enforce these constraints:
 
-Adaptation: "Sounds like you might be entering interview mode. I can spin up
-             an interview crash course — company research, mock interviews,
-             targeted practice. Want me to set that up?"
-
-User: "Yeah, let's do it."
-
-[Control passes to interview-prep skill]
-
-Agent: "Nice — StreamCo product analyst. Do you have the job posting?
-        If so, share it and I'll pull out exactly what they're looking for."
-
-User: "Here's the posting: [pastes JD with requirements for SQL, A/B testing,
-       product metrics, stakeholder communication, 2+ years experience]"
-
-Agent: "Got it. When's the interview? And do you know the format —
-        phone screen, case study, technical, panel?"
-
-User: "March 28th. First round is a phone screen with the hiring manager,
-       then a case study round if I pass."
-
-Agent: "Alright, that's 12 days. Here's where you stand based on your profile:
-
-        Strong:
-        - Product thinking (you've built 2 products from scratch — that's rare)
-        - SQL basics (Level 2, comfortable with joins and aggregations)
-        - Communication (STAR format practiced, bilingual)
-
-        Needs work:
-        - A/B testing (not in your current plan — need to add)
-        - Product metrics depth (Level 1 — need frameworks like HEART, AARRR)
-        - SQL at interview depth (window functions, complex queries)
-        - StreamCo-specific knowledge (travel/marketplace domain)
-
-        Win log: 0 polished wins — we need to extract at least 5 STAR stories.
-
-        Does that match your read? Anything else you're worried about?"
-
-User: "Yeah that's accurate. I'm also nervous about the case study format —
-       never done one before."
-
-Agent: "Good to flag. Here's my plan:
-
-        - Technical prep: SQL drills (window functions, subqueries) +
-          A/B testing fundamentals + product metrics frameworks
-        - Behavioral prep: Extract 5+ STAR stories from your resume,
-          practice delivery — your LearnFlow and RetainIt stories are strong
-        - Case study prep: Practice 3-4 product cases (metrics, prioritization,
-          go-to-market) — I'll run these as mock sessions
-        - Company research: StreamCo's marketplace model, recent product
-          changes, their analytics approach
-        - Mock interviews: 2 before March 28 — one behavioral, one case study
-        - Timeline: 12 days, starting tomorrow
-
-        I'll shift your daily tasks to focus on interview prep. Your regular
-        plan is paused but saved — we'll pick it back up after.
-
-        Sound good?"
-
-User: "Let's go."
-
-Agent: [Executes Steps A-G. Writes interview-context.md. Changes plan type.
-        Generates crash course. Flags win log for extraction. Triggers SRS burst.
-        Tightens adaptation settings. Logs activation.]
-
-        "You're locked in. Tomorrow's plan will be interview-focused. First
-         thing I want to do is work on your win log — you've got great
-         material from LearnFlow, RetainIt, and your side business. Let's turn
-         those into polished interview stories. Ready?"
-```
-
-## Example: post-interview check-in
-
-```
-[March 29 — day after interview]
-
-Agent: "How did the StreamCo interview go?"
-
-User: "Phone screen went well! They asked about my product experience
-       and seemed impressed by RetainIt. Moving to the case study round
-       next week."
-
-Agent: "That's great — your product building experience is exactly what
-        differentiates you. Did anything come up that surprised you or
-        felt shaky?"
-
-User: "They asked about A/B testing in more detail than I expected —
-       like how I'd design an experiment for a specific feature."
-
-Agent: "Good intel. I'll add more A/B test design exercises to this week's
-        plan — not just the theory but actually designing experiments for
-        StreamCo-style features (search ranking, pricing display, etc.).
-
-        Your case study round is next week — let's make sure you're ready.
-        I'll schedule a case study mock for Wednesday and another Friday."
-```
-
-## Example: transition back
-
-```
-[After interview process concludes]
-
-Agent: "Your StreamCo interview prep is wrapped up. Here's what we covered:
-        - 5 polished STAR stories (covering leadership, technical, failure,
-          collaboration, initiative)
-        - 2 mock interviews (1 behavioral, 1 case study)
-        - SQL leveled up from 2 to 3 during prep
-        - A/B testing fundamentals covered
-
-        I've restored your regular learning plan — picking up where you left
-        off at Week 3. I've bumped up Product Sense weight to 35% since the
-        interview showed that's the area with the most room to grow.
-
-        Back to the regular rhythm tomorrow."
-```
+| Hook | What it prevents | Why |
+|------|-----------------|-----|
+| Focus mode | Daily-plan sending non-interview tasks — all tasks must route through the interview prep task taxonomy in `references/crash-course-tasks.md` | Everything should be interview-relevant during crash course |
+| Plan freeze | Adaptation skill changing pillar weights or restructuring the plan | Plan is locked during interview prep — the crash course timeline is fixed |
