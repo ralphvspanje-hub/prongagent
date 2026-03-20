@@ -8,8 +8,8 @@
 ## Messaging (built-in)
 
 - Send and receive messages via any configured channel (Discord, WhatsApp, Telegram, Slack, etc.)
-- OpenClaw handles channel routing — skills just compose messages
-- No external bot needed — OpenClaw manages channel connections natively
+- The host agent handles channel routing — skills just compose messages
+- Channel connections are managed by the host platform (Claude Code, OpenClaw, etc.)
 
 ## Memory tools
 
