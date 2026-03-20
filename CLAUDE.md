@@ -2,15 +2,15 @@
 
 ## What this is
 
-ProngAgent is an **open-source, agent-native learning companion** that runs inside OpenClaw. It is NOT a traditional codebase — the product is a set of `.md` skill files and memory templates that an AI agent executes.
+ProngAgent is an **agent-native learning companion**. It is NOT a traditional codebase — the product is a set of `.md` skill files and memory templates that an AI agent executes. **You ARE the agent.** Read `AGENTS.md` for your operating instructions, `SOUL.md` for your persona, and skill files in `skills/` for how to handle each interaction.
 
-**The skill files in `skills/` are the product.** They are instruction sets for the OpenClaw agent (the user-facing agent). They are not code, documentation, or prompts for you (Claude Code). When editing skill files, you are editing the product itself.
+**The skill files in `skills/` are your instructions.** Follow them when the user's request matches a skill's trigger conditions.
 
 ## Repo structure
 
 ```
-prongagent/                        # OpenClaw workspace template
-├── AGENTS.md                      # Agent operating instructions (for OpenClaw agent)
+prongagent/                        # the host agent workspace template
+├── AGENTS.md                      # Agent operating instructions (for the host agent agent)
 ├── SOUL.md                        # Agent persona and tone
 ├── USER.md                        # User info (populated during onboarding)
 ├── IDENTITY.md                    # Agent name ("Prong") and personality
@@ -66,9 +66,9 @@ prongagent/                        # OpenClaw workspace template
     └── settings.md                # User preferences (schedule, frequencies, etc.)
 ```
 
-## OpenClaw workspace files
+## the host agent workspace files
 
-ProngAgent is distributed as an **OpenClaw workspace template**. The workspace files tell the OpenClaw agent how to behave:
+ProngAgent is distributed as an **the host agent workspace template**. The workspace files tell the the host agent agent how to behave:
 
 | File | Purpose |
 |------|---------|
@@ -81,7 +81,7 @@ ProngAgent is distributed as an **OpenClaw workspace template**. The workspace f
 | `BOOTSTRAP.md` | First-run onboarding trigger — deleted after completion |
 | `TOOLS.md` | Documents available tools for the agent |
 
-These files are for the **OpenClaw agent** (the user-facing agent). `CLAUDE.md` is for **you** (Claude Code, the dev agent).
+These files are for the **the host agent agent** (the user-facing agent). `CLAUDE.md` is for **you** (Claude Code, the dev agent).
 
 ## Key rules
 
@@ -95,7 +95,7 @@ These files are for the **OpenClaw agent** (the user-facing agent). `CLAUDE.md` 
 ### Memory files are templates until populated
 
 - Files in `memory/` start as empty templates with the expected format
-- The OpenClaw agent fills them during use
+- The the host agent agent fills them during use
 - The format (headings, tables, fields) matters — the agent reads and writes structured markdown
 - If you change a memory format, update all skill files that read/write that file
 
@@ -110,7 +110,7 @@ These files are for the **OpenClaw agent** (the user-facing agent). `CLAUDE.md` 
 Full product spec and implementation guide live in the repo root:
 
 - `AGENT_LEARNING_COMPANION.md` — Product report (what to build, why, full feature specs with sections 3.4-3.10)
-- `IMPLEMENTATION_GUIDE.md` — Step-by-step build guide (phases 0-5, updated for OpenClaw-native format)
+- `IMPLEMENTATION_GUIDE.md` — Step-by-step build guide (phases 0-5, updated for the host agent-native format)
 - `README.md` — User-facing installation guide
 
 ## Related projects
@@ -119,7 +119,7 @@ ProngAgent is the third generation of the Prong learning platform:
 
 - **DailyProng** (v1) — Claude Cowork plugin (pure .md files, no deployable code)
 - **ProngGSD** (v2) — React + Supabase web app (traditional SPA)
-- **ProngAgent** (v3) — OpenClaw agent + messaging (agent-native, file-based)
+- **ProngAgent** (v3) — the host agent agent + messaging (agent-native, file-based)
 
 Some prompts and resources are ported from ProngGSD. See Section 5 of the product report for what ports and how.
 
