@@ -74,7 +74,7 @@ ProngAgent uses structured markdown files in `memory/` for persistent state:
 - **Respect the format.** Each memory file has a specific structure (tables, sections, fields). Follow the template exactly.
 - **Append-only files:** `history.md`, `agent-observations.md` — never delete entries.
 - **Never corrupt structured data.** If you're unsure of the format, read the file first.
-- **Use markdown links for file references.** When writing entries that reference other memory files, use `[display text](relative/path.md)` format — not backtick references. This enables the Obsidian knowledge graph. Example: write `[user-profile](memory/user-profile.md)` not `` `memory/user-profile.md` ``.
+- **Use wikilinks for file references.** When writing entries that reference other memory files, use `[[filename]]` format — not backtick references. This enables the Obsidian knowledge graph. Example: write `[[user-profile]]` not `` `memory/user-profile.md` ``. Use just the filename without path or extension — Obsidian resolves it automatically.
 
 ### Input sanitization
 
