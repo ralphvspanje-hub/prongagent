@@ -13,6 +13,8 @@ An open-source, agent-native learning companion that runs inside [OpenClaw](http
 - **Builds your win log** — extracts STAR-format interview stories from your achievements
 - **Runs interview crash courses** when you have an interview coming up
 - **Conducts mock interviews** with coaching and cross-session pattern detection
+- **Scans job boards daily** via the dispatch agent — career pages, LinkedIn, Indeed, Glassdoor
+- **Shows a live dashboard** at localhost:3737 — job tracker, learning progress, interview readiness
 
 ## Quick start
 
@@ -95,6 +97,35 @@ openclaw cron add --name "Check-in" --cron "0 20 * * 1-5" \
 
 Adjust times, timezone, and days to match your `config/settings.md` preferences.
 
+### Set up the dispatch agent (optional — job scanning)
+
+The dispatch agent scans job boards and company career pages daily. It runs as a separate scheduled task:
+
+1. Configure your target companies and search terms in `dispatch/company-tiers.md` and `dispatch/scanning-protocol.md`
+2. Populate your behavioral rules in `dispatch/CLAUDE.md` (target region, role preferences, constraints)
+3. Schedule the dispatch agent to run daily (e.g., 05:00 AM via your host agent's task scheduler)
+4. Set up a morning cron that reads the dispatch results and sends them via your messaging channel
+
+The dispatch agent writes to `files/job-tracker/job_tracker.md` and `dispatch/daily-brief.md`. See `dispatch/CLAUDE.md` for full instructions.
+
+### Set up the dashboard (optional)
+
+A local web dashboard shows your ProngAgent state at a glance — job tracker, learning progress, interview readiness, and more.
+
+```bash
+cd dashboard
+bun install
+bun run start    # Opens at http://localhost:3737
+```
+
+| Command | What it does |
+|---------|-------------|
+| `bun run start` | Start the dashboard server |
+| `bun run stop` | Stop an orphaned server process |
+| `bun run restart` | Restart the server |
+
+See `dashboard/README.md` for details.
+
 ## Manual installation
 
 If you already have an OpenClaw workspace and want to add ProngAgent:
@@ -117,7 +148,9 @@ prongagent/
 ├── HEARTBEAT.md           # Periodic lightweight checks
 ├── BOOTSTRAP.md           # First-run setup (self-deleting)
 ├── TOOLS.md               # Available tools documentation
-├── skills/                # THE PRODUCT — 12 skill directories
+├── dispatch/              # Job search dispatch agent
+├── dashboard/             # Local web dashboard (Bun + Hono)
+├── skills/                # THE PRODUCT — 16 skill directories
 │   ├── onboarding/        # First-time setup conversation
 │   ├── daily-plan/        # Daily task generation + delivery
 │   ├── check-in/          # Evening progress check-in
@@ -128,8 +161,12 @@ prongagent/
 │   ├── weekly-review/     # Weekly narrative digest
 │   ├── win-log/           # Achievement extraction + STAR formatting
 │   ├── portfolio-projects/# Dream-career project suggestions
+│   ├── career-mentor/     # Freeform career advisor
 │   ├── interview-prep/    # Interview crash course
-│   └── mock-interview/    # Mock interview conductor
+│   ├── mock-interview/    # Mock interview conductor
+│   ├── auto-linking/      # Concept cross-referencing
+│   ├── knowledge-drop/    # Save facts and resources
+│   └── job-scan/          # Job board scanning
 ├── memory/                # Persistent state (templates until first use)
 │   ├── user-profile.md
 │   ├── current-plan.md

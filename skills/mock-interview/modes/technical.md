@@ -44,13 +44,17 @@ Encourage thinking aloud: "Walk me through your thinking." Don't rush them. If t
 | Communication | Did they explain their thinking? Could an interviewer follow their process? |
 | Edge case awareness | Did they consider edge cases, null inputs, empty sets, overflow? |
 
-**d. Coach**
+**d. Score the answer (internal)**
+
+Score each of the 4 dimensions above 1-10 per `references/scoring-rubric.md`. Record the per-dimension scores — they surface in the session summary only, not during the mock.
+
+**e. Coach**
 
 > "**What was right:** [specific — e.g., 'Good approach using a hash map — that's the optimal solution']
 > **What was missed:** [specific — e.g., 'You didn't handle the empty array case — interviewers watch for that']
 > **Optimal approach:** [if different from what they did — walk through it briefly]"
 
-**e. Can't solve it — walk through**
+**f. Can't solve it — walk through**
 
 If the user is stuck and can't make progress:
 
@@ -59,7 +63,7 @@ If the user is stuck and can't make progress:
 3. Note that hints were needed — scored lower but still valuable practice
 4. Add the concept to `spaced-repetition.md` for review if it's not already there
 
-**f. Flag weak areas**
+**g. Flag weak areas**
 
 If a technical question reveals a significant gap (user doesn't know a concept the job requires):
 - Note it for the session summary

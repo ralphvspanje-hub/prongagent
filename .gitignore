@@ -38,6 +38,10 @@ files/*
 !files/job-tracker/
 files/job-tracker/*
 !files/job-tracker/.gitkeep
+!files/job-tracker/job_tracker.md
+!files/job-descriptions/
+files/job-descriptions/*
+!files/job-descriptions/.gitkeep
 
 # Development briefs (not part of the product)
 BRIEF_*.md

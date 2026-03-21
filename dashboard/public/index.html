@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProngAgent Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h1 id="header-name">ProngAgent</h1>
+    <div class="meta">
+      <span class="live-dot"></span>
+      <span>Last refresh: <span id="last-refresh">—</span></span>
+    </div>
+  </div>
+
+  <!-- Daily Brief -->
+  <div class="card">
+    <h2>Daily Brief</h2>
+    <div id="brief-content"><p class="empty">Loading...</p></div>
+  </div>
+
+  <!-- Job Tracker -->
+  <div class="card">
+    <h2>Job Tracker</h2>
+    <div id="jobs-content"><p class="empty">Loading...</p></div>
+  </div>
+
+  <!-- Learning Progress (conditional) -->
+  <div class="card" id="progress-section" style="display:none">
+    <h2>Learning Progress</h2>
+    <div id="progress-content"></div>
+  </div>
+
+  <!-- Crash Course (conditional) -->
+  <div class="card" id="crash-section" style="display:none">
+    <h2>Crash Course</h2>
+    <div id="crash-content"></div>
+  </div>
+
+  <!-- Interview Readiness (conditional) -->
+  <div class="card" id="interview-section" style="display:none">
+    <h2>Interview Readiness</h2>
+    <div id="interview-content"></div>
+  </div>
+
+  <!-- Prep Briefing (per-company) -->
+  <div class="card" id="briefing-section" style="display:none">
+    <h2>Prep Briefing</h2>
+    <div id="briefing-content"></div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="card">
+    <h2>Quick Stats</h2>
+    <div id="footer-stats"><p class="empty">Loading...</p></div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

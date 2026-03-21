@@ -1,0 +1,404 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1a1a2e;
+  color: #eee;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  padding: 0 16px 40px;
+}
+
+code, .mono {
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #0f3460;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #4ecca3;
+}
+
+.header .meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #8899aa;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ecca3;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Cards ── */
+.card {
+  background: #16213e;
+  border: 1px solid #0f3460;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  font-size: 1.1rem;
+  color: #4ecca3;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #0f346044;
+}
+
+/* ── Warning banner ── */
+.warning-banner {
+  background: #e2b71422;
+  border: 1px solid #e2b714;
+  border-radius: 6px;
+  padding: 10px 16px;
+  color: #e2b714;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+/* ── Top 3 ── */
+.top3-list {
+  list-style: none;
+  counter-reset: top3;
+}
+
+.top3-list li {
+  counter-increment: top3;
+  padding: 8px 0;
+  border-bottom: 1px solid #0f346033;
+  font-size: 0.95rem;
+}
+
+.top3-list li::before {
+  content: counter(top3) ".";
+  color: #e2b714;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.top3-list li:last-child { border-bottom: none; }
+
+/* ── New jobs ── */
+.new-job {
+  padding: 10px 0;
+  border-bottom: 1px solid #0f346033;
+}
+
+.new-job:last-child { border-bottom: none; }
+
+.new-job .title {
+  font-weight: 600;
+  color: #eee;
+}
+
+.new-job .company {
+  color: #4ecca3;
+}
+
+.new-job .fit {
+  font-family: "JetBrains Mono", monospace;
+  color: #e2b714;
+  font-weight: 600;
+}
+
+.new-job .explanation {
+  color: #8899aa;
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+/* ── Tracker updates ── */
+.tracker-updates {
+  list-style: disc;
+  padding-left: 20px;
+  color: #8899aa;
+  font-size: 0.9rem;
+}
+
+.tracker-updates li { padding: 2px 0; }
+
+/* ── Job table ── */
+.job-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.job-table th {
+  text-align: left;
+  padding: 8px 10px;
+  color: #8899aa;
+  font-weight: 600;
+  border-bottom: 2px solid #0f3460;
+  white-space: nowrap;
+}
+
+.job-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #0f346033;
+  vertical-align: top;
+}
+
+.job-table tr.applied td { color: #4ecca3; }
+.job-table tr.act-now td { color: #e2b714; }
+.job-table tr.lower td { color: #8899aa; }
+
+.job-table .score {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+}
+
+.job-table a {
+  color: #4e9fca;
+  text-decoration: none;
+}
+
+.job-table a:hover { text-decoration: underline; }
+
+.job-summary {
+  font-size: 0.9rem;
+  color: #8899aa;
+  margin-bottom: 12px;
+}
+
+.job-summary span {
+  font-weight: 600;
+}
+
+.job-summary .active { color: #eee; }
+.job-summary .applied-count { color: #4ecca3; }
+.job-summary .act-now-count { color: #e2b714; }
+
+/* ── Pillar bars ── */
+.pillar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.pillar-name {
+  width: 180px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.pillar-bar-bg {
+  flex: 1;
+  height: 20px;
+  background: #0f3460;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pillar-bar-fill {
+  height: 100%;
+  background: #4ecca3;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.pillar-level {
+  width: 40px;
+  text-align: right;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+  color: #4ecca3;
+}
+
+.progress-stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.progress-stats .stat-label {
+  color: #8899aa;
+  font-size: 0.8rem;
+}
+
+.progress-stats .stat-value {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.2rem;
+  color: #4ecca3;
+}
+
+/* ── Crash course ── */
+.countdown {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.4rem;
+  color: #e2b714;
+  margin-bottom: 12px;
+}
+
+.crash-meta {
+  font-size: 0.9rem;
+  color: #8899aa;
+  margin-bottom: 16px;
+}
+
+.crash-meta strong { color: #eee; }
+
+.checklist {
+  list-style: none;
+  padding: 0;
+}
+
+.checklist li {
+  padding: 4px 0;
+  font-size: 0.9rem;
+}
+
+.checklist li.done { color: #4ecca3; }
+.checklist li.done::before { content: "✓ "; font-weight: 700; }
+.checklist li.pending { color: #8899aa; }
+.checklist li.pending::before { content: "○ "; }
+
+/* ── Footer stats ── */
+.footer-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.footer-stat {
+  text-align: center;
+}
+
+.footer-stat .val {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.3rem;
+  color: #4ecca3;
+}
+
+.footer-stat .label {
+  font-size: 0.75rem;
+  color: #8899aa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Interview panel ── */
+.readiness-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coverage-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.coverage-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.coverage-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.coverage-count {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  color: #8899aa;
+}
+
+/* ── Prep briefing ── */
+.company-briefing {
+  border: 1px solid #0f3460;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.company-name {
+  color: #4ecca3;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.briefing-block {
+  margin-bottom: 12px;
+}
+
+.briefing-label {
+  display: block;
+  color: #8899aa;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.briefing-block ul {
+  list-style: none;
+  padding: 0;
+}
+
+.briefing-block li {
+  padding: 3px 0;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+/* ── Empty state ── */
+.empty {
+  color: #556677;
+  font-style: italic;
+  padding: 12px 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .header { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .progress-stats { flex-direction: column; gap: 12px; }
+  .footer-stats { flex-direction: column; gap: 16px; }
+  .job-table { font-size: 0.75rem; }
+  .job-table th, .job-table td { padding: 6px; }
+  .pillar-name { width: 120px; }
+}

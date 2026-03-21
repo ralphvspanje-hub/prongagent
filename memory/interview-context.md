@@ -6,6 +6,7 @@
 ## Active Interview Prep
 
 - **Status:** inactive
+- **JD file:** none
 - **Target company:**
 - **Target role:**
 - **Interview date:**
@@ -20,11 +21,17 @@
 
 ## Company Research
 
-- **Company size:**
-- **Industry:**
-- **Tech stack (if known):**
-- **Culture notes:**
-- **Recent news:**
+Per-company research checklist. Populate when interviews are scheduled.
+
+<!-- Template for each company:
+### [Company Name]
+- **Tech stack:** [found / pending] — [notes]
+- **Recent news/launches:** [researched YYYY-MM-DD] — [key items]
+- **Culture & values:** [sources] — [key takeaways]
+- **Product understanding:** [key features, competitors, market position]
+- **Questions to ask interviewer:** [3+ prepared questions]
+- **Completion:** [X/5 items done]
+-->
 
 ## Prep Checklist
 

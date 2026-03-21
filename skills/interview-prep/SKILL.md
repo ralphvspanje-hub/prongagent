@@ -17,7 +17,8 @@ metadata:
 | `modes/onboarding.md` | At skill start — the 3-4 turn conversation to gather interview context (pre-check routing, company+role, timeline+format, readiness assessment, confirm+activate) |
 | `modes/activation.md` | After user confirms — the 7-step activation sequence (Steps A-G: write interview-context, change plan type, generate crash course, win log activation, SRS burst, config tightening, log activation) |
 | `modes/post-interview.md` | After interview date passes — check-in conversation, handle response, transition back to learning plan |
-| `references/crash-course-tasks.md` | During crash course generation — task types (technical, system design, behavioral, company research, mock interviews, take-home) and countdown/progress tracking integration |
+| `references/crash-course-tasks.md` | During crash course generation — task types (technical, system design, behavioral, company research, mock interviews, take-home), JD-mapped task weighting, and countdown/progress tracking integration |
+| `references/readiness-tiers.md` | During activation (Step A readiness assessment) and referenced by daily-plan for daily readiness display — 4-tier assessment (Ready/Almost There/Partially Ready/Unprepared) with objective criteria |
 | `examples/activation-flow.md` | Reference — full activation flow example, post-interview check-in example, transition back example |
 | `session-log.md` | At skill start — read last 5-10 entries for continuity |
 
@@ -223,6 +224,15 @@ If the user previously cancelled and now wants to resume:
 2. Ask: "I have your previous prep for [company/role]. Want to pick up where you left off, or start fresh?"
 3. If picking up: restore the interview context, recalculate days remaining, resume the crash course
 4. If starting fresh: treat as a new activation
+
+### Transition from job_search to interview_prep
+
+When the user reports a specific interview date while in `job_search` mode:
+
+- The transition is smoother than from `learning` because `interview-context.md` likely already has general prep data (target role types, company targets)
+- Save the `job_search` state (not just learning pillars — also save `job_search_started` date, weekly application targets)
+- Run the full activation sequence (Steps A-G) but merge with existing data in `interview-context.md` — don't overwrite general prep context
+- Win log extraction may already be active (job_search auto-activates passive capture) — check `memory/win-log/candidates.md` → `## Cooldown` before re-triggering
 
 ### Interview process takes longer than expected
 

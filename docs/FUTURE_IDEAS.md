@@ -22,6 +22,45 @@ Agent scans job boards, company career pages, and LinkedIn for openings that mat
 
 **Scope guard:** This is a feature *within* the job search plan type, not a standalone skill. The agent should only scan when the user is in job_search mode. Don't scan for users who are just learning.
 
+## Interview Crash Course Improvements (inspired by ProngGSD)
+
+**STATUS: ALL 7 IMPROVEMENTS IMPLEMENTED**
+
+All items below have been built. Kept here for reference on what was done and why.
+
+### ~~Improvement 1: Per-company crash course customization~~ DONE
+Implemented in `activation.md` Step A (Skill Requirements) + Step C (JD file read) + `crash-course-tasks.md` (JD-Mapped Task Weighting section).
+
+### ~~Improvement 2: SRS burst on crash course activation~~ DONE
+Implemented in `activation.md` Step E with fallback for empty SRS table.
+
+### ~~Improvement 3: Per-question scoring in mocks~~ DONE
+Implemented via `references/scoring-rubric.md` (centralized 1-10 scale), per-question scoring in all 3 mode files (behavioral, technical, system-design), score tables in `session-summary.md`, score-based pattern detection in `mistake-patterns.md`.
+
+### ~~Improvement 4: Win-log capture from mocks~~ DONE
+Session-summary now triggers win-log capture for answers scoring 8+ (max 2 per session).
+
+### ~~Improvement 5: Readiness tiers~~ DONE
+`references/readiness-tiers.md` created with 4 tiers. Daily-plan displays tier during interview mode. Dashboard shows it in Interview Readiness panel.
+
+### ~~Improvement 6: Company research tracking~~ DONE
+`interview-context.md` expanded with structured Company Research checklist (tech stack, news, culture, product, questions to ask — each with found/pending).
+
+### ~~Improvement 7: Real interview question capture~~ DONE
+`memory/real-interview-questions.md` created. `post-interview.md` captures actual questions after real interviews.
+
+---
+
+## ~~Job Description persistence~~ DONE
+
+JDs now saved to `files/job-descriptions/[company]-[role-slug].md` automatically. Implemented in:
+- `interview-prep/modes/onboarding.md` — saves on JD paste in Turn 1
+- `career-mentor/SKILL.md` — saves on JD paste for resume/cover letter
+- `activation.md` Step A — reads JD file, adds `jd_file` field to interview-context
+- `interview-context.md` — has `jd_file` field under Active Interview Prep
+
+---
+
 ## Newsletter/X scanning for current topics
 
 Enhancement to the resource search layer (Priority 2 in daily-plan.md). Instead of only searching when curated resources are missing, proactively scan newsletters, X/Twitter, and tech blogs for current topics. Useful for fast-moving pillars (AI, cloud, frameworks) where the best resources change monthly. Could use RSS feeds, API integrations, or agent web search on a weekly schedule. Output: append fresh resources to curated-resources.md with a `[scanned]` tag and let the graduation system vet them through user ratings.
@@ -85,6 +124,38 @@ During the first week, add an optional footer to the daily message: "Got extra t
 ## Doomscroll nudge (depends on OpenClaw context)
 
 If OpenClaw exposes screen activity / app usage context, the agent could detect idle scrolling and send a gentle nudge: "Hey, I noticed you're free — want to knock out today's task? It's only 20min." Framed as opportunity, never guilt. Hard constraints: max once per day, never during quiet hours, if user ignores twice in a row stop doing it entirely. **Blocked on:** Step 0.6 — need to know what context OpenClaw actually exposes before designing this.
+
+## Calendar integration
+
+Connect Prong to your calendar so it's aware of your schedule. Scope: **career support tool** (busy-day awareness, interview scheduling), not a general life planner.
+
+### Platform options
+
+**Google Calendar (easiest path):**
+- Google Calendar MCP server exists for Claude Code. Add as MCP plugin — agent reads/writes via tool calls, no custom code needed.
+- Even if you use Apple Calendar on your phone, you can subscribe Apple Calendar to a Google Calendar and Prong talks to Google. This is the cleanest bridge.
+
+### Three levels of depth
+
+**Level 1 — Read-only awareness:**
+- Daily-plan reads your calendar before generating tasks. Busy day (4+ meetings) → lighter plan.
+- Skip daily messages on days marked as vacation/holiday.
+- Interview dates read from the actual calendar event, not just a markdown field.
+
+**Level 2 — Write access:**
+- When interview-prep activates with a date → Prong creates a calendar event automatically.
+- Mock interviews get scheduled as actual calendar blocks ("Mock interview — 30min" at a time that fits).
+- Study blocks suggested and optionally added to calendar.
+
+**Level 3 — Smart scheduling:**
+- Prong finds gaps in your calendar and suggests: "You have 45min free between meetings — want to knock out today's task?"
+- Reschedules missed study blocks to the next available slot.
+
+### Scope guard
+
+This is a **career support feature**, not a life management tool. The calendar integration should only inform skills that already exist (daily-plan, interview-prep, mock-interview). Don't build calendar-only features (reminders, general scheduling, habit tracking) — that's a different product.
+
+**When to build:** After daily messaging is stable and you've used the system for 2+ weeks. Calendar awareness is high-value but adds complexity to daily-plan logic.
 
 ## CLI / notebook interface
 

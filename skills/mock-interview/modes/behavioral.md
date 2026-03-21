@@ -46,7 +46,11 @@ Score on five dimensions:
 | Conciseness | Told in ~2 minutes? Situation section wasn't 90 seconds with 10 seconds on result? |
 | Impact of result | Did the result include outcomes — metrics, feedback, changes, things that happened because of their action? |
 
-**d. Give immediate feedback**
+**d. Score the answer (internal)**
+
+Score each of the 5 dimensions above 1-10 per `references/scoring-rubric.md`. Record the per-dimension scores — they surface in the session summary only, not during the mock.
+
+**e. Give immediate feedback**
 
 Brief, specific, actionable. Format:
 
@@ -57,14 +61,14 @@ Brief, specific, actionable. Format:
 
 > "That was decent, but your [win title] story is a stronger fit for this question — it shows [specific quality the question tests]. Want to try it with that story instead?"
 
-**e. Win-log capture**
+**f. Win-log capture**
 
 If the user gives a strong answer that contains a real achievement NOT already in `wins.md`:
 - Note it silently in `memory/win-log/candidates.md` with Status = `draft` and source = `mock-capture`
 - After the mock session (not during), flag it: "That answer about [topic] was strong — want me to save it as a polished win?"
 - The win-log skill (mock capture mode) handles the actual polishing
 
-**f. Struggle detection**
+**g. Struggle detection**
 
 If the user struggles with a question type (can't think of a story, gives a very weak answer):
 - Note it — don't dwell on it during the mock

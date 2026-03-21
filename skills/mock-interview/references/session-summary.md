@@ -8,17 +8,25 @@ Brief, per-question feedback was delivered during the mock. The session summary 
 
 After the last question, give a comprehensive wrap-up:
 
-**Overall rating:**
+**Per-question score table:**
 
-| Rating | Criteria |
-|--------|----------|
-| **Ready** | Answers were consistently strong. Minor polish needed. Would pass this interview type. |
-| **Almost there** | Solid foundation with 1-2 fixable weaknesses. Targeted practice will get them there. |
-| **Needs work** | Significant gaps. Need more practice before the real interview. Not a judgment — a roadmap. |
+Present the scores that were recorded internally during the mock:
+
+> | # | Question | Score | Strongest Dimension | Weakest Dimension |
+> |---|----------|-------|--------------------|--------------------|
+> | 1 | [question summary] | [X/10] | [dimension name] | [dimension name] |
+> | 2 | [question summary] | [X/10] | [dimension name] | [dimension name] |
+> | ... | | | | |
+>
+> **Session average: [X/10]**
+
+**Overall rating** — derive from session average using the scale in `references/scoring-rubric.md` (8+ = Ready, 5-7.9 = Almost there, <5 = Needs work).
+
+**Note:** This is *mock session performance* — a different assessment from *interview readiness tiers* (see `skills/interview-prep/references/readiness-tiers.md`), which measures structural prep completeness.
 
 **Format:**
 
-> "**Overall: [Ready / Almost there / Needs work]** for [behavioral / technical / system design]
+> "**Overall: [Ready / Almost there / Needs work]** for [behavioral / technical / system design] (session average: [X/10])
 >
 > **Top strength:** [the single best thing about their performance — be specific]
 >
@@ -41,11 +49,13 @@ If `mistake-journal.md` has entries from previous mocks, compare:
 
 ## C. Win-log capture prompt
 
-If any answers during the mock contained strong, real achievements not in `wins.md`:
+If any answer scored **8 or higher** on overall question score AND contained a real achievement not already in `wins.md`:
 
-> "One more thing — that answer about [topic] was strong. Want me to save it as a polished interview story?"
+> "One more thing — that answer about [topic] scored [X]/10. That's a strong interview story. Want me to save it as a polished win?"
 
-If yes -> trigger win-log skill (mock capture mode).
+If yes -> trigger win-log skill (mock capture mode) — see `skills/win-log/modes/mock-capture.md`.
+
+If multiple answers scored 8+, offer the highest-scoring one first. Don't overwhelm with multiple captures in one session — max 2.
 
 ---
 
@@ -59,11 +69,20 @@ Append to `memory/mistake-journal.md` after each mock session.
 ## YYYY-MM-DD — Mock Interview ([behavioral / technical / system design])
 
 **Mock #:** [sequence number — count from interview-context prep checklist]
+**Session average:** [X/10]
 **Overall rating:** [Ready / Almost there / Needs work]
+
+### Per-Question Scores
+
+| # | Question | Score | Dimensions |
+|---|----------|-------|-----------|
+| 1 | [question summary] | [X/10] | [dimension1:X, dimension2:X, ...] |
+| 2 | [question summary] | [X/10] | [dimension1:X, dimension2:X, ...] |
 
 ### Mistake 1
 
 - **Question:** [What was asked]
+- **Score:** [X/10]
 - **What you said:** [Summary of the user's response]
 - **What would've been better:** [Specific coaching — not "be better" but "lead with the 40% latency improvement number"]
 - **Category:** [structuring / specificity / technical accuracy / delivery / story selection / requirements clarification / edge cases / communication]

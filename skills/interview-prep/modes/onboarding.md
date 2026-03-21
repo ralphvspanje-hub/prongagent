@@ -15,15 +15,46 @@ Before starting the conversation, check the timeline:
 > "What company and role? Share the job posting if you have it — I'll pull out exactly what they're looking for."
 
 Accept whatever format:
-- **Full job posting:** Parse it — extract required skills, nice-to-haves, team info, company description, seniority level
-- **Company + role title only:** Work with that. Use general requirements for that role type. Note that details are incomplete — update if the user gets more info later.
-- **Just "an interview" (no company/role yet):** That's fine — recruiter outreach, still figuring it out. Do general interview prep (see edge cases).
+- **Full job posting:** Parse it — extract required skills, nice-to-haves, team info, company description, seniority level. **Save the JD** (see below).
+- **Company + role title only:** Work with that. Use general requirements for that role type. Note that details are incomplete — update if the user gets more info later. Skip JD file creation.
+- **Just "an interview" (no company/role yet):** That's fine — recruiter outreach, still figuring it out. Do general interview prep (see edge cases). Skip JD file creation.
 
-Extract:
+### Save the job description
+
+If the user shared a full job posting (pasted text or enough detail to constitute a JD), save it to `Files/Job Descriptions/[company]-[role-slug].md`:
+
+```markdown
+# [Role Title] — [Company]
+**Saved:** YYYY-MM-DD
+**Source:** [URL if available]
+**Status:** active
+
+## Original Job Description
+[full JD text as pasted by user]
+
+## Extracted Requirements
+- [must-have skill 1]
+- [must-have skill 2]
+- [nice-to-have 1]
+- [experience level required]
+- [CS degree required? yes/no/preferred]
+```
+
+**Naming convention:** lowercase, hyphenated. Examples: `adyen-se.md`, `uber-strategy-planning-analyst.md`, `booking-data-analyst.md`
+
+If no JD text was provided (just a company + role title), skip file creation — the file can be created later if the user shares the posting.
+
+### Gotchas
+- **Recruiter emails aren't JDs.** A brief recruiter outreach ("We have an exciting opportunity at...") doesn't have enough detail to extract requirements. Ask for the actual posting before creating a JD file.
+- **Same company, different roles.** If the user has already prepped for a different role at the same company, the naming convention will produce different files (e.g., `adyen-se.md` vs `adyen-data-analyst.md`). Check `Files/Job Descriptions/` for existing files from the same company — the company research may be reusable.
+- **JD text may include boilerplate.** Corporate JDs often have paragraphs of diversity statements, benefits, etc. Extract requirements from the substantive sections, not the boilerplate.
+
+### Extract:
 - **Company name** (or "unknown" if recruiter stage)
 - **Role title** (as specific as possible)
 - **Job description details:** required skills, nice-to-haves, team info, seniority expectations
 - **Industry/domain** (for company-specific prep — if Stripe, payments domain; if Spotify, audio streaming)
+- **JD file path** (if saved — reference in activation Step A)
 
 ## Turn 2: Timeline + format
 

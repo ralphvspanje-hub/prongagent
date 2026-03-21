@@ -25,7 +25,23 @@ prongagent/                        # the host agent workspace template
 ├── AGENT_LEARNING_COMPANION.md    # Product report (full spec)
 ├── IMPLEMENTATION_GUIDE.md        # Step-by-step build guide
 ├── FUTURE_IDEAS.md                # Parked ideas
-├── skills/                        # THE PRODUCT — 15 skill directories
+├── dispatch/                      # Job search dispatch agent (scheduled scanner)
+│   ├── CLAUDE.md                  # Dispatch agent instructions
+│   ├── scanning-protocol.md       # Search terms, sources, depth expectations
+│   ├── company-tiers.md           # Tiered company list with career page URLs
+│   ├── gotchas.md                 # Known failure patterns
+│   ├── tracker-format.md          # Job tracker format spec
+│   ├── brief-template.md          # Daily brief output template
+│   ├── observations.md            # Self-improving scan log (append-only)
+│   ├── daily-brief.md             # Latest scan results (overwritten each run)
+│   └── config.json                # Scan settings (time, thresholds, regions)
+├── dashboard/                     # Local web dashboard (Bun + Hono)
+│   ├── server.ts                  # API routes serving memory file data
+│   ├── parsers/markdown.ts        # Markdown → structured data parsers
+│   ├── public/                    # Static frontend (HTML + JS + CSS)
+│   ├── package.json               # Bun project config
+│   └── README.md                  # Dashboard usage guide
+├── skills/                        # THE PRODUCT — 16 skill directories
 │   ├── onboarding/SKILL.md        # First-time user setup: dream career, goals, prefs
 │   ├── daily-plan/SKILL.md        # Daily task generation + delivery
 │   ├── check-in/SKILL.md          # Evening progress check-in conversation
@@ -39,7 +55,9 @@ prongagent/                        # the host agent workspace template
 │   ├── career-mentor/SKILL.md     # Freeform career advisor — resume, cover letters, LinkedIn, strategy
 │   ├── interview-prep/SKILL.md    # Job search detection + crash course
 │   ├── mock-interview/SKILL.md    # Mock interview conductor + coaching
-│   └── auto-linking/SKILL.md      # Silent concept cross-referencing after check-in/teach-back
+│   ├── auto-linking/SKILL.md      # Silent concept cross-referencing after check-in/teach-back
+│   ├── knowledge-drop/SKILL.md    # Save facts, insights, resources on demand
+│   └── job-scan/SKILL.md          # Job board scanning (powers dispatch agent)
 ├── memory/                        # Agent's persistent state (templates until first use)
 │   ├── user-profile.md            # User identity, dream career, preferences
 │   ├── current-plan.md            # Active plan: pillars, levels, weeks
@@ -55,11 +73,18 @@ prongagent/                        # the host agent workspace template
 │   ├── user-model.md              # Progressive mental model of the user (agent-maintained)
 │   ├── concept-links.md           # Cross-references between learned concepts (auto-linking)
 │   ├── agent-observations.md      # Self-observations about skill file issues
+│   ├── knowledge-drops.md         # Saved facts, insights, resources (knowledge-drop skill)
+│   ├── real-interview-questions.md # Real interview questions log (post-interview capture)
+│   ├── job-scan-state.md          # Job scan tracking state
 │   ├── win-log/                   # Achievement system
 │   │   ├── wins.md                # Polished wins (STAR format)
 │   │   ├── candidates.md          # Agent-observed potential wins
 │   │   └── interview-mapping.md   # Wins categorized by question type
 │   └── weekly-digests/            # One narrative digest per week
+├── files/                         # User files (resumes, JDs, tracker)
+│   ├── job-tracker/               # Job tracker (dispatch-managed)
+│   │   └── job_tracker.md         # Active jobs, watchlist, application log
+│   └── job-descriptions/          # Saved job descriptions by company-role
 ├── resources/                     # Curated learning resources
 │   └── curated-resources.md       # 55+ resources by pillar + level
 └── config/

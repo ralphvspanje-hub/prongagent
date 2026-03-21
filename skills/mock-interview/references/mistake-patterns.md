@@ -27,6 +27,19 @@ Targeted exercises by pattern:
 
 Flag persistent patterns for adaptation — adaptation skill should add targeted practice to the daily plan.
 
+## Score-based pattern detection
+
+In addition to category-based patterns, use per-question dimension scores to detect weaknesses:
+
+**Dimension weakness:** When a specific dimension scores 4 or below across 2+ mocks, flag it as a persistent weakness regardless of overall session performance.
+
+> "Your [dimension] score has been consistently low: [X/10] in mock 1, [Y/10] in mock 2. This is your biggest lever for improvement."
+
+**Score trend analysis:** Compare session averages across mocks:
+- Improving (each mock higher) → encourage: "You're trending up — [X/10] → [Y/10]."
+- Flat (same range) → diagnose: "You've plateaued around [X/10]. The [dimension] gap is holding you back."
+- Declining → investigate: "Score dropped from [X/10] to [Y/10]. What changed? Were you more nervous, or were the questions harder?"
+
 ---
 
 # Delivery Tracking (win-log integration)

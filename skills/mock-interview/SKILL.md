@@ -41,6 +41,7 @@ Do NOT push if the user declines. Note the decline and don't re-suggest for 2 da
 | `modes/behavioral.md` | User selects (or agent picks) behavioral mode |
 | `modes/technical.md` | User selects (or agent picks) technical mode |
 | `modes/system-design.md` | User selects (or agent picks) system design mode |
+| `references/scoring-rubric.md` | During each question evaluation — 1-10 scale, recording format, gotchas (scores are internal only) |
 | `references/session-summary.md` | After the mock ends — summary format + mistake journal protocol |
 | `references/mistake-patterns.md` | After 2+ mocks — cross-mock pattern detection + delivery tracking |
 | `examples/sample-session.md` | Reference examples of behavioral mock, technical mock, and session summary |
@@ -64,6 +65,7 @@ Read ALL of the following before starting any mock:
 | `memory/user-model.md` | Communication Style (coaching tone under pressure), Avoidance Patterns (areas of anxiety — push but with awareness), Knowledge Anchors (calibrate question difficulty to demonstrated understanding) |
 | `skills/mock-interview/config.json` | Default mode, difficulty, follow-up depth |
 | `files/` (STAR story bank) | During debrief, for comparing user answers to existing stories |
+| `memory/real-interview-questions.md` | Real questions from past interviews — use to inform question selection. Don't repeat the exact same question; use them to create company-specific variants. Especially valuable when prepping for a company the user has interviewed at before. |
 | `config/settings.md` | Verbosity preference — adjust feedback depth |
 
 ## What to write
@@ -102,7 +104,7 @@ After execution, append an entry if anything notable happened. Don't log routine
 
 | Skill | Trigger condition |
 |-------|------------------|
-| `skills/win-log/SKILL.md` (mock capture mode) | Strong answer contains a real achievement not in `wins.md` |
+| `skills/win-log/SKILL.md` (mock capture mode) | Answer scores 8+ on overall question score AND contains a real achievement not in `wins.md` (see `references/session-summary.md` → Win-log capture prompt) |
 | `skills/adaptation/SKILL.md` | Mock reveals a weak technical area — flag so adaptation adds targeted practice to next week |
 
 ---
@@ -160,6 +162,18 @@ Lightning round rules:
 - Feedback is focused on ONE actionable improvement, not comprehensive
 - Still write to mistake-journal (abbreviated)
 - Still counts toward mocks completed
+
+### Step 5: Delivery mode awareness
+
+If the user is communicating via voice messages (transcribed text from Telegram voice notes or similar), acknowledge it once at the start:
+
+> "Voice mocks are great — talking through your answers out loud is closer to the real thing."
+
+If the user is text-only (standard chat), suggest once per session:
+
+> "Quick tip: try reading your answers out loud before typing them. Real interviews are verbal — practicing the words in your mouth makes a difference."
+
+This is a one-time suggestion per mock session. Don't repeat it for every question.
 
 ---
 
@@ -268,6 +282,18 @@ If the user requests a specific question (e.g., "ask me about failure", "give me
 - Honor the request — ask exactly that type
 - Still conduct it as a proper mock (full evaluation, feedback, mistake-journal)
 - Note in the session summary that the question was user-requested
+
+### Voice message input
+
+If the user sends voice messages (transcribed to text by the I/O layer):
+
+- Treat transcribed text identically to typed text — same evaluation, scoring, feedback
+- Voice answers tend to be more natural but less structured. Note this in feedback: "Your STAR structure came through clearly even speaking off the cuff" or "The story was there but the structure got loose midway — try leading with the situation next time"
+- Filler words, restarts, and verbal tics in transcription are normal for spoken answers. Don't penalize them in scoring — note as delivery feedback only: "You said 'um' a few times at the start — once you got into the story you were smooth"
+- Do NOT attempt to detect whether input is voice vs text — the agent receives text either way. Channel metadata (if available) tells you, but the evaluation logic is identical
+- If something seems incoherent (possible transcription error), ask: "Could you repeat that point? I want to make sure I caught it right."
+
+Voice is a delivery channel, not a mock mode. The existing behavioral/technical/system-design modes handle all input the same way.
 
 ### Mixed mode request
 

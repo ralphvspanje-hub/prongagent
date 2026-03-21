@@ -37,7 +37,7 @@ Resource format: `Practice: Behavioral — draft STAR story for [question type] 
 - Understand their tech stack and technical challenges
 - Recent news, funding rounds, product launches
 - Culture and values (from careers page, Glassdoor, LinkedIn)
-- Prepare 2-3 thoughtful questions to ask the interviewer
+- Prepare 3+ thoughtful questions to ask the interviewer (required — interviewers notice when you have no questions)
 
 Resource format: `Research: [company] — [specific topic] ~[time]` (URL: company blog/careers page if known, or `Search: "[company] engineering blog" on Google`)
 
@@ -59,6 +59,42 @@ Resource format: `Practice: Mock interview — [format] (with learning companion
 - If the company's stack is known, practice with that stack specifically
 
 Resource format: `Build: Take-home practice — [stack/topic] ~[time]`
+
+---
+
+## JD-Mapped Task Weighting
+
+When Skill Requirements have been parsed (see `activation.md` Step A), use the weights to customize the daily task mix. Read `memory/interview-context.md` → `## Skill Requirements` table and map each required skill to the task types defined above.
+
+**Intent:** The daily mix should reflect where the gaps are. If the JD is heavy on SQL and the user is weak there, most tasks should be technical practice. But don't neglect any category entirely — even a JD-heavy technical role will have behavioral questions.
+
+If no JD was provided (company + title only), bias the mix toward the most common interview format for that role type. The agent knows what analyst vs PM vs engineering interviews typically look like.
+
+### Examples
+
+**Adyen Software Engineer (14 days):**
+- Technical practice: 35% (SQL + API integration)
+- System design: 20% (payments architecture)
+- Behavioral prep: 20% (STAR stories)
+- Company research: 15% (Adyen payments ecosystem)
+- Mock interviews: 10% (2 sessions scheduled)
+
+**Uber Product Analyst (10 days):**
+- Technical practice: 40% (SQL window functions, metrics)
+- Behavioral prep: 25% (data storytelling, STAR)
+- Company research: 15% (Uber data culture, marketplace metrics)
+- Mock interviews: 10% (1 technical, 1 behavioral)
+- System design: 10% (not primary for this role, but some coverage)
+
+### Timeline adjustments
+
+As the interview approaches, narrow focus to the highest-impact areas. In the final 1-2 days, stop introducing new material — review only.
+
+### Gotchas
+
+- **Don't over-optimize the mix.** A rough 70/20/10 split based on judgment is better than a precise 23.5%/18.2%/... calculation. The user's daily experience should feel natural, not algorithmically optimized.
+- **Mock interviews need spacing.** Don't cluster all mock sessions in one week. First mock early (to identify weak areas), last mock 2-3 days before (to build confidence).
+- **Company research has diminishing returns.** After the basics (tech stack, recent news, 3 questions to ask), additional research time is better spent on practice.
 
 ---
 

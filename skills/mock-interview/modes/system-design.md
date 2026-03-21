@@ -52,7 +52,11 @@ Ask 2-4 follow-ups per problem. Don't ask all of them — pick the ones most rel
 | Scalability | Did they consider scale — load balancing, caching, partitioning? |
 | Tradeoff awareness | Did they acknowledge tradeoffs in their choices? |
 
-**e. Coach**
+**e. Score the answer (internal)**
+
+Score each of the 5 dimensions above 1-10 per `references/scoring-rubric.md`. Record the per-dimension scores — they surface in the session summary only, not during the mock.
+
+**f. Coach**
 
 > "**What was strong:** [e.g., 'Good that you started by clarifying requirements — most candidates skip that']
 > **What was missed:** [e.g., 'You didn't address what happens when the database goes down — availability is critical for a payments system']

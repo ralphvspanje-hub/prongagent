@@ -1,0 +1,13 @@
+{
+  "name": "prongagent-dashboard",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "bun run server.ts",
+    "dev": "bun --watch run server.ts",
+    "stop": "powershell -Command \"Get-NetTCPConnection -LocalPort 3737 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }\"",
+    "restart": "bun run stop && bun run start"
+  },
+  "dependencies": {
+    "hono": "^4.7.0"
+  }
+}

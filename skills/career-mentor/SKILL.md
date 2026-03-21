@@ -110,16 +110,42 @@ After execution, append an entry if anything notable happened. Don't log routine
 
 ## Job posting persistence
 
-When the user shares a job posting (full text, link, or describes a role), parse and append a summary to `memory/interview-context.md` under a `## Job Posting History` section. This ensures the agent remembers postings across sessions.
+When the user shares a job posting (full text, link, or describes a role), do TWO things:
 
-### Format
+### 1. Save the full JD file
+
+If the user shared enough text to constitute a job description, save it to `Files/Job Descriptions/[company]-[role-slug].md`:
 
 ```markdown
-## Job Posting History
+# [Role Title] — [Company]
+**Saved:** YYYY-MM-DD
+**Source:** [URL if available]
+**Status:** active
 
+## Original Job Description
+[full JD text as pasted by user]
+
+## Extracted Requirements
+- [must-have skill 1]
+- [must-have skill 2]
+- [nice-to-have 1]
+- [experience level required]
+- [CS degree required? yes/no/preferred]
+```
+
+**Naming convention:** lowercase, hyphenated. Examples: `adyen-se.md`, `uber-strategy-planning-analyst.md`
+
+If the user only described the role verbally (no JD text), skip full file creation.
+
+### 2. Append lightweight summary to interview-context.md
+
+Always append a parsed summary to `memory/interview-context.md` under `## Job Posting History`:
+
+```markdown
 ### [Company] — [Role Title]
 
 - **Date shared:** YYYY-MM-DD
+- **JD file:** [path to `Files/Job Descriptions/[file].md` if saved, or "none"]
 - **Key requirements:** [bulleted — required skills, experience level, qualifications]
 - **Nice-to-haves:** [bulleted]
 - **Fit notes:** [1-3 sentences — how the user's profile matches, key gaps, overall assessment]
@@ -129,8 +155,8 @@ When the user shares a job posting (full text, link, or describes a role), parse
 
 ### Rules
 
-- Keep it lightweight — parsed summary only, not the full posting text
-- If the user shares multiple postings, each gets its own subsection
+- The full JD file is the source of truth; the summary in interview-context is a quick reference
+- If the user shares multiple postings, each gets its own subsection and its own file
 - Update `User interest` if the user later says they applied, passed, etc.
 - If the user moves to active interview prep for a posting, the interview-prep skill takes over — the posting history entry stays as a record
 

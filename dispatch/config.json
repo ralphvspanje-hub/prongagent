@@ -1,0 +1,12 @@
+{
+  "scan_time": "05:00",
+  "timezone": "Europe/Amsterdam",
+  "freshness_threshold_hours": 48,
+  "min_fit_score": 7,
+  "max_brief_items": 10,
+  "career_start": "Summer 2026",
+  "excluded_types": ["consultancies", "recruitment agencies", "contractor roles"],
+  "search_regions": ["Netherlands", "Amsterdam"],
+  "tier2_scan_frequency": "weekly",
+  "verify_existing_per_run": 3
+}

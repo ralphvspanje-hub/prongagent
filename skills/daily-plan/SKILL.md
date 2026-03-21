@@ -254,7 +254,8 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 
   **What changes in weekly mode:**
   - Read `memory/interview-context.md` for target company, role, format, requirements, and days until interview
-  - Pillars are remapped by interview-prep — use the weights from current-plan.md (already adjusted)
+  - Read `memory/interview-context.md` → `## Skill Requirements` table for JD-mapped task weights. Use these weights (not the regular pillar weights) to determine the daily task mix. See `skills/interview-prep/references/crash-course-tasks.md` → JD-Mapped Task Weighting for the algorithm and examples.
+  - If no Skill Requirements table exists (no JD available), use the default role-based mix from `crash-course-tasks.md` → "When no JD file exists"
   - Task types shift toward interview practice: behavioral prep (STAR story review, practice delivery), product/technical cases, company research, mock interview sessions, targeted skill practice
   - Timeline is compressed — generate only enough days to reach the interview date, not a full 8-week plan
   - No ramp-up: start at full intensity from Day 1 (the user chose interview prep, they're motivated)
@@ -262,6 +263,8 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 
   **What changes in daily_message mode:**
   - Include countdown: "Interview in [X] days. Today's focus: [area]."
+  - Calculate readiness tier using `skills/interview-prep/references/readiness-tiers.md` criteria. Show tier name and the most relevant gap: "Readiness: Almost There — company research is the last piece." **Exception:** In the final 1-2 days before the interview, if the tier is "Unprepared" or "Partially Ready", drop the tier label entirely — it's demoralizing with no time to act on it. Focus on confidence-building language instead (see readiness-tiers.md → Gotchas).
+  - If readiness tier triggers a warning (see readiness-tiers.md → When to Warn), include it prominently before the task list.
   - Connect tasks to interview readiness, not dream career: "This product case practice maps directly to StreamCo's Round 2 format"
   - If interview is 3 or fewer days away: shift tone to confidence-building, reduce task count, focus on review not new material. "You've put in the work. Trust your prep."
   - SRS burst: if spaced-repetition has role-relevant concepts marked as due, include up to 2 review questions (not the usual 1) in the first few days
@@ -271,6 +274,28 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
   - daily-plan's full_plan mode should check plan type — if interview_prep, defer to interview-prep.md for plan structure. Daily-plan still handles weekly task generation and daily messages within that structure.
 
   See `skills/interview-prep/SKILL.md` for activation flow, onboarding, and crash course task type definitions.
+
+- **Job search mode:** When `plan type` is `job_search` in `memory/current-plan.md`, daily-plan operates with these adjustments:
+
+  **What changes in weekly mode:**
+  - Read `memory/interview-context.md` for target role types and company targets (general prep context)
+  - Shift pillar weights ~15% toward interview-relevant skills. For each pillar, if it maps to a skill commonly tested in interviews for the target role, add weight proportionally. Reduce weights from pillars least relevant to interviews. Weights must still sum to 100%.
+  - Add 1 application/job-search task per week as a recurring task type. Examples: "Review and update resume for [role type]", "Draft cover letter for [company]", "Research [company] culture and interview process", "Update LinkedIn profile section: [specific section]". These are in addition to learning tasks, not replacements.
+  - Include more practice_prompt tasks (interview-relevant active recall) compared to pure learning mode
+  - Keep regular 8-week cadence — no timeline compression
+  - Ramp-up rules still apply for new users
+
+  **What changes in daily_message mode:**
+  - Include a brief job search context line: "Job search mode active. This week's application target: [target from config/settings.md or default 2-3]."
+  - Connect at least one task to interview readiness (not just dream career): "This SQL practice is the kind of thing that shows up in analyst interviews."
+  - If `memory/interview-context.md` has company-specific expectations, reference them when relevant: "Uber's analyst interview is heavy on window functions — today's practice hits that."
+  - Do NOT include countdown (no interview date exists)
+  - Do NOT display readiness tier (that's for interview_prep only)
+
+  **What changes in full_plan mode:**
+  - Generate the same multi-week plan structure as `learning`, but with the ~15% weight shift toward interview-relevant pillars applied
+  - Do NOT generate a crash course — that's interview_prep only
+
 - **Spaced repetition queue is long:** Still only include 1 review per daily message. The SRS skill manages the queue — daily-plan just surfaces what's due today.
 - **First week after onboarding:** Start gently. Ramp up over the first 3-4 days:
   - Day 1-2: 1 task per day at normal length (not half-length — just fewer tasks). For 30min users this means 1 task at ~25-30min, not a 15min task.
