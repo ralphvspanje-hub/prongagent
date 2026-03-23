@@ -6,6 +6,7 @@ user-invocable: false
 metadata:
   openclaw:
     emoji: "🔗"
+
 ---
 
 # Auto-Linking Skill
@@ -129,27 +130,15 @@ This skill writes. Other skills read. The connections enrich user-facing output 
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Auto-linking-specific:**
 - A concept had no meaningful connections to anything the user has learned (log the concept and pillar — this might indicate the learning path has gaps)
 - The same connection keeps getting "mentioned" but never "demonstrated" — the user isn't making the link despite multiple exposures (log for teach-back to target)
 - A cross-pillar bridge was surprisingly strong — the user connected concepts from different pillars unprompted (log for weekly review to highlight)
 
 ## Edge cases
-
 - **First week (no history):** Very few connections will exist. That's fine — the graph builds over time. Don't force connections between day 1 and day 2 concepts.
-
 - **User is in interview_prep mode:** Still run auto-linking, but prioritize connections that are interview-relevant. Cross-pillar bridges to the target role's key skills are especially valuable.
-
 - **Concept-links.md is getting long (50+ connections):** Start pruning `mentioned` connections that haven't been upgraded to `demonstrated` after 3+ weeks. They're noise. Keep all `demonstrated` and `strong` connections.
-
 - **Teach-back reveals a misconception:** If the user incorrectly connected two concepts (e.g., confused JOIN types), do NOT create a link. Instead, check if a wrong link exists and remove it. The teach-back skill handles the correction; auto-linking should reflect accurate understanding only.
-
 - **Multiple concepts completed in one day:** Process each independently. Don't create connections between concepts just because they were completed on the same day — that's coincidence, not relationship.

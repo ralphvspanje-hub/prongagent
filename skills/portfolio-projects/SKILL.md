@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "🔨"
+
 ---
 
 # Portfolio Project Suggestions Skill
@@ -228,70 +229,45 @@ If the user says yes, flag for `skills/mock-interview/SKILL.md`.
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Portfolio-projects-specific:**
 - The suggested project scope didn't match the user's actual available time — the pacing table estimate was off for this user's real schedule (log the suggested hours vs what felt realistic)
 - The project didn't feel relevant to the dream career despite matching pillars — pillar alignment alone wasn't enough to make it compelling (log the project, the pillars, and what was missing)
 - User's own project idea was better than anything the agent would have suggested (log what made their idea better — domain knowledge, personal motivation, real-world relevance, etc.)
 
 ## Edge cases
-
 ### User declines project suggestion
-
 "No problem. I'll check back in a few weeks."
-
 Track the decline. After 2 declines:
 - Reduce suggestion frequency to once per month max
 - Only suggest via triggers 1 (skill block completion) and 4 (manual request)
 - Reset the decline counter if the user later asks for a project manually
-
 ### User wants to build something not suggested
-
 Great — even better. Their idea, your structure:
-
 1. Help them scope it: "That sounds great. Let me think about scope — how much time do you want to spend on it?"
 2. Break it into 4-8 tasks following the standard format
 3. Add to `memory/current-plan.md` and `memory/plan-tasks/week-{N}.md`
 4. Track completion the same way as agent-suggested projects
 5. Trigger win-log on completion
-
 ### User is overwhelmed with current tasks
-
 If `memory/progress.md` → completion rate < 70% this week, skip the project suggestion trigger entirely. The user doesn't need more to do — they need to catch up on what's already assigned.
-
 Exception: manual request (trigger 4) always gets a response, even if completion is low. If you do suggest a project in this case, scope it smaller and mention: "Since you've got a lot on your plate right now, here's something small — [X hours] total."
-
 ### Project is abandoned mid-way
-
 If project tasks are being skipped for 2+ weeks (check `memory/plan-tasks/week-{N}.md` for consecutive skipped project tasks):
-
 > "The [project name] seems stalled. Want to:
 > - Finish it with a smaller scope? (I can cut the remaining tasks down)
 > - Pause it? (I'll save your progress and we can pick it up later)
 > - Drop it? (No judgment — it happens)
 >
 > What sounds right?"
-
 Update `memory/current-plan.md` → Portfolio Projects status accordingly:
 - Smaller scope: update tasks, keep status `in progress`
 - Pause: set status to `paused`
 - Drop: set status to `dropped`
-
 Don't guilt. Don't nag. One check-in, then respect the answer.
-
 ### User is a complete beginner (all pillars Level 1)
-
 Don't suggest open-ended builds — that's overwhelming for someone just learning.
-
 Instead, suggest **guided projects with tutorials**:
-
 > "You're building your fundamentals nicely. Here's a guided project that'll give you something real to show:
 >
 > 🔧 **Project: [Name] (Tutorial + Customize)**
@@ -300,66 +276,37 @@ Instead, suggest **guided projects with tutorials**:
 > - **Scope:** ~[X] hours (including the tutorial)
 >
 > Following a tutorial first, then making it yours, is how most developers start their portfolio."
-
 The "customize" part is what makes it portfolio-worthy — anyone can follow a tutorial, but customizations show understanding.
-
 ### Interview is in less than 2 weeks
-
 Don't suggest a new project. There's not enough time to build something meaningful AND prepare for the interview.
-
 Instead, if they have existing projects (from `memory/resume-context.md` or `memory/current-plan.md` → Portfolio Projects):
-
 > "With [X] days until your interview, starting a new project isn't the best use of your time. But you already have [existing project] — want to polish it or practice talking about it instead?"
-
 ### User already has 3+ active projects
-
 Don't suggest another one. Finish what's started.
-
 > "You've got [N] projects in progress right now. Let's finish [project name] first — shipping one project is worth more than having three half-done. Want me to help you push [project name] across the finish line?"
-
 Check `memory/current-plan.md` → Portfolio Projects for active projects (status = `in progress` or `paused`).
-
 ### Project requires paid tools/APIs
-
 Avoid. Always prefer free alternatives. If no free option exists for the project concept:
-
 > "This project would ideally use [paid tool], which costs [amount]. There's a free alternative: [free option] — it's [tradeoff]. Want to go with the free option, or is the paid tool okay?"
-
 Never silently assume the user will pay for tools.
-
 ### Multiple pillars level up simultaneously
-
 Suggest ONE project that combines them:
-
 > "You just leveled up in both [pillar A] and [pillar B] — nice combo. Here's a project that uses both:
 >
 > [standard suggestion format with skills from both pillars]"
-
 This is more impressive on a portfolio than two separate small projects.
-
 ### User's learning style is consumption-heavy
-
 If `memory/resource-feedback.md` shows the user consistently rates videos and articles higher than practice tasks, and they've declined projects before — respect this. Some users learn by consuming, not building. Reduce project suggestion frequency further.
-
 But don't eliminate suggestions entirely — even consumption-focused learners benefit from occasional building. Frame it differently:
-
 > "I know you prefer learning through videos and reading — totally valid. But a small build project can lock in what you've been absorbing. This one is only [X hours] and uses exactly what you've been studying."
-
 ### Project completion coincides with a pillar level-up
-
 If completing the project also causes a pillar to level up (project tasks count as blocks), celebrate both:
-
 > "Double milestone — you shipped [project name] AND leveled up to Level [N] in [pillar]. That's the kind of week that changes trajectories."
-
 ### Interview prep wants a portfolio project but time is tight
-
 If `memory/interview-context.md` → Status = `active` and Days remaining is 14-21 (enough time but tight):
-
 - Suggest a SMALLER project (4-6 hours max)
 - Focus on the target company's domain
 - Skip the stretch goal
 - Front-load completion: all tasks in the first week, nothing in the final days before the interview
-
 > "You've got enough time for a quick project that'll look great for [company]. This one's scoped tight — [X hours] total, all wrapped up before your final prep days."
-
 For full example conversations, see `examples/scenarios.md`.

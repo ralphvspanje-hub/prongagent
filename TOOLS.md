@@ -13,11 +13,6 @@
 - The host agent handles channel routing — skills just compose messages
 - Channel connections are managed by the host platform (Claude Code, OpenClaw, etc.)
 
-## Memory tools
-
-- `memory_search` — Semantic search across all memory files (vector + keyword)
-- `memory_get` — Read specific files or line ranges
-
 ## Scheduling
 
 - Cron jobs handle time-triggered actions (daily messages, check-ins)

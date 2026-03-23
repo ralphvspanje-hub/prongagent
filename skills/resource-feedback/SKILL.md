@@ -6,6 +6,7 @@ user-invocable: false
 metadata:
   openclaw:
     emoji: "⭐"
+
 ---
 
 # Resource Feedback Skill
@@ -115,20 +116,12 @@ In addition to individual resources, the agent tracks which platforms the user p
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Resource-feedback-specific:**
 - The graduation threshold (3x "great" for promotion) feels too high or too low based on observed usage patterns (log the resource and ratings pattern)
 - User's ratings don't match their actual behavior — rates resources "great" but skips that format, or rates "didn't click" but keeps completing similar resources (log the discrepancy)
 
 ## Edge cases
-
 - **User gives no response:** Don't nag. Skip this resource and try again on the next eligible task.
 - **Resource was self-guided (URL: N/A):** Still ask for feedback — the task format matters even without a specific resource.
 - **Same resource used by different tasks:** Each task gets its own rating opportunity. A resource can accumulate ratings across tasks.

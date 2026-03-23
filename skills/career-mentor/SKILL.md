@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "🧭"
+
 ---
 
 # Career Mentor Skill
@@ -85,27 +86,12 @@ All other output is conversational — advice, drafts, analysis delivered direct
 
 ## Session log
 
-This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
-
-After execution, append an entry if anything notable happened. Don't log routine executions.
-
-**What to log:**
+See `AGENTS.md` for session log protocol. Skill-specific logging:
 - What the user asked about, what advice was given, whether user accepted or pushed back
 - Cover letter tone that was approved, resume bullets that were changed after review
 - Companies discussed, decisions made, reasoning given — the mentor shouldn't repeat the same advice
 - "User preferred shorter cover letter" → next time default shorter
 - "Already advised against [role] on [date]" → don't bring it up again
-
-**Entry format:**
-```markdown
-### YYYY-MM-DD — [brief title]
-- **Context:** [what triggered the skill]
-- **Notable:** [what's worth remembering for next time]
-- **User reaction:** [accepted / pushed back / modified / skipped]
-```
-
-**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
-
 ---
 
 ## Job posting persistence
@@ -299,15 +285,8 @@ Adjust by verbosity (from `config/settings.md`):
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Career-mentor-specific:**
 - A career question didn't fit any of the defined modes — the user wanted something the skill doesn't cover (log what they asked and what mode would have handled it)
 - Resume tailoring felt too mechanical — the back-and-forth didn't match the natural rhythm of collaboration (log what happened and what flow would have felt better)
 - The handoff to interview-prep felt abrupt or confusing to the user (log the conversation context and what transition would have been smoother)
@@ -317,66 +296,39 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 ---
 
 ## Edge cases
-
 ### No user profile or resume context
-
 The mentor can still give general advice, but it won't be personalized. Flag it:
-
 > "I don't have your background loaded yet. For tailored advice, I need your resume or a quick rundown of your experience. Want to share that now, or keep it general?"
-
 If the user shares their background conversationally, note key details but suggest running onboarding or sharing their resume for full context.
-
 ### User shares a posting but doesn't ask a question
-
 If the user just drops a job posting with no prompt, interpret as "what do you think?":
-
 > "Let me look at this. [Parse → fit assessment → recommendation]. Want me to tailor your resume for it?"
-
 ### Cover letter chains from resume tailoring
-
 If the user just did resume tailoring and says "now write me a cover letter" or "cover letter too" — reuse everything from the current conversation. Don't re-ask for the posting. Don't re-parse. Just draft.
-
 ### Multiple postings in one conversation
-
 If the user shares several postings for comparison:
-
 1. Parse and persist each one to `memory/interview-context.md`
 2. Compare them side by side against the user's profile
 3. Give a ranking with reasoning: "If I had to pick one, [Company A] — here's why..."
 4. Don't force a choice — the user may want to apply to all of them
-
 ### User asks about salary or negotiation
-
 This is in scope. Give advice based on role type, company size, and market context. Be practical:
-
 > "For [role] at [company type], the typical range is [X-Y]. Given your experience level, I'd target [Z]. When you get to negotiation, lead with [strategy]."
-
 Don't claim to know exact numbers — frame as ranges and general strategy.
-
 ### User asks about a career path the mentor disagrees with
-
 If the user is considering something that clearly moves away from PM (their stated dream career), challenge it — but respect their autonomy:
-
 > "I want to flag something: this role is pure [X] with no product exposure. If your goal is still PM, this doesn't get you closer. That said — if you're rethinking the goal, that's worth talking about too. What's your thinking?"
-
 Don't repeat the challenge if the user acknowledges it and decides to proceed anyway.
-
 ### User wants to update their resume context
-
 If the user shares new experience, a new project, or updated resume information during a career-mentor conversation, update `memory/resume-context.md` with the new information. Don't wait for a separate onboarding flow.
-
 ### Job posting was shared in a previous session
-
 If the user references a role discussed earlier ("the Adyen role", "that PM job I showed you"), look it up in `memory/interview-context.md` → `## Job Posting History`. If found, use the stored summary. If not found, ask:
-
 > "I don't have that one saved — can you share it again?"
 
 ---
 
 ## Hooks
-
 While this skill is active, enforce these constraints:
-
 | Hook | What it prevents | Why |
 |------|-----------------|-----|
 | Honesty guard | Telling the user a role is a good fit if the fit score is below 5/10 — always surface the real assessment | The mentor's value comes from honesty; the agent's default tendency is to be encouraging, which leads to bad advice |

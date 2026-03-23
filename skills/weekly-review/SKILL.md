@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "📊"
+
 ---
 
 # Weekly Review Skill
@@ -106,25 +107,10 @@ These are TWO separate outputs. The stored digest is structured data. The messag
 
 ## Session log
 
-This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
-
-After execution, append an entry if anything notable happened. Don't log routine executions.
-
-**What to log:**
+See `AGENTS.md` for session log protocol. Skill-specific logging:
 - What the user engaged with in the digest, what they skipped
 - "User always asks about pillar progress, ignores streak stats" → lead with pillars
 - Format or framing preferences that emerge from user reactions
-
-**Entry format:**
-```markdown
-### YYYY-MM-DD — [brief title]
-- **Context:** [what triggered the skill]
-- **Notable:** [what's worth remembering for next time]
-- **User reaction:** [accepted / pushed back / modified / skipped]
-```
-
-**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
-
 ---
 
 ## Generating the digest
@@ -286,98 +272,59 @@ If it's the first week (no previous digest), skip comparisons entirely. Don't me
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Weekly-review-specific:**
 - The narrative tone felt off for the user's situation — too cheerful for a bad week, too cautious for a great week (log what tone you used and what would have been better)
 - Week-over-week comparison was misleading — e.g., different number of active days, plan type changed mid-week, or days off shifted (log what made the comparison unreliable)
 
 ---
 
 ## Edge cases
-
 ### First week (no previous digest)
-
 Still generate the full narrative with all applicable elements, but skip week-over-week comparisons. Extra encouraging tone:
-
 - "You're 1 week into a path most people never start."
 - Don't compare against nothing — just tell the story of this week.
-
 ### Zero completion week
-
 Don't skip the digest. Acknowledge it honestly without guilt:
-
 - "Quiet week — life happens. Your progress from previous weeks is saved and your plan is waiting whenever you're ready."
 - Offer to adjust: "Want me to lighten the load for next week, or keep the plan as-is?"
 - Skip elements B (teach-back), D (pattern observation), and H (SRS) — there's nothing to analyze.
 - Still include E (dream career connection) and F (look-ahead) — keep the bigger picture visible.
-
 ### Perfect week (100% completion)
-
 Celebrate genuinely. Mention the streak. Tease what's next.
-
 - "Clean sweep — every single task done. That's the kind of consistency that compounds."
 - If teach-backs were also strong: "And you're not just completing tasks — the teach-backs show you're actually learning this. Want me to bump the difficulty?"
 - If teach-backs were weak despite perfect completion: "You're putting in the work — the teach-backs show some concepts need more time to sink in. That's normal. Keep going."
 - Only suggest increasing difficulty if teach-backs are also strong.
-
 ### No teach-backs happened this week
-
 Skip element B entirely. Don't mention its absence — the user doesn't know what elements "should" be there.
-
 ### Interview prep mode (plan type = `interview_prep`)
-
 Shift tone to urgency-aware:
-
 - If interview date is known (from `memory/interview-context.md`): include countdown. "You're 9 days out from your [company] interview."
 - Focus on readiness gaps rather than general progress: "Behavioral is solid. Product sense needs work — especially metrics questions."
 - Look-ahead should be interview-focused: "Next week: 2 mock interviews + gap-filling on system design."
 - Still keep the narrative warm — urgency, not panic.
-
 ### Multiple adaptations happened this week
-
 Summarize in one sentence, don't list each one:
-
 - "I adjusted your plan a couple of times this week based on your progress — shifted more time to System Design and swapped some articles for videos."
 - The stored digest has the full list. The message summarizes.
-
 ### Very long history (week 10+)
-
 Keep the digest the SAME length. Don't let it grow with more data — summarize more aggressively:
-
 - Focus on this week's story, not cumulative history
 - Week-over-week comparisons only against last week, not Week 1
 - Pillar progress: mention current state and recent changes, not full history
 - The stored digest can be slightly longer for records, but the message stays at the verbosity-appropriate length
-
 ### Mid-week manual request
-
 If the user asks for a digest mid-week:
-
 - Generate from available data (checked-in days only)
 - Note it's partial: "Here's where things stand so far this week — I'll send the full recap on [digest day]."
 - Don't write the stored digest file — that's reserved for the actual end-of-week digest. This is a conversational response only.
-
 ### Days off had activity
-
 If the user worked on a configured day off and the check-in logged it, include that activity in the digest. Don't call out that they worked on their day off — just count the work.
-
 ### No resource feedback this week
-
 Skip format preference observations in element D. Don't mention the absence.
-
 ### Plan type changed mid-week
-
 If the plan switched from `learning` to `interview_prep` (or vice versa) during the week, acknowledge the transition:
-
 - "Midweek you activated interview prep mode — the plan shifted focus to [company/role]. Here's both halves went."
-
 ## Examples
-
 See `examples/sample-digest.md` for example outputs.

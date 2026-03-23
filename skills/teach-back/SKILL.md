@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "🧠"
+
 ---
 
 # Teach-Back Skill
@@ -59,25 +60,10 @@ Three activation paths:
 
 ## Session log
 
-This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
-
-After execution, append an entry if anything notable happened. Don't log routine executions.
-
-**What to log:**
+See `AGENTS.md` for session log protocol. Skill-specific logging:
 - Which concepts were strong, which were weak, what follow-up helped
 - "Explaining with analogies worked better than definitions for this user"
 - Level-up gate outcomes and what made the difference
-
-**Entry format:**
-```markdown
-### YYYY-MM-DD — [brief title]
-- **Context:** [what triggered the skill]
-- **Notable:** [what's worth remembering for next time]
-- **User reaction:** [accepted / pushed back / modified / skipped]
-```
-
-**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
-
 ## Formulating the teach-back prompt
 
 ### Make it specific and practical
@@ -356,41 +342,22 @@ Agent: "Number 2 is spot on — clarifying the metric is exactly right.
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Teach-back-specific:**
 - The teach-back question didn't match what the resource actually taught (log the resource, what you asked, and what the resource covered — indicates a content mismatch)
 - Level-up gate felt too easy or too hard for the pillar (log the pillar, level, questions asked, and user's response quality)
 - User's response was hard to categorize — not clearly strong, partial, or can't-explain (log the response and what you chose)
 
 ## Edge cases
-
 - **User gives a wrong but confident answer:** Correct gently ("Close — you've got [X] right, but [Y] actually works differently"). Treat as partial, not can't-explain. They have a mental model that needs adjusting, not building from scratch.
-
 - **User asks for a hint:** Give a small nudge, not the answer. Let them try again. Hint-assisted response = partial at best, even if correct after the hint.
-
 - **User answers with much more depth than expected:** Acknowledge enthusiastically, mark strong, flag for `memory/win-log/candidates.md`.
-
 - **Level-up gate fails twice for same pillar/level:** Log for the adaptation skill in `memory/adaptation-log.md`. Don't keep retrying in a loop — let adaptation review whether the resources or thresholds need adjusting.
-
 - **Practice tasks (LeetCode, coding exercises, etc.):** NEVER trigger teach-back on these. They're already active recall by nature.
-
 - **Practice prompt tasks:** NEVER trigger teach-back on these. They are already evaluated as active recall during check-in. The check-in skill handles response evaluation and SRS entry for practice_prompt tasks.
-
 - **Maximum 1 scheduled teach-back per day:** Level-up gates are exempt from this limit since they're triggered by a milestone.
-
 - **User is in the middle of another conversation:** Don't interrupt with teach-back. Queue it for the next interaction.
-
 - **Concept already in `memory/spaced-repetition.md`:** Update the existing entry's interval and review date rather than adding a duplicate row.
-
 - **No conceptual tasks completed recently:** Don't force a teach-back. Wait until there's something meaningful to ask about.
-
 - **User declined onboarding or has sparse profile:** Still trigger teach-back, but skip the dream-career framing. Use generic prompts.
-
 - **Multiple concepts eligible:** Pick the most recently completed one for scheduled teach-back. For level-up gates, pick the 1-2 most fundamental concepts regardless of recency.

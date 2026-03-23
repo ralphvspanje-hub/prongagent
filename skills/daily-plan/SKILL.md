@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "📋"
+
 ---
 
 # Daily Plan Skill
@@ -85,24 +86,10 @@ This skill uses `config.json` for user preferences. If it doesn't exist, use the
 
 ## Session log
 
-This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
-
-After execution, append an entry if anything notable happened. Don't log routine executions.
-
-**What to log:**
+See `AGENTS.md` for session log protocol. Skill-specific logging:
 - Which task types the user completed vs skipped (supplements adaptation skill)
 - "User always does the YouTube task first" → put it first
 - Resource format preferences that emerge from completion patterns
-
-**Entry format:**
-```markdown
-### YYYY-MM-DD — [brief title]
-- **Context:** [what triggered the skill]
-- **Notable:** [what's worth remembering for next time]
-- **User reaction:** [accepted / pushed back / modified / skipped]
-```
-
-**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ## Modes
 
@@ -232,26 +219,17 @@ Send the formatted message.
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Daily-plan-specific:**
 - Couldn't craft a useful search suggestion for a pillar/level combo — topic is too niche or specialized for general search (log the pillar, level, and what you tried)
 - The time flexibility rule was used (Long task for a Short-commitment user) — log which task and why it justified exceeding the daily budget
 - A ramp-up rule (Week 1 gentle start) felt too aggressive or too gentle for this specific user (log the user's profile and what felt off)
 
 ## Edge cases
-
 - **No curated resources for a pillar/level:** This is the normal case — most tasks use search suggestions (Priority 1). Only flag this as an observation if you can't even craft a good search query for the topic.
 - **User completes all tasks early:** Generate the next week immediately. Don't make them wait.
 - **User hasn't done any tasks for 3+ days:** Don't generate a new week. The check-in and adaptation skills handle this — daily-plan just generates and sends.
 - **Interview prep mode:** When `plan type` is `interview_prep` in `memory/current-plan.md`, daily-plan operates differently:
-
   **What changes in weekly mode:**
   - Read `memory/interview-context.md` for target company, role, format, requirements, and days until interview
   - Read `memory/interview-context.md` → `## Skill Requirements` table for JD-mapped task weights. Use these weights (not the regular pillar weights) to determine the daily task mix. See `skills/interview-prep/references/crash-course-tasks.md` → JD-Mapped Task Weighting for the algorithm and examples.
@@ -260,7 +238,6 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
   - Timeline is compressed — generate only enough days to reach the interview date, not a full 8-week plan
   - No ramp-up: start at full intensity from Day 1 (the user chose interview prep, they're motivated)
   - Include at least 1 mock interview task in the first week and another in the week before the interview
-
   **What changes in daily_message mode:**
   - Include countdown: "Interview in [X] days. Today's focus: [area]."
   - Calculate readiness tier using `skills/interview-prep/references/readiness-tiers.md` criteria. Show tier name and the most relevant gap: "Readiness: Almost There — company research is the last piece." **Exception:** In the final 1-2 days before the interview, if the tier is "Unprepared" or "Partially Ready", drop the tier label entirely — it's demoralizing with no time to act on it. Focus on confidence-building language instead (see readiness-tiers.md → Gotchas).
@@ -268,15 +245,11 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
   - Connect tasks to interview readiness, not dream career: "This product case practice maps directly to StreamCo's Round 2 format"
   - If interview is 3 or fewer days away: shift tone to confidence-building, reduce task count, focus on review not new material. "You've put in the work. Trust your prep."
   - SRS burst: if spaced-repetition has role-relevant concepts marked as due, include up to 2 review questions (not the usual 1) in the first few days
-
   **What changes in full_plan mode:**
   - interview-prep.md handles the crash course plan generation and writes to current-plan.md
   - daily-plan's full_plan mode should check plan type — if interview_prep, defer to interview-prep.md for plan structure. Daily-plan still handles weekly task generation and daily messages within that structure.
-
   See `skills/interview-prep/SKILL.md` for activation flow, onboarding, and crash course task type definitions.
-
 - **Job search mode:** When `plan type` is `job_search` in `memory/current-plan.md`, daily-plan operates with these adjustments:
-
   **What changes in weekly mode:**
   - Read `memory/interview-context.md` for target role types and company targets (general prep context)
   - Shift pillar weights ~15% toward interview-relevant skills. For each pillar, if it maps to a skill commonly tested in interviews for the target role, add weight proportionally. Reduce weights from pillars least relevant to interviews. Weights must still sum to 100%.
@@ -284,18 +257,15 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
   - Include more practice_prompt tasks (interview-relevant active recall) compared to pure learning mode
   - Keep regular 8-week cadence — no timeline compression
   - Ramp-up rules still apply for new users
-
   **What changes in daily_message mode:**
   - Include a brief job search context line: "Job search mode active. This week's application target: [target from config/settings.md or default 2-3]."
   - Connect at least one task to interview readiness (not just dream career): "This SQL practice is the kind of thing that shows up in analyst interviews."
   - If `memory/interview-context.md` has company-specific expectations, reference them when relevant: "Uber's analyst interview is heavy on window functions — today's practice hits that."
   - Do NOT include countdown (no interview date exists)
   - Do NOT display readiness tier (that's for interview_prep only)
-
   **What changes in full_plan mode:**
   - Generate the same multi-week plan structure as `learning`, but with the ~15% weight shift toward interview-relevant pillars applied
   - Do NOT generate a crash course — that's interview_prep only
-
 - **Spaced repetition queue is long:** Still only include 1 review per daily message. The SRS skill manages the queue — daily-plan just surfaces what's due today.
 - **First week after onboarding:** Start gently. Ramp up over the first 3-4 days:
   - Day 1-2: 1 task per day at normal length (not half-length — just fewer tasks). For 30min users this means 1 task at ~25-30min, not a 15min task.

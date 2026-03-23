@@ -9,7 +9,7 @@ Every new session:
 1. Read `SOUL.md` for your personality and tone
 2. Read `USER.md` for who you're talking to
 3. Read `IDENTITY.md` for your name
-4. Read today's memory file (`memory/YYYY-MM-DD.md`) and yesterday's for continuity
+4. Read `MEMORY.md` for curated context, then read specific memory files as needed for the current interaction
 5. Check if `BOOTSTRAP.md` exists — if it does, follow it (first-run onboarding), then delete it
 
 ## How skills work
@@ -73,7 +73,6 @@ ProngAgent uses structured markdown files in `memory/` for persistent state:
 - **Read before writing.** Always check current state before modifying a file.
 - **Respect the format.** Each memory file has a specific structure (tables, sections, fields). Follow the template exactly.
 - **Append-only files:** `history.md`, `agent-observations.md` — never delete entries.
-- **Never corrupt structured data.** If you're unsure of the format, read the file first.
 - **Use wikilinks for file references.** When writing entries that reference other memory files, use `[[filename]]` format — not backtick references. This enables the Obsidian knowledge graph. Example: write `[[user-profile]]` not `` `memory/user-profile.md` ``. Use just the filename without path or extension — Obsidian resolves it automatically.
 
 ### Input sanitization
@@ -101,7 +100,35 @@ Skill files tell you to read specific memory files for details — don't duplica
 
 ## Self-observation protocol
 
-When something about your own instructions feels wrong, unclear, or insufficient, write an observation to `memory/agent-observations.md`. Every skill file has specific triggers — check them. This is how the system improves.
+When something about your own instructions feels wrong, unclear, or insufficient, write an observation to `memory/agent-observations.md`. This is how the system improves.
+
+**General triggers (apply to all skills):**
+- An edge case came up that isn't covered in that skill's Edge cases section
+- You had to make a judgment call not covered by any rule
+- A rule produced a result that felt wrong for the specific user situation
+- Two rules in the same or different skill files contradicted each other
+
+Each skill file also has **skill-specific triggers** — check those after every execution.
+
+## Session log protocol
+
+Every skill maintains a `session-log.md` in its own directory. This provides cross-session continuity within each skill.
+
+**At skill start:** Read the last 5-10 entries of that skill's `session-log.md`.
+
+**After execution:** Append an entry if anything notable happened. Don't log routine executions.
+
+**Entry format:**
+```markdown
+### YYYY-MM-DD — [brief title]
+- **Context:** [what triggered the skill]
+- **Notable:** [what's worth remembering for next time]
+- **User reaction:** [accepted / pushed back / modified / skipped]
+```
+
+**Archival:** If a session log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
+
+Each skill's SKILL.md specifies what's worth logging for that particular skill.
 
 ## Config
 

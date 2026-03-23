@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "💡"
+
 ---
 
 # Knowledge Drop Skill

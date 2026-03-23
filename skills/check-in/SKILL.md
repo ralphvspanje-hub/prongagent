@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "✅"
+
 ---
 
 # Check-In Skill
@@ -40,24 +41,10 @@ Do NOT trigger if:
 
 ## Session log
 
-This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
-
-After execution, append an entry if anything notable happened. Don't log routine executions.
-
-**What to log:**
+See `AGENTS.md` for session log protocol. Skill-specific logging:
 - How the user reports (terse vs detailed), what format they use
 - "User always says 'did all 3' — doesn't elaborate" → keep responses equally terse
 - Notable patterns in what gets completed vs skipped
-
-**Entry format:**
-```markdown
-### YYYY-MM-DD — [brief title]
-- **Context:** [what triggered the skill]
-- **Notable:** [what's worth remembering for next time]
-- **User reaction:** [accepted / pushed back / modified / skipped]
-```
-
-**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
 
 ## Conversation flow
 
@@ -288,49 +275,29 @@ Read `memory/user-model.md` → Communication Style to calibrate response tone a
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Check-in-specific:**
 - User's response didn't match any of the parsing patterns in the matching logic table (log the exact response and how you interpreted it)
 - User reported completing tasks not on the plan 3+ times (suggests plan misalignment — log what they did instead and why it might be more relevant)
 - Streak reset felt unfair — user did meaningful work but it didn't count because it didn't match plan tasks (log the situation)
 
 ## Edge cases
-
 - **User checks in before the scheduled time:** That's fine — process it exactly the same way. An early check-in is still a check-in.
-
 - **User checks in the next morning instead of evening:** Still counts for yesterday. Match their tasks against yesterday's plan, not today's. If today's plan has already been sent, clarify: "Is this about yesterday's tasks or today's?"
-
 - **User reports doing tasks not on the plan (extra credit):** Log them in `memory/history.md`. Count them toward the streak (≥1 task = streak continues). Do NOT add blocks to pillar progress unless the extra task clearly maps to a pillar — if it does, add the block. Don't penalize or question extra work.
-
 - **User is vague ("I did some stuff"):** Ask one clarifying question listing today's tasks briefly. Accept whatever they give after that — don't push further. If still unclear, mark what's clear as done and the rest as skipped.
-
 - **User hasn't received tasks yet today (no plan generated):** Don't check in. If the user messages about progress, respond conversationally but don't try to process task statuses. Example: "Looks like today's plan hasn't been sent yet — I'll get that to you. How are things going otherwise?"
-
 - **Multiple check-ins in one day:** Only the first check-in updates `progress.md`, `history.md`, and task statuses. Subsequent messages about progress are just conversation — respond warmly but don't double-count. Check `memory/history.md` for today's date to detect duplicates.
-
 - **User reports doing a task partially:** Mark as "partial" in the week file. Count as 0.5 block for pillar progress. Append to history with "(partial)" note. Counts toward streak (partial > nothing).
-
 - **All tasks already marked done/skipped for today:** The user already checked in. Respond conversationally: "Already got you logged for today — anything else on your mind?"
-
 - **User mentions difficulty or frustration:** Acknowledge it, don't try to fix it. "Yeah, [topic] is tough — the fact that you sat with it counts." The adaptation skill will detect patterns and adjust if needed.
-
 - **User mentions they loved a resource:** Note it in the history entry's Notes column. The resource-feedback skill may follow up later, but don't ask for a rating here.
-
 - **Weekend / day off check-in:** If the user checks in on a configured day off, process it normally. They chose to work — respect that and log it.
 
 ---
 
 ## Hooks
-
 While this skill is active, enforce these constraints:
-
 | Hook | What it prevents | Why |
 |------|-----------------|-----|
 | No guilt language | Using phrases like "you should have", "you missed", "you only did X", or any language that implies the user fell short | Check-in is the highest-risk moment for making the user feel bad — reinforces SOUL.md's zero-guilt principle |

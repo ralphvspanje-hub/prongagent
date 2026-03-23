@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "🎭"
+
 ---
 
 # Mock Interview Skill
@@ -81,25 +82,10 @@ Read ALL of the following before starting any mock:
 
 ## Session log
 
-This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
-
-After execution, append an entry if anything notable happened. Don't log routine executions.
-
-**What to log:**
+See `AGENTS.md` for session log protocol. Skill-specific logging:
 - Which mode was used, which questions were asked, performance (strong/partial/weak)
 - Patterns across sessions: "user struggles with 'tell me about a time you failed' consistently"
 - Delivery improvements or regressions compared to previous mocks
-
-**Entry format:**
-```markdown
-### YYYY-MM-DD — [brief title]
-- **Context:** [what triggered the skill]
-- **Notable:** [what's worth remembering for next time]
-- **User reaction:** [accepted / pushed back / modified / skipped]
-```
-
-**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
-
 ## Downstream triggers
 
 | Skill | Trigger condition |
@@ -183,122 +169,77 @@ Read the relevant mode file from `modes/` based on user selection. After the moc
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Mock-interview-specific:**
 - Question difficulty was miscalibrated for the user's level — too easy (user answered instantly with no effort) or too hard (user couldn't engage at all) (log the question, user's pillar level, and what difficulty would have been appropriate)
 - The coaching feedback contradicted what a previous mock suggested (log both pieces of advice and what changed)
 - Mistake pattern detection flagged something that isn't actually a pattern — false positive from too few data points or coincidental repetition (log the "pattern" and why it's not real)
 
 ## Edge cases
-
 ### User gets frustrated during mock
-
 Pause immediately. Do NOT push through frustration.
-
 > "Want to take a break, switch to a different question, or call it here? All good either way."
-
 If they want to stop: end the mock gracefully, still write session summary and mistake-journal for questions completed. Frame positively: "We covered [N] questions — that's useful data. [One positive thing from the session]."
-
 ### User asks for hints during technical round
-
 Give a nudge, not the answer:
-
 > "Think about [relevant concept or approach]..."
-
 Note the hint in your evaluation. Hint-assisted answers are scored lower but still valuable practice. In the mistake journal, note: "Required hint — [what hint was given]."
-
 ### No interview context (general practice)
-
 User just wants general practice — no active interview in `interview-context.md`:
-
 - Run a generic mock using common questions for their dream career role from `user-profile.md`
 - Calibrate difficulty to pillar levels
 - Still write to `mistake-journal.md` — patterns from general practice carry forward
 - Skip company-specific questions and research-based questions
 - Still use `wins.md` for coaching if populated
-
 ### User wants to redo a question
-
 Allow it. This is great practice.
-
 > "Sure — take another shot. I'll compare both attempts."
-
 After the second attempt:
 - Note what improved and what didn't
 - In the mistake journal, log both attempts: "Attempt 1: [issue]. Attempt 2: [improvement or persistent issue]."
 - Only the better attempt counts toward the overall session rating
-
 ### First mock ever
-
 Go easier (already covered in Setup Step 3):
 - Default to behavioral
 - Use standard, well-known questions
 - Be extra encouraging
 - Save system design for mock 2+
 - Feedback focuses on 1 thing to improve, not a list
-
 ### User has done 5+ mocks and still makes the same mistakes
-
 Escalate — standard coaching isn't working:
-
 > "We've practiced this pattern several times and it keeps coming up. Let's try a different approach: [specific exercise targeting the root cause]."
-
 See the escalation section in `references/mistake-patterns.md`.
-
 ### Time constraint — lightning round
-
 Already covered in Setup Step 4:
 - 2 questions, ~10 minutes
 - 1 actionable feedback point
 - Abbreviated mistake-journal entry
 - Counts toward mocks completed
-
 ### Post-interview debrief
-
 User comes back after the REAL interview — not a mock:
-
 > "How did it go? What questions did they ask? How did you feel about your answers?"
-
 Capture everything:
 - Questions they were asked -> add to `mistake-journal.md` under a "## YYYY-MM-DD — Real Interview Debrief" section
 - What felt good -> reinforce in future mocks
 - What felt shaky -> target in next mock or future prep
 - New information about the process -> update `interview-context.md`
 - Strong answers the user gave -> consider for `win-log/candidates.md` if they describe real achievements
-
 This is a learning opportunity, not a mock. Don't score it — just listen, capture, and adjust.
-
 ### User wants a specific question type
-
 If the user requests a specific question (e.g., "ask me about failure", "give me a SQL question"):
-
 - Honor the request — ask exactly that type
 - Still conduct it as a proper mock (full evaluation, feedback, mistake-journal)
 - Note in the session summary that the question was user-requested
-
 ### Voice message input
-
 If the user sends voice messages (transcribed to text by the I/O layer):
-
 - Treat transcribed text identically to typed text — same evaluation, scoring, feedback
 - Voice answers tend to be more natural but less structured. Note this in feedback: "Your STAR structure came through clearly even speaking off the cuff" or "The story was there but the structure got loose midway — try leading with the situation next time"
 - Filler words, restarts, and verbal tics in transcription are normal for spoken answers. Don't penalize them in scoring — note as delivery feedback only: "You said 'um' a few times at the start — once you got into the story you were smooth"
 - Do NOT attempt to detect whether input is voice vs text — the agent receives text either way. Channel metadata (if available) tells you, but the evaluation logic is identical
 - If something seems incoherent (possible transcription error), ask: "Could you repeat that point? I want to make sure I caught it right."
-
 Voice is a delivery channel, not a mock mode. The existing behavioral/technical/system-design modes handle all input the same way.
-
 ### Mixed mode request
-
 User says "can we do 2 behavioral and 1 technical?":
-
 - Honor it — run a mixed mock
 - Apply the relevant mode rules for each question type
 - Session summary covers both modes
@@ -307,9 +248,7 @@ User says "can we do 2 behavioral and 1 technical?":
 ---
 
 ## Hooks
-
 While this skill is active (during a mock interview session), enforce these constraints:
-
 | Hook | What it prevents | Why |
 |------|-----------------|-----|
 | No meta-breaks | Breaking character with "as an AI" caveats or disclaimers during the interview portion | Destroys immersion — the mock loses value if the interviewer reminds them it's simulated |

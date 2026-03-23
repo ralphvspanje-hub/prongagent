@@ -6,6 +6,7 @@ user-invocable: true
 metadata:
   openclaw:
     emoji: "🔍"
+
 ---
 
 # Job Scan
@@ -96,25 +97,10 @@ Do NOT trigger if:
 
 ## Session log
 
-This skill maintains `session-log.md` in this directory. Read the last 5-10 entries at the start of every execution for continuity and self-improvement.
-
-After execution, append an entry if anything notable happened. Don't log routine executions.
-
-**What to log:**
+See `AGENTS.md` for session log protocol. Skill-specific logging:
 - Which jobs were surfaced, which the user acted on, which were ignored
 - "User consistently skips grad programs" → stop surfacing them (feed into config)
 - Job types or companies that consistently get engagement vs. dismissal
-
-**Entry format:**
-```markdown
-### YYYY-MM-DD — [brief title]
-- **Context:** [what triggered the skill]
-- **Notable:** [what's worth remembering for next time]
-- **User reaction:** [accepted / pushed back / modified / skipped]
-```
-
-**Archival:** If the log exceeds ~100 entries, summarize old entries into `session-log-archive.md` and start fresh.
-
 ## Two-way sync rules
 
 The external job tracker is shared between the dispatch agent (writes new jobs, updates closures) and ProngAgent (writes user status updates). These rules prevent conflicts:
@@ -281,15 +267,8 @@ When the user wants deeper engagement with a specific job (fit analysis, resume 
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Job-scan-specific:**
 - The job tracker file format changed and parsing failed or produced unexpected results (log the format difference and how you adapted)
 - A high-fit job (8+) expired before the user saw it (log the timeline — was the scan frequency sufficient?)
 - The dispatch agent overwrote a ProngAgent status update (log both values if detectable)
@@ -297,31 +276,20 @@ Write an entry to `memory/agent-observations.md` if any of the following occur:
 - Nag logic surfaced a job the user clearly wasn't interested in (nag threshold needs adjustment)
 
 ## Edge cases
-
 - **Job tracker file doesn't exist or is empty:** Log an observation. In daily_scan mode, skip the job block silently. In interactive mode, tell the user: "I don't see your job tracker file at [path]. Check the path in config.json or ask me to update it."
-
 - **Job tracker file format is unexpected:** The dispatch agent may change its format. Parse flexibly — look for common patterns (headings, tables, bullet lists). If truly unparseable, log an observation and tell the user.
-
 - **job_scan_active is false:** Skip entirely in daily_scan mode. In interactive mode, tell the user the scan is paused and offer to re-enable it: "Job scan is currently paused. Want me to turn it back on?"
-
 - **User is already in interview_prep for a listed company:** If `memory/interview-context.md` shows active prep for a company that appears in the tracker, flag it: "You're already prepping for [company] — this listing matches your active interview prep." Don't double-surface.
-
 - **Dispatch agent and ProngAgent write conflict:** If the agent detects that a field it previously wrote has been overwritten (status reverted, notes removed), log an observation but don't re-write. Mention to the user if relevant during interactive mode.
-
 - **User wants to toggle the feature:** Accept "pause job scan", "stop showing jobs", "disable job updates" — set `job_scan_active: false` in `config/settings.md`. Accept "resume job scan", "turn jobs back on" to re-enable.
-
 - **Too many new jobs at once (10+):** Don't dump them all. Show top 5 by fit score, mention the count: "10 new jobs since last scan — here are the top 5 by fit. Say 'show all' for the full list."
-
 - **User asks about a job not in the tracker:** They may have found it themselves. Help them evaluate it (brief fit assessment using their profile) and offer to add it to the tracker manually with a `## ProngAgent Notes` entry.
-
 - **User sets preferences that filter everything:** If preferences would result in zero jobs being surfaced from the current active list, warn them: "With those filters, none of the current [X] active jobs would show up. Want to keep these settings anyway?"
 
 ---
 
 ## Hooks
-
 While this skill is active and writing to the external job tracker, enforce these constraints:
-
 | Hook | What it prevents | Why |
 |------|-----------------|-----|
 | Field-level write lock | Modifying any field other than `Status`, `Applied`, `Next step`, and `Notes` in existing tracker entries | The external tracker is shared with the dispatch agent — touching dispatch-owned fields breaks both systems |

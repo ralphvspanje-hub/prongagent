@@ -6,6 +6,7 @@ user-invocable: false
 metadata:
   openclaw:
     emoji: "⚙️"
+
 ---
 
 # Adaptation Skill
@@ -94,15 +95,15 @@ Bad: "Reduced tasks"
 
 When in doubt, don't adapt. False positives (unnecessary changes) are worse than false negatives (missing an opportunity to adjust). If the signal is weak or ambiguous, wait for more data.
 
-### Rule 9: Cross-reference with user model
+### Rule 7: Cross-reference with user model
 
 Before making any adaptation, check `memory/user-model.md` for context that explains the pattern. A pillar skip rate of 80% means something different if the user model shows "avoids system design due to anxiety" vs "skips articles but watches videos." The user model turns quantitative signals into informed decisions. If the user model has relevant observations, reference them in the adaptation log reasoning.
 
-### Rule 7: Respect explicit user preferences
+### Rule 8: Respect explicit user preferences
 
 If the user explicitly asked for a certain pace during onboarding, respect it even if data suggests otherwise. Only override explicit preferences if the user is clearly struggling: completion < 30% for 2+ weeks.
 
-### Rule 8: Minimum task guarantee
+### Rule 9: Minimum task guarantee
 
 Adaptation NEVER removes all tasks for a day. Every active day must have at least 1 task.
 
@@ -366,78 +367,49 @@ This is informational, not a plan change. Don't count it against the 2-change li
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Adaptation-specific:**
 - Two triggers fired that genuinely contradicted and the priority order didn't resolve it cleanly (log both triggers, the priority ranking, and what you chose)
 - The 3-day cooldown prevented a change that felt obviously needed (log the trigger, the recent adaptation it would contradict, and why the new change felt urgent)
 - Max 2 changes felt insufficient for the situation — 3+ triggers fired and deferring the rest felt like leaving real problems unaddressed (log all triggers and which were deferred)
 - The conservative default (Rule 6: don't adapt when signal is weak) was chosen but you would have preferred to act (log the signal and why it felt meaningful despite being technically weak)
 
 ## Edge cases
-
 ### First week (no history yet)
-
 Don't adapt — there's not enough data. Skip all trigger checks.
-
 **Exception:** If the user completes everything on Day 1-2 AND explicitly says it was too easy (check conversation context), you can bump difficulty early. This bypasses both the cooldown and the first-week freeze.
-
 ### Conflicting signals
-
 **High completion but weak teach-backs:** Prioritize the teach-back signal. Completion measures effort, teach-back measures learning. Someone can complete tasks without learning. Response: keep task count the same but increase conceptual task ratio and add reinforcement.
-
 **High completion but all "didn't click" resource feedback:** The user is doing the work but the resources aren't effective. Don't increase difficulty — fix the resource selection first.
-
 **Low completion but strong teach-backs:** The user is learning when they engage but life is getting in the way. Don't decrease difficulty — decrease volume (fewer tasks, same level).
-
 **Low completion AND weak teach-backs:** The most concerning combination — the user isn't engaging AND isn't learning when they do. This is likely a difficulty or relevance problem, not a motivation problem. Response: (1) reduce task count to lower the barrier, (2) swap resource formats for the weak pillar based on learning style profile. Do NOT increase conceptual tasks for the weak pillar yet — the user can't handle more volume. Fix the format and difficulty first, then add volume once completion recovers.
-
 ### Interview prep mode (plan type = `interview_prep`)
-
 Tighter adaptation cycle:
 - Review progress daily instead of waiting for weekly patterns
 - More aggressive difficulty scaling (bump up after 2 days of full completion instead of 3)
 - Shorter cooldown: 1 day instead of 3
 - Prioritize interview-relevant triggers (mock interview weaknesses, win log gaps)
 - Don't suggest adding new pillars or portfolio projects — stay focused on the interview
-
 ### Explicit user override
-
 User says "this is too easy" or "this is too hard" → treat as immediate override:
 - Bypass cooldown
 - Bypass pattern requirements (don't wait for 2-3 days of data)
 - Make the adjustment immediately for tomorrow's tasks
 - Log with reasoning: "User explicitly reported [too easy/too hard] — immediate adjustment"
-
 ### Multiple triggers fire simultaneously
-
 Apply the trigger priority order (learning-quality > completion > resource > engagement > milestone). Pick the top 2 by priority. Defer the rest — they'll fire again on the next run if still relevant.
-
 ### Pillar stuck at same level for 3+ weeks
-
 **Detection:** Read `memory/current-plan.md` → Pillars table. Check if any pillar has been at the same level for 3+ weeks without reaching 5/5 blocks.
-
 **Response:** The tasks might not be generating enough blocks. Investigate:
 1. Are too many tasks being skipped? → Volume problem, not difficulty
 2. Are tasks being marked partial? → Difficulty problem, tasks are too long or hard
 3. Is the pillar weight too low? → Not enough tasks assigned to this pillar to accumulate blocks
 4. Is the user avoiding this pillar? → Engagement problem, the pillar may not feel relevant
-
 Based on the finding, adjust weights (if too low), reduce task difficulty (if too hard), or surface the observation to the user in the daily message context (if engagement).
-
 ### Adaptation would contradict a very recent change
-
 If a trigger fires that would reverse a change made in the last 3 days:
 - Do NOT make the change
 - Log it as "deferred" in `memory/adaptation-log.md`: "Trigger [X] fired but would contradict adaptation from [date]. Deferring until cooldown expires."
 - Re-evaluate on the next run after cooldown
-
 ### No triggers fire
-
 This is the expected outcome most days. Do nothing. Don't adapt for the sake of adapting.

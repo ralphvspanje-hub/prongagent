@@ -6,6 +6,7 @@ user-invocable: false
 metadata:
   openclaw:
     emoji: "🔄"
+
 ---
 
 # Spaced Repetition Skill
@@ -350,78 +351,45 @@ Processing:
 
 ## Self-observation triggers
 
-Write an entry to `memory/agent-observations.md` if any of the following occur:
+In addition to the general triggers in `AGENTS.md`, write an observation if:
 
-**General (apply to all skills):**
-- An edge case came up that isn't covered in the Edge cases section
-- You had to make a judgment call not covered by any rule
-- A rule produced a result that felt wrong for the specific user situation
-- Two rules in the same or different skill files contradicted each other
-
-**Spaced-repetition-specific:**
 - The spacing intervals don't feel right for a specific concept — advancing too aggressively (user keeps getting it wrong at longer intervals) or too lazily (user nails it every time at short intervals) (log the concept and its review history)
 - Queue is growing faster than the 1-per-day cap can service — many items are becoming overdue and the backlog is building (log the queue size and how long items have been overdue)
 - A concept keeps bouncing between "correct" and "wrong" without converging — consecutive correct resets repeatedly (log the concept and its pattern over 4+ reviews)
 
 ---
-
 ### Queue is empty (no concepts tracked yet)
-
 Nothing to review. Don't write anything to the Review Queue. The daily message skips the review section entirely. This is normal for the first 1-2 weeks before teach-backs generate SRS entries.
-
 ### Queue has 10+ overdue items
-
 Don't try to catch up. Pick the 1 most important item (highest priority per Step 2) and review it. The rest stay overdue and will be picked up one per day. They'll naturally spread out as they get reviewed and rescheduled.
-
 ### Same concept reviewed by both SRS and teach-back in the same day
-
 SRS defers to teach-back. If a teach-back prompt already covered this concept today (check `memory/progress.md` → Teach-Back Log for today's date), skip the SRS review for this concept. Teach-back is a richer, multi-turn interaction — SRS shouldn't duplicate it.
-
 During queue management (Step 3): if the concept selected for today's review was already teach-backed today, pick the next item instead.
-
 During response processing: if the user's check-in references both a teach-back response and an SRS response for the same concept, only process the teach-back. The teach-back skill will update `memory/spaced-repetition.md` with the appropriate interval.
-
 ### User never answers review questions (always skips)
-
 Track consecutive skips across ALL concepts (not per-concept). Count any review question that appears in the daily message but gets no response during check-in.
-
 After 5 consecutive skips across any concepts:
 - Reduce review frequency from 1 per day to 1 per week
 - Note the change in `config/settings.md` under Frequencies: `Spaced repetition: 1 review per week (reduced — 5 consecutive skips)`
 - If the user starts answering again (2+ correct answers), restore to 1 per day
-
 ### Concept is from a pillar the user is no longer studying
-
 Keep reviewing it. Foundational knowledge shouldn't decay just because the plan shifted focus. The concept follows the normal retirement path — it only leaves Active Review Items through mastery (5+ consecutive correct at 3+ month interval), not through plan changes.
-
 ### Interview prep activates
-
 When `memory/current-plan.md` → Plan type changes to `interview_prep` or `memory/interview-context.md` has a target date:
-
 **Active items:** Pull all Active Review Items relevant to the target role to "due today" regardless of their scheduled Next review date. "Relevant" = the concept's pillar matches one of the interview prep pillars, OR the concept directly relates to the target role's core competencies.
-
 **Retired items:** Pull relevant Retired items back into the Active Review Items table:
 - Set Next review = today
 - Set Consecutive correct = 0
 - Set Status = "Refreshing"
 - Set Last reviewed to their original "Date mastered" (so interval calculation works correctly on the next review)
-
 This is a one-time pull — after the initial activation, concepts follow the normal spacing algorithm again. The increased frequency comes from having more items due at once, not from changing the algorithm.
-
 ### Concept already exists in Active Review Items
-
 When teach-back or block completion tries to add a concept that's already in the table:
 - Do NOT add a duplicate row
 - Update the existing entry: set Last reviewed to today, recalculate Next review based on the new response quality, adjust Consecutive correct accordingly
-
 ### First concept enters the system
-
 When the first concept is added (usually from the first teach-back), the next queue management run will find it. If it's due, it'll be queued for the daily message. No special handling needed — the system bootstraps naturally.
-
 ### User answers review question outside of check-in
-
 If the user responds to a review question directly (not during evening check-in), process it immediately. Don't wait for check-in. Update `memory/spaced-repetition.md` right away.
-
 ### Multiple concepts due but only 1 review allowed
-
 This is normal operation, not an edge case. Always pick the highest-priority item per Step 2. The unreviewed items stay at their current "Next review" date — they'll be overdue tomorrow and get higher priority then.
