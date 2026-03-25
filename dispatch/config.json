@@ -8,5 +8,6 @@
   "excluded_types": ["consultancies", "recruitment agencies", "contractor roles"],
   "search_regions": ["Netherlands", "Amsterdam"],
   "tier2_scan_frequency": "weekly",
-  "verify_existing_per_run": 3
+  "verify_existing_per_run": 3,
+  "telegram_brief_time": "07:30"
 }

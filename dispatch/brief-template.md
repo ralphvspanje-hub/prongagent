@@ -1,13 +1,13 @@
 # Daily Brief Template
 
-The dispatch agent overwrites `dispatch/daily-brief.md` after every run using this format. This file is what gets delivered to the user via their messaging channel.
+The dispatch agent overwrites `dispatch/daily-brief.md` after every run using this format. This file is what gets sent to the user via Telegram.
 
 ---
 
 ```markdown
 # Daily Job Brief
 
-**last_run:** YYYY-MM-DDTHH:MM (ISO format, local timezone)
+**last_run:** YYYY-MM-DDTHH:MM (ISO format, timezone from config.json)
 **jobs_scanned:** [number of career pages + job board searches completed]
 **tracker_updated:** [yes/no — did anything change in job_tracker.md?]
 
@@ -51,9 +51,9 @@ The dispatch agent overwrites `dispatch/daily-brief.md` after every run using th
 
 ## Rules for writing the brief
 
-- Keep it scannable. Users read this on their phone via messaging apps.
+- Keep it scannable. Users read this on their phone via Telegram.
 - Bold company names and role titles for easy scanning.
 - Every role mentioned must have a direct link.
 - The "Top 3" section is opinionated — rank by urgency AND fit combined.
 - If the run found nothing new and nothing changed: write a brief that says so. Don't pad.
-- The `last_run` timestamp is critical — it lets the messaging relay detect staleness.
+- The `last_run` timestamp is critical -- it lets the morning brief task detect staleness.
