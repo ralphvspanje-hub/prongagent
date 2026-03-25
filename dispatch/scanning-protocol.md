@@ -47,7 +47,7 @@ Scan career pages for ALL companies in `dispatch/company-tiers.md` (Tier 1 + Tie
 |--------|---------------|
 | LinkedIn Jobs | All search terms below, filtered to your region |
 | Indeed | Same search terms |
-| Glassdoor | Same search terms |
+| Glassdoor | 1 spot-check only (deprecated — see gotchas.md) |
 
 ### Search terms
 
@@ -99,13 +99,12 @@ This dispatch runs early morning with a 1-2 hour time budget. **Use all of it.**
 
 1. **ALL search terms** on LinkedIn. Not 3. Not 6. All of them. Log each one.
 2. **ALL search terms** on Indeed. Indeed is a separate source — do not skip it.
-3. **ALL search terms** on Glassdoor. Glassdoor is a separate source — do not skip it.
-4. **ALL Tier 1 career pages** checked. Every single one. If blocked, try Greenhouse/Lever/Workday portals.
-5. **ALL Tier 1.5 career pages** checked. Every single one. Same fallback rule.
-6. **Tier 2 career pages** at least weekly (check day of week).
-7. **Multiple pages of results** — don't stop at page 1 for broad terms.
-8. **Discovery scan** — search beyond the tier list. New companies, programs, anything.
-9. **Verify 2-3 existing tracker entries** — check if postings are still live.
+3. **Glassdoor — 1 spot-check only.** Glassdoor location detection is often broken (redirects to wrong country). Run 1 search term as a health check. If still broken, skip and log. Do NOT run all terms.
+4. **Career pages — check gotchas.md first.** Skip pages with 3+ consecutive failures. For working pages: ALL Tier 1 + Tier 1.5 every run, Tier 2 weekly.
+5. **Multiple pages of results** — don't stop at page 1 for broad terms.
+6. **Discovery scan** — search beyond the tier list. New companies, programs, anything.
+7. **Verify 2-3 existing tracker entries** — check if postings are still live.
+8. **Context budget rule** — read gotchas.md → "Context budget management" before scanning. If a source consistently wastes context, skip it.
 
 ### What a failed scan looks like
 

@@ -40,10 +40,10 @@ You are the user's daily job scanner. Single purpose: find new roles, update the
 Run every search term listed in `dispatch/scanning-protocol.md`. Not 3, not 6 — all of them. Go past page 1 for broad terms. Log each term and result count in observations.
 ### Phase 3: Indeed — run ALL search terms
 Same search terms, on Indeed for your region. This is NOT optional.
-### Phase 4: Glassdoor — run ALL search terms
-Same search terms, on Glassdoor for your region. This is NOT optional.
-### Phase 5: Career pages — ALL Tier 1 + Tier 1.5
-Visit every career page URL in `dispatch/company-tiers.md` for Tier 1 and Tier 1.5. If a page is JS-blocked, try the Greenhouse/Lever/Workday alternative. Log every company checked.
+### Phase 4: Glassdoor — 1 spot-check only
+Glassdoor location detection is often broken (redirects to wrong country). Run 1 search term as a health check. If still broken, skip and log. Do NOT run all terms.
+### Phase 5: Career pages — Tier 1 + Tier 1.5 (skip known-broken pages)
+Read `dispatch/gotchas.md` → "Context budget management" first. Skip career pages with 3+ consecutive failures in recent observations. For working pages: check Tier 1 + Tier 1.5. If a page is JS-blocked, try ONE fallback URL (Greenhouse/Lever/Workday). If that also fails, log the consecutive failure count and move on — don't burn context retrying. Log every company checked or skipped.
 ### Phase 6: Tier 2 career pages (weekly, check day of week)
 ### Phase 7: Discovery scan
 Go beyond the tier list. Search for new companies, programs, anything not already tracked.
@@ -53,13 +53,12 @@ Go beyond the tier list. Search for new companies, programs, anything not alread
 **COMPLETENESS CHECK — before writing outputs, confirm:**
 - [ ] All search terms on LinkedIn were run
 - [ ] Indeed was searched
-- [ ] Glassdoor was searched
-- [ ] All Tier 1 career pages were checked (or alternative URLs tried)
-- [ ] All Tier 1.5 career pages were checked (or alternative URLs tried)
+- [ ] Glassdoor spot-check done (1 term only — deprecated source)
+- [ ] Career pages checked (skipped pages with 3+ consecutive failures per gotchas.md)
 - [ ] Discovery scan was performed
 - [ ] 2-3 tracker entries were verified
 
-If any box is unchecked, go back and do it before writing outputs. Log the checklist result in observations.
+If any box is unchecked, go back and do it before writing outputs. Log the checklist result in observations. Read `dispatch/gotchas.md` → "Context budget management" for rules on skipping broken sources.
 
 ## Behavioral rules
 

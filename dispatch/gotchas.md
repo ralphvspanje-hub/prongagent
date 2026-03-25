@@ -23,6 +23,17 @@ Known failure patterns. Read this before every scan. Add new gotchas as you disc
 - **Career page URLs change.** If a URL 404s, search for the new one and update `dispatch/company-tiers.md`.
 - **Some companies use Greenhouse, Lever, or Workday.** The direct career page may redirect. Follow the redirect. If blocked, try the ATS URL directly (e.g., `boards.greenhouse.io/[company]`).
 
+## Context budget management
+
+You have a finite context window. Wasting it on pages that always fail means you run out before finishing the scan. Manage it:
+
+- **Before fetching a career page, check `dispatch/observations.md` (last 3-5 entries).** If a page has failed 3+ consecutive runs (JS-blocked, 404, 403, redirect to wrong country), SKIP it. Log "Skipped [company] — failed [N] consecutive runs" and move on.
+- **If a page fails this run, increment its failure count in observations.** Use a line like: "[Company] career page: consecutive failures: [N]"
+- **If a previously-failing page succeeds, reset its count to 0.**
+- **Glassdoor location detection is often broken** (redirects to wrong country). Do ONE spot-check per run maximum. If it redirects, skip entirely and log it. Do not run all search terms on Glassdoor.
+- **Prioritize sources that work.** LinkedIn and Indeed are your primary boards. Career pages that consistently load are more valuable than retrying broken ones. Spend your context budget on depth (more pages of results, better discovery) not on retrying dead endpoints.
+- **If you notice compression starting (conversation getting long), stop fetching new pages.** Write outputs with whatever you have so far. A partial scan with results is better than a full scan that crashes.
+
 ## Fit scoring
 
 - **Roles requiring 2-3 years experience are NOT automatic skips.** Many entry-level candidates apply for these. If the role genuinely fits your profile and you have a credible case, include it. Only skip 5+ year requirements unless at a Tier 1 company.
